@@ -1,0 +1,24 @@
+BOMBEIROS NARÓN · sitio para Vercel
+
+Qué hay en esta carpeta
+  index.html    la web
+  datos.json    todo el contenido (noticias, plantilla, vehículos, enlaces...)
+  archivos/     fotos y PDF
+  vercel.json   configuración de Vercel (no tocar)
+
+Cómo publicarla
+  Opción A, sin GitHub:
+    1. Entra en vercel.com con tu cuenta.
+    2. Add New > Project > pestaña de subir carpeta (o arrastra esta carpeta).
+    3. Framework: Other. Sin comando de build. Deploy.
+  Opción B, con GitHub:
+    1. Crea un repositorio y sube el contenido de esta carpeta (no la carpeta en sí).
+    2. En Vercel: Add New > Project > importa el repositorio. Framework: Other. Deploy.
+    Cada vez que cambies archivos en GitHub, Vercel publica solo.
+
+Dirección propia
+  En el proyecto de Vercel: Settings > Domains > añade tu dominio y sigue las instrucciones de DNS.
+
+Cómo actualizar el contenido
+  Esta versión pública es de solo lectura. Se edita en el panel privado de Claude
+  y se vuelve a generar esta carpeta.
