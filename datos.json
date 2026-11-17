@@ -1,4 +1,74 @@
 {
+ "avisosweb": [
+  {
+   "id": "memoria2025",
+   "data": {
+    "files": [],
+    "nivel": "Informativo",
+    "orden": 1,
+    "texto": "Ya se puede consultar y descargar la memoria anual del servicio.",
+    "titulo": "Publicada la memoria de actividades 2025",
+    "url": "#memorias"
+   }
+  }
+ ],
+ "ciudadania": [
+  {
+   "id": "ordenanzas",
+   "data": {
+    "apartado": "Ordenanzas y tasas",
+    "files": [],
+    "orden": 5,
+    "texto": "Ordenanzas fiscales, tasas y reglamentos del Concello de Narón en su portal de transparencia.",
+    "titulo": "Normativa municipal vigente",
+    "url": "https://transparencia.naron.gal/normativa-vigente/"
+   }
+  },
+  {
+   "id": "quemas1",
+   "data": {
+    "apartado": "Quemas",
+    "files": [],
+    "orden": 1,
+    "texto": "Para quemar restos agrícolas de tu explotación tienes que comunicarlo a la Consellería do Medio Rural con dos días de antelación, en su página de permisos de queimas o en el teléfono 012 (días laborables).\n\nLas comunicaciones y autorizaciones dejan de valer los días de viento o de temperaturas altas. Para quemar restos forestales amontonados hace falta una autorización expresa.",
+    "titulo": "Comunicar una quema agrícola",
+    "url": "https://mediorural.xunta.gal/gl/temas/defensa-monte/permisos-queimas"
+   }
+  },
+  {
+   "id": "quemas2",
+   "data": {
+    "apartado": "Quemas",
+    "files": [],
+    "orden": 2,
+    "texto": "No dejes nunca el fuego sin vigilancia y ten agua y herramientas a mano. Comprueba que queda bien apagado antes de irte.\n\nSi el fuego se descontrola, llama al 112.",
+    "titulo": "Durante la quema",
+    "url": ""
+   }
+  },
+  {
+   "id": "velutina1",
+   "data": {
+    "apartado": "Avispa velutina",
+    "files": [],
+    "orden": 3,
+    "texto": "No te acerques ni intentes retirarlo por tu cuenta. Avisa al 012 de la Xunta, que gestiona su retirada.\n\nSi el nido está activo en una vivienda habitada, en una zona muy concurrida o hay personas alérgicas cerca, llama al 112.",
+    "titulo": "Si ves un nido",
+    "url": "https://www.xunta.gal/notas-de-prensa/-/nova/024440/xunta-lleva-retirados-mas-600-nidos-avispa-velutina-actual-campana-retirada"
+   }
+  },
+  {
+   "id": "velutina2",
+   "data": {
+    "apartado": "Avispa velutina",
+    "files": [],
+    "orden": 4,
+    "texto": "Ten especial cuidado al limpiar fincas, desbrozar o hacer trabajos agrícolas: la velutina también puede anidar en el suelo y en setos.",
+    "titulo": "Cuidado en fincas y huertas",
+    "url": ""
+   }
+  }
+ ],
  "config": [
   {
    "id": "cifras",
@@ -74,12 +144,22 @@
   {
    "id": "layout",
    "data": {
-    "order": [
+    "menu": [
      "avisos",
-     "mapas",
      "noticias",
      "servicio",
      "alertas",
+     "intervenciones",
+     "prevencion",
+     "ciudadania"
+    ],
+    "order": [
+     "avisos",
+     "noticias",
+     "servicio",
+     "alertas",
+     "ciudadania",
+     "mapas",
      "redes",
      "convocatorias",
      "intervenciones",
@@ -90,15 +170,20 @@
      "memorias",
      "documentos",
      "enlaces"
-    ],
-    "menu": [
-     "avisos",
-     "noticias",
-     "servicio",
-     "alertas",
-     "intervenciones",
-     "prevencion"
     ]
+   }
+  }
+ ],
+ "docservicio": [
+  {
+   "id": "reglamento2018",
+   "data": {
+    "detalle": "Boletín Oficial de la Provincia de A Coruña nº 149",
+    "fecha": "2018-08-07",
+    "files": [],
+    "nombre": "Reglamento de organización y funcionamiento del Servicio Municipal de Emergencias, Protección Civil, Prevención y Extinción de Incendios, y Salvamento",
+    "orden": 1,
+    "url": "https://bop.dacoruna.gal/bopportal/publicado/2018/08/07/2018_0000005901.html"
    }
   }
  ],
@@ -151,16 +236,6 @@
     "nombre": "Protección Civil",
     "orden": 5,
     "url": "https://www.proteccioncivil.es"
-   }
-  },
-  {
-   "id": "en5",
-   "data": {
-    "detalle": "Gestión interna del parque",
-    "files": [],
-    "nombre": "GesParques",
-    "orden": 6,
-    "url": "https://bnaron.gesparques.es/"
    }
   }
  ],
@@ -242,6 +317,34 @@
     "nombre": "Mapa de avisos",
     "orden": 3,
     "url": "https://www.aemet.es/es/eltiempo/prediccion/avisos"
+   }
+  }
+ ],
+ "mapasweb": [
+  {
+   "id": "incidencias112",
+   "data": {
+    "alto": "560",
+    "files": [],
+    "orden": 1,
+    "titulo": "Incidencias en Galicia · 112 Galicia",
+    "url": "https://www.axega112.gal/gl",
+    "x": "0",
+    "y": "0",
+    "zoom": "0.8"
+   }
+  },
+  {
+   "id": "irdi",
+   "data": {
+    "alto": "560",
+    "files": [],
+    "orden": 2,
+    "titulo": "Índice de risco diario de incendio (IRDI)",
+    "url": "https://mediorural.xunta.gal/gl/temas/alimentacion",
+    "x": "0",
+    "y": "0",
+    "zoom": "0.8"
    }
   }
  ],
@@ -445,6 +548,62 @@
    }
   }
  ],
+ "rapidos": [
+  {
+   "id": "r1",
+   "data": {
+    "files": [],
+    "nombre": "Convocatorias abiertas",
+    "orden": 1,
+    "url": "#convocatorias"
+   }
+  },
+  {
+   "id": "r2",
+   "data": {
+    "files": [],
+    "nombre": "Memorias de actividades",
+    "orden": 2,
+    "url": "#memorias"
+   }
+  },
+  {
+   "id": "r3",
+   "data": {
+    "files": [],
+    "nombre": "Consejos de prevención",
+    "orden": 3,
+    "url": "#prevencion"
+   }
+  },
+  {
+   "id": "r4",
+   "data": {
+    "files": [],
+    "nombre": "Avisos del 112",
+    "orden": 4,
+    "url": "https://www.axega112.gal/gl"
+   }
+  },
+  {
+   "id": "r5",
+   "data": {
+    "files": [],
+    "nombre": "Vehículos del parque",
+    "orden": 5,
+    "url": "#vehiculos"
+   }
+  },
+  {
+   "id": "r6",
+   "data": {
+    "files": [],
+    "nombre": "Dónde estamos",
+    "orden": 6,
+    "url": "#servicio"
+   }
+  }
+ ],
  "redes": [
   {
    "id": "facebook",
@@ -485,6 +644,18 @@
      {
       "id": "a987a9022e04dce98eb7f2989ad52f50",
       "name": "foto-alertas.jpg",
+      "type": "image/jpeg"
+     }
+    ]
+   }
+  },
+  {
+   "id": "ciudadania",
+   "data": {
+    "files": [
+     {
+      "id": "cf3423f19506f9d2a087a066bc87e327",
+      "name": "foto-prevencion.jpg",
       "type": "image/jpeg"
      }
     ]
@@ -533,6 +704,18 @@
      {
       "id": "15e41f84e1059926f27403d0c3654bee",
       "name": "foto-intervenciones.jpg",
+      "type": "image/jpeg"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mapas",
+   "data": {
+    "files": [
+     {
+      "id": "5391ced626338e3d3a77f4d48b390c4d",
+      "name": "noticia-vehiculos-carretera.jpg",
       "type": "image/jpeg"
      }
     ]
@@ -842,123 +1025,6 @@
     "orden": 6,
     "tipo": "furgon",
     "uso": "Rescates, tráfico y mercancías peligrosas"
-   }
-  }
- ],
- "menuextra": [
-  {
-   "id": "concello",
-   "data": {
-    "nombre": "Concello de Narón",
-    "url": "https://www.naron.gal",
-    "files": [],
-    "orden": 1
-   }
-  },
-  {
-   "id": "g112",
-   "data": {
-    "nombre": "Alertas 112 Galicia",
-    "url": "https://www.axega112.gal/gl",
-    "files": [],
-    "orden": 2
-   }
-  }
- ],
- "rapidos": [
-  {
-   "id": "r1",
-   "data": {
-    "nombre": "Convocatorias abiertas",
-    "url": "#convocatorias",
-    "files": [],
-    "orden": 1
-   }
-  },
-  {
-   "id": "r2",
-   "data": {
-    "nombre": "Memorias de actividades",
-    "url": "#memorias",
-    "files": [],
-    "orden": 2
-   }
-  },
-  {
-   "id": "r3",
-   "data": {
-    "nombre": "Consejos de prevención",
-    "url": "#prevencion",
-    "files": [],
-    "orden": 3
-   }
-  },
-  {
-   "id": "r4",
-   "data": {
-    "nombre": "Avisos del 112",
-    "url": "https://www.axega112.gal/gl",
-    "files": [],
-    "orden": 4
-   }
-  },
-  {
-   "id": "r5",
-   "data": {
-    "nombre": "Vehículos del parque",
-    "url": "#vehiculos",
-    "files": [],
-    "orden": 5
-   }
-  },
-  {
-   "id": "r6",
-   "data": {
-    "nombre": "Dónde estamos",
-    "url": "#servicio",
-    "files": [],
-    "orden": 6
-   }
-  }
- ],
- "avisosweb": [
-  {
-   "id": "memoria2025",
-   "data": {
-    "titulo": "Publicada la memoria de actividades 2025",
-    "texto": "Ya se puede consultar y descargar la memoria anual del servicio.",
-    "nivel": "Informativo",
-    "url": "#memorias",
-    "files": [],
-    "orden": 1
-   }
-  }
- ],
- "mapasweb": [
-  {
-   "id": "incidencias112",
-   "data": {
-    "titulo": "Incidencias en Galicia · 112 Galicia",
-    "url": "https://www.axega112.gal/gl",
-    "x": "0",
-    "y": "0",
-    "zoom": "0.8",
-    "alto": "560",
-    "files": [],
-    "orden": 1
-   }
-  },
-  {
-   "id": "irdi",
-   "data": {
-    "titulo": "Índice de risco diario de incendio (IRDI)",
-    "url": "https://mediorural.xunta.gal/gl/temas/alimentacion",
-    "x": "0",
-    "y": "0",
-    "zoom": "0.8",
-    "alto": "560",
-    "files": [],
-    "orden": 2
    }
   }
  ]
