@@ -438,9 +438,7 @@ dialog input[type=color]{height:42px;padding:3px}
 #priv{width:min(560px,calc(100vw - 32px))}
 
 /* mapa real en canvas, ciudadanía */
-.hero{height:clamp(380px,42vw,620px);overflow:hidden}
-#mapc{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y}
-#mapc:active{cursor:grabbing}
+.hero .map{display:block;width:100%;height:clamp(240px,24vw,360px);min-height:0;max-height:none}
 .mapctl{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:12px;display:flex;flex-direction:column;gap:6px}
 .mapctl .btn{width:34px;height:34px;padding:0;font-size:1.1rem;background:rgba(14,23,20,.88);color:#eef1ef;border-color:#2c3a35}
 .mapleg{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:12px;max-width:min(520px,calc(100% - 32px));background:rgba(14,23,20,.88);color:#c9d1cd;border:1px solid #2c3a35;border-radius:8px;padding:8px 12px;font-size:.8rem;display:flex;flex-direction:column;gap:2px}
@@ -501,14 +499,6 @@ h2.blk.arriba{margin-top:18px}
 <div class="wrap barras112" id="barras112"></div>
 
 <div id="v-inicio">
-  <div class="wrap"><h2 class="blk arriba">Dónde actuamos</h2></div>
-  <header class="hero">
-    <canvas id="mapc" aria-label="Mapa de Narón con calles y edificios reales, el parque de bomberos, los vehículos en servicio y los incendios por zona" role="img"></canvas>
-    <div class="mapctl"><button class="btn mini" data-mz="1.4" aria-label="Acercar">+</button><button class="btn mini" data-mz="0.7" aria-label="Alejar">−</button><button class="btn mini" data-mz="0" aria-label="Ver todo">⟲</button></div>
-    <div class="mapleg" id="mapleg"></div>
-    <div class="mapnote" id="mapnote">Calles: © OpenStreetMap · Edificios: Catastro. Arrastra para moverte.</div>
-    </header>
-  <div class="wrap"><div id="cifras"></div></div>
   <div class="wrap home">
     <div class="leftcol">
       <aside id="side0" class="sidebar" aria-label="Accesos"></aside>
@@ -527,6 +517,28 @@ h2.blk.arriba{margin-top:18px}
       <a class="btn" href="#noticias" style="margin-top:12px">Todas las noticias</a>
     </div>
   </div>
+  <div class="wrap"><h2 class="blk">Dónde actuamos</h2></div>
+  <header class="hero">
+    <svg class="map" id="map" viewBox="0 0 1000 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Plano esquemático de Narón con el parque de bomberos, las carreteras principales y los incendios de 2025 por zona">
+      <rect width="1000" height="440" fill="var(--m-bg)"/><g id="mapg">
+      <defs><radialGradient id="glow"><stop offset="0" stop-color="#3b82ff" stop-opacity=".9"/><stop offset="1" stop-color="#3b82ff" stop-opacity="0"/></radialGradient>
+        <path id="rd1" d="M-520 380L40 364C120 344 170 342 250 348S400 358 470 360S600 372 660 384S860 402 1000 392"/><path id="rd2" d="M-520 330L120 292C200 256 300 248 420 244S700 214 1000 160"/><path id="rd3" d="M150 322C190 280 230 230 270 170S330 70 400 0"/><path id="rd4" d="M330 350C340 300 370 250 400 200S520 90 600 0"/></defs>
+      <path d="M-520 384H0C140 364 300 384 430 392S600 404 664 390L668 406C600 428 470 432 360 428S120 440 0 440H-520Z" fill="var(--m-water)"/>
+      <text x="150" y="424" font-size="14" font-style="italic" class="dim">Ría de Ferrol</text>
+      <rect x="150" y="196" width="132" height="70" rx="4" fill="var(--m-zone)" stroke="var(--m-line)" stroke-width="1"/>
+      <text x="158" y="213" font-size="12" class="dim">P.I. Río do Pozo</text>
+      <g fill="none" stroke="var(--m-minor)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M60 300L95 230L150 196"/><path d="M282 210L340 196L420 244"/><path d="M250 348L262 300L340 290"/><path d="M470 360L500 300L560 290L600 232"/><path d="M600 232L680 168L760 120"/><path d="M560 290L640 290L700 330L820 340"/><path d="M700 330L760 260L822 250"/><path d="M760 260L860 200"/><path d="M396 186L460 160L520 228"/><path d="M180 120L270 170"/><path d="M100 160L180 120L230 60"/><path d="M640 290L660 384"/><path d="M822 250L900 300L1000 290"/><path d="M60 300L-60 310"/></g>
+      <g fill="none" stroke="var(--m-road)" stroke-width="2.6" stroke-linecap="round"><use href="#rd1"/><use href="#rd2"/><use href="#rd3"/><use href="#rd4"/></g>
+      <g font-size="13" letter-spacing="2" class="road"><text dy="-7"><textPath href="#rd2" startOffset="83%">AG-64</textPath></text><text dy="-7"><textPath href="#rd1" startOffset="88%">AC-862</textPath></text><text dy="-7"><textPath href="#rd3" startOffset="78%">AC-116</textPath></text><text dy="-7"><textPath href="#rd4" startOffset="74%">AC-566</textPath></text></g>
+      <g id="zonas"></g>
+      <g id="rutas"></g>
+      <circle class="pulso" cx="215" cy="232" r="8" fill="none" stroke="var(--accent)" stroke-width="3"/>
+      <circle cx="215" cy="232" r="9" fill="var(--accent)" stroke="var(--m-bg)" stroke-width="3"/>
+      <text x="230" y="238" font-size="16" font-weight="700">Parque de Bombeiros</text></g>
+    </svg>
+    <div class="mapnote" id="mapnote">Plano esquemático, no a escala.</div>
+    </header>
+  <div class="wrap"><div id="cifras"></div></div>
 </div>
 
 <div class="wrap shell" id="shell" hidden><aside id="side1" class="sidebar" aria-label="Accesos"></aside><main>
@@ -848,7 +860,9 @@ function render(){
   const c=S.cifras; const med=S.data.vehiculos.length, per=S.data.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);
   $('cifras').innerHTML=c?`<div class="cifras">${[[nf(c.total),'intervenciones en '+c.anio],[per||'–','personas en plantilla'],[med||'–','vehículos y medios'],[nf(c.hidrantes),'hidrantes revisados'],[c.km2+' km²','de término municipal']].map(x=>`<div class="cifra"><b class="num">${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`:'';
   $('tablaCifras').innerHTML=c&&c.tipos?`<div class="card tablewrap" style="margin-top:14px"><h3>Intervenciones por tipo</h3><table style="margin-top:8px"><thead><tr><th>Tipo</th><th class="r">${c.anio}</th><th class="r">${c.anio-1}</th></tr></thead><tbody>${c.tipos.map(t=>`<tr><td>${esc(t.n)}</td><td class="r num"><b>${nf(t.a)}</b></td><td class="r num muted">${t.b==null?'–':nf(t.b)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td class="r num"><b>${nf(c.total)}</b></td><td class="r num muted">${nf(c.anterior)}</td></tr></tbody></table></div>`:'';
-  if(typeof mapaCache==='function'&&MAPA.d){const k=JSON.stringify(c&&c.zonas||{});if(MAPA.zk!==k){MAPA.zk=k;mapaCache()}}
+  const z=(c&&c.zonas)||{};
+  $('zonas').innerHTML=ZONAS.map(([n,x,y])=>{const v=z[n],r=v?6+Math.sqrt(v)*4.2:4;return `<circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="var(--accent)" fill-opacity="${v?.18:.5}" stroke="var(--accent)" stroke-width="1.2"/><text x="${x}" y="${y-r-5}" font-size="14" font-weight="500" text-anchor="middle" class="dim">${esc(n)}${v?' · '+v:''}</text>`}).join('');
+  $('mapnote').textContent=c&&c.zonas?`Plano esquemático, no a escala. Círculos: incendios en ${c.anio} por zona.`:'Plano esquemático, no a escala.';
   const ab=S.data.convocatorias.filter(x=>x.estado==='Abierta').length,um=S.data.memorias.map(m=>m.anio).sort().pop();
   const a1=S.al112[0],n1=a1&&NIV[a1.nivel];
   $('dest').innerHTML=`<a class="dcard ${a1?n1[0]:top?esc(top.nivel):'verde'}" href="#alertas"><span class="label">Alertas meteorológicas</span><b>${a1?(LANG==='gl'?'Alerta '+n1[2]:'Alerta '+n1[1]):top?'Aviso '+esc(top.nivel):'Sin avisos activos'}</b><span>${a1?esc(((LANG==='gl'?a1.tipo_gl:a1.tipo_es)||a1.tipo_es||'')):top?esc(top.fenomeno):'Fuente: 112 Galicia'}</span></a><a class="dcard" href="#convocatorias"><span class="label">Convocatorias</span><b>${ab?ab+' abierta'+(ab>1?'s':''):'Ninguna abierta'}</b><span>Empleo y formación</span></a><a class="dcard" href="#memorias"><span class="label">Memorias de actividades</span><b>${um?'Memoria '+esc(um):'Memoria anual'}</b><span>${c?nf(c.total)+' intervenciones':'Datos del servicio'}</span></a>`;
@@ -877,88 +891,19 @@ $('burger').onclick=()=>{const o=$('menu').classList.toggle('open');$('burger').
 function ruta(){let h=location.hash.slice(1);if(!SECS[h])h='inicio';
   S.view=h;$('menu').classList.remove('open');document.querySelectorAll('#menu .dd').forEach(d=>d.classList.remove('open'));document.querySelectorAll('#menu a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));$('shell').hidden=h==='inicio';side();menu();$('v-inicio').hidden=h!=='inicio';Object.keys(SECS).forEach(s=>$('v-'+s).hidden=s!==h);window.scrollTo(0,0);tr()}
 addEventListener('hashchange',ruta);
-/* «Dónde actuamos»: mapa real de Narón (calles OSM y edificios del Catastro) dibujado en canvas */
-const MAPA={d:null,S:[],B:[],R:[],cx:0,cy:0,s:.2,W:0,H:0,dpr:1,cache:null,tocado:false,img:{},vis:true};
-const MZ={alto:'Alto del Castaño',gandara:'Gándara',cecilia:'Santa Cecilia',couto:'Couto',pineiros:'Piñeiros',xuvia:'Xuvia',feal:'Feal'};
-const MC={bg:'#0e1714',b:'#1b2622',bl:'#2c3a35',foot:'#3e4b46',svc:'#5d6a64',res:'#aab4af',ter:'#d3d9d6',pri:'#eef1ef',txt:'#c9d1cd',dim:'#8f9c96',red:'#e5372b'};
-const decP=a=>{const o=new Float64Array(a.length);o[0]=a[0];o[1]=a[1];for(let i=2;i<a.length;i+=2){o[i]=o[i-2]+a[i];o[i+1]=o[i-1]+a[i+1]}return o};
-const bbox=p=>{let a=1e9,b=1e9,c=-1e9,d=-1e9;for(let i=0;i<p.length;i+=2){a=Math.min(a,p[i]);c=Math.max(c,p[i]);b=Math.min(b,p[i+1]);d=Math.max(d,p[i+1])}return [a,b,c,d]};
-async function cargaMapa(){try{const r=await fetch('naron-mapa.json');if(!r.ok)throw 0;const d=await r.json();MAPA.d=d;
-  MAPA.S=d.s.map(([c,n,a])=>{const p=decP(a);return {c,n,p,bb:bbox(p)}}).sort((a,b)=>b.c-a.c);
-  MAPA.B=d.b.map(a=>{const p=decP(a);return {p,bb:bbox(p)}});
-  MAPA.R=Object.entries(d.rutas||{}).map(([nom,pts],k)=>{const L=[0];for(let i=1;i<pts.length;i++)L.push(L[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
-    const f={'BNL 5':'top-bnl5.png','AEA 4':'top-aea4.png','AEA 2':'top-aea2.png'}[nom];if(f&&!MAPA.img[f]){const im=new Image();im.src=f;MAPA.img[f]=im}
-    return {nom,pts,L,len:L[L.length-1],f,dur:24000+k*9000,off:k*5000}});
-  mapaTam();}catch(e){$('mapnote').textContent='No se pudo cargar el mapa.'}}
-function mapaFit(){const d=MAPA.d;if(!d)return;const P=[d.parque,...Object.values(d.zonas).map(z=>[z[0],z[1]])];
-  let a=1e9,b=1e9,c=-1e9,e=-1e9;P.forEach(([x,y])=>{a=Math.min(a,x);c=Math.max(c,x);b=Math.min(b,y);e=Math.max(e,y)});
-  const pad=MAPA.W<700?1.12:1.25;MAPA.cx=(a+c)/2;MAPA.cy=(b+e)/2;MAPA.s=Math.min(MAPA.W/((c-a)*pad+200),MAPA.H/((e-b)*pad+200))}
-function mapaTam(){const cv=$('mapc');if(!cv)return;const r=cv.parentElement.getBoundingClientRect();if(r.height<20)return;MAPA.W=Math.max(300,Math.round(r.width));MAPA.H=Math.round(r.height);MAPA.dpr=Math.min(2,window.devicePixelRatio||1);
-  cv.width=MAPA.W*MAPA.dpr;cv.height=MAPA.H*MAPA.dpr;if(!MAPA.tocado)mapaFit();mapaCache()}
-const PX=(x,y)=>[(x-MAPA.cx)*MAPA.s+MAPA.W/2,MAPA.H/2-(y-MAPA.cy)*MAPA.s];
-function mapaCache(){const d=MAPA.d;if(!d||!MAPA.W||MAPA.H<20)return;const c=MAPA.cache||(MAPA.cache=document.createElement('canvas'));c.width=MAPA.W*MAPA.dpr;c.height=MAPA.H*MAPA.dpr;
-  const g=c.getContext('2d');g.setTransform(MAPA.dpr,0,0,MAPA.dpr,0,0);g.fillStyle=MC.bg;g.fillRect(0,0,MAPA.W,MAPA.H);
-  const s=MAPA.s,hw=MAPA.W/2/s,hh=MAPA.H/2/s,vx0=MAPA.cx-hw,vx1=MAPA.cx+hw,vy0=MAPA.cy-hh,vy1=MAPA.cy+hh,vis=bb=>bb[2]>=vx0&&bb[0]<=vx1&&bb[3]>=vy0&&bb[1]<=vy1;
-  const path=p=>{let[x,y]=PX(p[0],p[1]);g.moveTo(x,y);for(let i=2;i<p.length;i+=2){[x,y]=PX(p[i],p[i+1]);g.lineTo(x,y)}};
-  // edificios
-  g.beginPath();MAPA.B.forEach(b=>{if(vis(b.bb)){path(b.p);g.closePath()}});g.fillStyle=MC.b;g.fill();if(s>.22){g.strokeStyle=MC.bl;g.lineWidth=.6;g.stroke()}
-  // calles por categoría (las secundarias primero)
-  const k=Math.min(2.2,Math.max(.55,s*2.2));
-  const EST={8:[MC.foot,.6,[2,3]],7:[MC.svc,.9],6:[MC.svc,.8],5:[MC.res,1.1],4:[MC.ter,1.6],3:[MC.ter,1.7],2:[MC.pri,2.1],1:[MC.pri,2.3],0:[MC.pri,2.8]};
-  [8,7,6,5,4,3,2,1,0].forEach(cl=>{if(cl===8&&s<.3)return;if((cl===6||cl===7)&&s<.12)return;const [col,w,dash]=EST[cl];g.beginPath();MAPA.S.forEach(st=>{if(st.c===cl&&vis(st.bb))path(st.p)});
-    g.strokeStyle=col;g.lineWidth=w*k;g.lineCap='round';g.lineJoin='round';g.setLineDash(dash||[]);g.stroke()});g.setLineDash([]);
-  // nombres de calle a lo largo del tramo más largo
-  const ocup=[];const libre=(x,y,w,h)=>{const r=[x-w/2,y-h/2,x+w/2,y+h/2];if(ocup.some(o=>r[0]<o[2]&&r[2]>o[0]&&r[1]<o[3]&&r[3]>o[1]))return false;ocup.push(r);return true};
-  g.font='500 11px Inter,system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';
-  if(s>.16)[...MAPA.S].filter(st=>st.n&&st.c<=5&&vis(st.bb)).sort((a,b)=>a.c-b.c).forEach(st=>{let best=0,bi=0;const p=st.p;for(let i=0;i+3<p.length;i+=2){const l=Math.hypot(p[i+2]-p[i],p[i+3]-p[i+1]);if(l>best){best=l;bi=i}}
-    const t=st.n.toUpperCase().length>26?st.n:st.n,tw=g.measureText(t).width+12;if(best*s<tw)return;
-    const [x1,y1]=PX(p[bi],p[bi+1]),[x2,y2]=PX(p[bi+2],p[bi+3]),mx=(x1+x2)/2,my=(y1+y2)/2;if(mx<20||my<20||mx>MAPA.W-20||my>MAPA.H-20)return;
-    let a=Math.atan2(y2-y1,x2-x1);if(a>Math.PI/2)a-=Math.PI;if(a<-Math.PI/2)a+=Math.PI;
-    if(!libre(mx,my,Math.abs(Math.cos(a))*tw+12,Math.abs(Math.sin(a))*tw+14))return;
-    g.save();g.translate(mx,my);g.rotate(a);g.lineWidth=3;g.strokeStyle=MC.bg;g.strokeText(t,0,-7);g.fillStyle=MC.txt;g.fillText(t,0,-7);g.restore()});
-  // incendios por zona
-  const z=(S.cifras&&S.cifras.zonas)||{};g.textBaseline='alphabetic';
-  const zs=Object.entries(d.zonas).map(([id,[x,y]])=>{const nom=MZ[id]||id,v=z[nom],[px,py]=PX(x,y);return {nom,v,px,py,r:v?7+Math.sqrt(v)*5:5}});
-  const lab=[];const cho=(a)=>lab.some(o=>a[0]<o[2]&&a[2]>o[0]&&a[1]<o[3]&&a[3]>o[1]);
-  zs.forEach(o=>{g.beginPath();g.arc(o.px,o.py,o.r,0,7);g.fillStyle=o.v?'rgba(229,55,43,.22)':'rgba(229,55,43,.5)';g.fill();g.lineWidth=1.3;g.strokeStyle=MC.red;g.stroke()});
-  g.font='600 14px Inter,system-ui,sans-serif';
-  [...zs].sort((a,b)=>(b.v||0)-(a.v||0)).forEach(o=>{const t=o.nom+(o.v?' · '+o.v:''),w=g.measureText(t).width;
-    const ops=[[o.px,o.py-o.r-6,'center'],[o.px,o.py+o.r+16,'center'],[o.px+o.r+6,o.py+5,'left'],[o.px-o.r-6,o.py+5,'right']];
-    let pick=ops[0];for(const op of ops){const x0=op[2]==='center'?op[0]-w/2:op[2]==='left'?op[0]:op[0]-w;const a=[x0-3,op[1]-13,x0+w+3,op[1]+4];if(!cho(a)){pick=op;lab.push(a);break}}
-    g.textAlign=pick[2];g.lineWidth=4;g.strokeStyle=MC.bg;g.strokeText(t,pick[0],pick[1]);g.fillStyle='#fff';g.fillText(t,pick[0],pick[1])});
-  g.textAlign='center';
-  // parque
-  const [qx,qy]=PX(...d.parque);g.beginPath();g.arc(qx,qy,9,0,7);g.fillStyle=MC.red;g.fill();g.lineWidth=3;g.strokeStyle=MC.bg;g.stroke();
-  g.font='700 15px Inter,system-ui,sans-serif';g.textAlign='left';g.lineWidth=4;g.strokeText('Parque de Bombeiros',qx+15,qy+5);g.fillStyle='#fff';g.fillText('Parque de Bombeiros',qx+15,qy+5);
-  const ru=Object.entries(z).filter(([n])=>!Object.values(MZ).includes(n));
-  $('mapleg').innerHTML=S.cifras&&S.cifras.zonas?`<b>Incendios en ${esc(S.cifras.anio)}</b>${ru.length?`<span>Parroquias fuera del mapa: ${ru.map(([n,v])=>esc(n)+' '+esc(v)).join(' · ')}</span>`:''}`:'';
-  mapaFrame(performance.now())}
-function posRuta(v,t){const u=((t+v.off)%v.dur)/v.dur,back=u>.5,f=u<.45?u/.45:u<.55?1:1-(u-.55)/.45,q=f*v.len;let i=1;while(i<v.L.length-1&&v.L[i]<q)i++;
-  const a=v.pts[i-1],b=v.pts[i],seg=(v.L[i]-v.L[i-1])||1,w=Math.min(1,Math.max(0,(q-v.L[i-1])/seg));return {x:a[0]+(b[0]-a[0])*w,y:a[1]+(b[1]-a[1])*w,ang:Math.atan2(-(b[1]-a[1]),b[0]-a[0])+(back&&u>.55?Math.PI:0)}}
-function mapaFrame(t){const cv=$('mapc');if(!cv||!MAPA.cache||!MAPA.cache.width||!MAPA.cache.height||!cv.width||!cv.height)return;const g=cv.getContext('2d');g.setTransform(1,0,0,1,0,0);g.drawImage(MAPA.cache,0,0);g.setTransform(MAPA.dpr,0,0,MAPA.dpr,0,0);
-  const d=MAPA.d,[qx,qy]=PX(...d.parque),ph=(t%2200)/2200;g.beginPath();g.arc(qx,qy,9+ph*26,0,7);g.strokeStyle=`rgba(229,55,43,${(1-ph)*.9})`;g.lineWidth=3;g.stroke();
-  const on=Math.floor(t/350)%2;
-  MAPA.R.forEach(v=>{const p=posRuta(v,t),[x,y]=PX(p.x,p.y);if(x<-60||y<-60||x>MAPA.W+60||y>MAPA.H+60)return;
-    const im=MAPA.img[v.f],L=46,H=im&&im.naturalWidth?L*im.naturalHeight/im.naturalWidth:16;
-    g.save();g.translate(x,y);g.rotate(p.ang);const fx=L*.32;
-    const gr=g.createRadialGradient(fx,0,0,fx,0,26);gr.addColorStop(0,`rgba(59,130,255,${on?.85:.35})`);gr.addColorStop(1,'rgba(59,130,255,0)');g.fillStyle=gr;g.beginPath();g.arc(fx,0,26,0,7);g.fill();
-    if(im&&im.complete&&im.naturalWidth)g.drawImage(im,-L/2,-H/2,L,H);else{g.fillStyle=MC.red;g.fillRect(-L/2,-6,L,12)}
-    g.fillStyle=on?'#4d8dff':'#ff3b30';g.beginPath();g.arc(fx,-H*.22,2.6,0,7);g.fill();g.fillStyle=on?'#ff3b30':'#4d8dff';g.beginPath();g.arc(fx,H*.22,2.6,0,7);g.fill();g.restore();
-    g.font='700 13px Inter,system-ui,sans-serif';g.textAlign='center';g.lineWidth=4;g.strokeStyle=MC.bg;g.strokeText(v.nom,x,y-24);g.fillStyle='#fff';g.fillText(v.nom,x,y-24)})}
-(function bucle(t){const quieto=matchMedia('(prefers-reduced-motion:reduce)').matches||(S.cfg.tema||{}).anim===false;
-  if(MAPA.cache&&MAPA.vis&&!$('v-inicio').hidden)mapaFrame(quieto?6000:t);requestAnimationFrame(bucle)})(0);
-function mapaZoom(f,ox,oy){const W=MAPA.W,H=MAPA.H;ox=ox??W/2;oy=oy??H/2;const mx=MAPA.cx+(ox-W/2)/MAPA.s,my=MAPA.cy-(oy-H/2)/MAPA.s;
-  MAPA.s=Math.min(3,Math.max(.05,MAPA.s*f));MAPA.cx=mx-(ox-W/2)/MAPA.s;MAPA.cy=my+(oy-H/2)/MAPA.s;MAPA.tocado=true;mapaCache()}
-(function(){const cv=$('mapc');let dr=null;
-  cv.addEventListener('pointerdown',e=>{dr={x:e.clientX,y:e.clientY,t:e.pointerType};if(e.pointerType!=='touch')cv.setPointerCapture(e.pointerId)});
-  cv.addEventListener('pointermove',e=>{if(!dr)return;const dx=e.clientX-dr.x,dy=dr.t==='touch'?0:e.clientY-dr.y;if(!dx&&!dy)return;MAPA.cx-=dx/MAPA.s;MAPA.cy+=dy/MAPA.s;dr.x=e.clientX;dr.y=e.clientY;MAPA.tocado=true;mapaCache()});
-  ['pointerup','pointercancel','pointerleave'].forEach(n=>cv.addEventListener(n,()=>dr=null));
-  cv.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();const r=cv.getBoundingClientRect();mapaZoom(e.deltaY<0?1.25:.8,e.clientX-r.left,e.clientY-r.top)},{passive:false});
-  document.addEventListener('click',e=>{const b=e.target.closest('[data-mz]');if(!b)return;const v=b.dataset.mz;if(v==='0'){MAPA.tocado=false;mapaFit();mapaCache()}else mapaZoom(+v)});
-  if('ResizeObserver' in window)new ResizeObserver(()=>mapaTam()).observe(cv.parentElement);else addEventListener('resize',mapaTam);
-  if('IntersectionObserver' in window)new IntersectionObserver(es=>{MAPA.vis=es[0].isIntersecting}).observe(cv);
-})();
-cargaMapa();
+/* vehículos del plano: vista cenital con rotativos azules */
+const NS='http://www.w3.org/2000/svg';
+const VE=[['top-bnl5.png','BNL 5',.39,'M215 232C235 215 255 195 270 170S310 100 345 60',12000],['top-aea4.png','AEA 4',.37,'M215 232C200 270 190 310 200 344C260 348 360 356 445 360',16000],['top-aea2.png','AEA 2',.24,'M215 232C260 250 340 246 420 244S640 222 820 190',21000]].map(([img,nom,ar,d,dur],k)=>{
+  const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('fill','none');$('rutas').appendChild(p);
+  const g=document.createElementNS(NS,'g'),L=54,H=L*ar;
+  g.innerHTML=`<circle class="halo" cx="${L*.3}" cy="0" r="22" fill="url(#glow)"/><image href="${img}" x="${-L/2}" y="${-H/2}" width="${L}" height="${H}"/><circle class="rot" cx="${L*.3}" cy="${-H*.2}" r="3.4"/><circle class="rot b" cx="${L*.3}" cy="${H*.2}" r="3.4"/>`;
+  const t=document.createElementNS(NS,'text');t.setAttribute('class','vlab');t.setAttribute('text-anchor','middle');t.textContent=nom;
+  $('rutas').appendChild(g);$('rutas').appendChild(t);return {p,g,t,len:p.getTotalLength(),dur,off:k*3000}});
+function mover(t){VE.forEach(v=>{const u=((t+v.off)%v.dur)/v.dur,back=u>.5,q=Math.min(1,(back?1-u:u)*2.15)*v.len;
+  const a=v.p.getPointAtLength(q),b=v.p.getPointAtLength(Math.min(v.len,q+1.5)),c=v.p.getPointAtLength(Math.max(0,q-1.5));
+  v.t.setAttribute('x',a.x.toFixed(1));v.t.setAttribute('y',(a.y-24).toFixed(1));
+  v.g.setAttribute('transform',`translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${(Math.atan2(b.y-c.y,b.x-c.x)*180/Math.PI+(back?180:0)).toFixed(1)})`)})}
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)mover(4000);else (function loop(t){if(!$('v-inicio').hidden&&(S.cfg.tema||{}).anim!==false)mover(t||0);requestAnimationFrame(loop)})(0);
 
 
 /* edición */
