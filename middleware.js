@@ -1,16 +1,36 @@
-// Protege /personal con usuario y contraseña (variables PERSONAL_USUARIO y PERSONAL_CLAVE en Vercel).
-// Sin esas variables configuradas, nadie puede entrar.
+// Protege /personal (variables en Vercel):
+//   PERSONAL_USUARIO y PERSONAL_CLAVE -> usuario y contraseña del personal.
+//   PERSONAL_LLAVE (opcional) -> acceso libre del administrador: abrir una vez /personal?llave=VALOR
+//   en cada dispositivo deja ese navegador con acceso sin contraseña durante un año.
+// Sin variables configuradas, nadie puede entrar.
 export const config = { matcher: ['/personal', '/personal/:path*'] };
 
+const COOKIE = 'bn_admin';
+const seguir = () => new Response(null, { headers: { 'x-middleware-next': '1' } });
+
 export default function middleware(request) {
-  const usuario = process.env.PERSONAL_USUARIO, clave = process.env.PERSONAL_CLAVE;
+  const usuario = process.env.PERSONAL_USUARIO, clave = process.env.PERSONAL_CLAVE, llave = process.env.PERSONAL_LLAVE;
+  const url = new URL(request.url);
+
+  if (llave) {
+    // 1) enlace de administrador: guarda la llave en una cookie y limpia la dirección
+    if (url.searchParams.get('llave') === llave) {
+      return new Response(null, { status: 302, headers: {
+        'Location': url.pathname,
+        'Set-Cookie': `${COOKIE}=${encodeURIComponent(llave)}; Path=/personal; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax`
+      } });
+    }
+    // 2) navegador del administrador ya reconocido
+    const galletas = Object.fromEntries((request.headers.get('cookie') || '').split(';').map(c => c.trim().split('=')).filter(p => p[0]).map(([k, ...v]) => [k, v.join('=')]));
+    if (galletas[COOKIE] && decodeURIComponent(galletas[COOKIE]) === llave) return seguir();
+  }
+
+  // 3) resto del personal: usuario y contraseña
   const auth = request.headers.get('authorization') || '';
   if (usuario && clave && auth.startsWith('Basic ')) {
     try {
       const [u, ...resto] = atob(auth.slice(6)).split(':');
-      if (u === usuario && resto.join(':') === clave) {
-        return new Response(null, { headers: { 'x-middleware-next': '1' } });
-      }
+      if (u === usuario && resto.join(':') === clave) return seguir();
     } catch (e) {}
   }
   return new Response('Acceso restringido al personal de Bombeiros Narón.', {
