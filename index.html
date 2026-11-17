@@ -448,6 +448,8 @@ dialog input[type=color]{height:42px;padding:3px}
 .hero .mapnote{display:block}
 h3.sub3{font-size:1.15rem;margin:24px 0 10px}
 @media (max-width:860px){.hero .mapnote{display:none}.mapleg{font-size:.74rem}}
+
+h2.blk.arriba{margin-top:18px}
 </style>
 </head>
 <body>
@@ -499,6 +501,14 @@ h3.sub3{font-size:1.15rem;margin:24px 0 10px}
 <div class="wrap barras112" id="barras112"></div>
 
 <div id="v-inicio">
+  <div class="wrap"><h2 class="blk arriba">Dónde actuamos</h2></div>
+  <header class="hero">
+    <canvas id="mapc" aria-label="Mapa de Narón con calles y edificios reales, el parque de bomberos, los vehículos en servicio y los incendios por zona" role="img"></canvas>
+    <div class="mapctl"><button class="btn mini" data-mz="1.4" aria-label="Acercar">+</button><button class="btn mini" data-mz="0.7" aria-label="Alejar">−</button><button class="btn mini" data-mz="0" aria-label="Ver todo">⟲</button></div>
+    <div class="mapleg" id="mapleg"></div>
+    <div class="mapnote" id="mapnote">Calles: © OpenStreetMap · Edificios: Catastro. Arrastra para moverte.</div>
+    </header>
+  <div class="wrap"><div id="cifras"></div></div>
   <div class="wrap home">
     <div class="leftcol">
       <aside id="side0" class="sidebar" aria-label="Accesos"></aside>
@@ -517,14 +527,6 @@ h3.sub3{font-size:1.15rem;margin:24px 0 10px}
       <a class="btn" href="#noticias" style="margin-top:12px">Todas las noticias</a>
     </div>
   </div>
-  <div class="wrap"><h2 class="blk">Dónde actuamos</h2></div>
-  <header class="hero">
-    <canvas id="mapc" aria-label="Mapa de Narón con calles y edificios reales, el parque de bomberos, los vehículos en servicio y los incendios por zona" role="img"></canvas>
-    <div class="mapctl"><button class="btn mini" data-mz="1.4" aria-label="Acercar">+</button><button class="btn mini" data-mz="0.7" aria-label="Alejar">−</button><button class="btn mini" data-mz="0" aria-label="Ver todo">⟲</button></div>
-    <div class="mapleg" id="mapleg"></div>
-    <div class="mapnote" id="mapnote">Calles: © OpenStreetMap · Edificios: Catastro. Arrastra para moverte.</div>
-    </header>
-  <div class="wrap"><div id="cifras"></div></div>
 </div>
 
 <div class="wrap shell" id="shell" hidden><aside id="side1" class="sidebar" aria-label="Accesos"></aside><main>
@@ -651,7 +653,7 @@ h3.sub3{font-size:1.15rem;margin:24px 0 10px}
 
 <dialog id="dlg"><form id="frm"><h3 id="dlg-t"></h3><div id="dlg-f" style="display:flex;flex-direction:column;gap:12px"></div>
   <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" id="dlg-x">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
-<dialog id="txt"><form id="txt-f"><h3>Editar texto</h3><p class="muted small">Original: <span id="txt-o"></span></p><textarea id="txt-v" rows="4"></textarea>
+<dialog id="txt"><form id="txt-f"><h3>Editar texto</h3><p class="muted small">Original: <span id="txt-o"></span></p><textarea id="txt-v" rows="4"></textarea><label id="txt-lw" hidden>Destino del botón o enlace<input id="txt-l" placeholder="https://... o #seccion"></label>
   <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" data-x="txt-r">Volver al original</button><button type="button" class="btn" data-x="txt-c">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
 <dialog id="tema"><form id="tema-f"><h3>Colores, botones e interacciones</h3>
   <label>Color principal (botones, cabeceras, iconos)<input type="color" id="t-accent"></label>
@@ -694,7 +696,9 @@ function tr(){const gl=LANG==='gl',ov=(S.cfg.textos[LANG])||{};document.document
     if(n._s===undefined||n.nodeValue!==n._s)n._o=n.nodeValue;
     const k=n._o.trim();if(!k)continue;let v=n._o;
     if(ov[k]!=null)v=n._o.replace(k,()=>ov[k]);else if(gl){const t=glt(k);if(t!=null)v=n._o.replace(k,()=>t)}
-    if(n.nodeValue!==v)n.nodeValue=v;n._s=v}}
+    if(n.nodeValue!==v)n.nodeValue=v;n._s=v}
+  const lk=S.cfg.textos.links||{};document.querySelectorAll('a[href]').forEach(a=>{if(a.closest('#txt,#tema'))return;const h=a.getAttribute('href');if(a._sh===undefined||h!==a._sh)a._oh=h;
+    const nv=lk[a._oh]||a._oh;if(h!==nv)a.setAttribute('href',nv);a._sh=nv;if(lk[a._oh]&&/^https:/i.test(nv)){a.target='_blank';a.rel='noopener'}})}
 const SECS={avisos:'Avisos',ciudadania:'Ciudadanía',mapas:'Mapas',noticias:'Noticias',alertas:'Alertas',servicio:'El servicio',redes:'Redes sociales',convocatorias:'Convocatorias',intervenciones:'Intervenciones',plantilla:'Plantilla',vehiculos:'Vehículos',prevencion:'Prevención',tiempo:'Mapas del tiempo',memorias:'Memorias',documentos:'Documentos',enlaces:'Enlaces'};
 const SEC_COL={avisos:['avisosweb'],ciudadania:['ciudadania'],mapas:['mapasweb'],noticias:['noticias'],alertas:['avisos'],servicio:['infoservicio','docservicio'],redes:['redes'],convocatorias:['convocatorias'],intervenciones:['intervenciones'],plantilla:['plantilla'],vehiculos:['vehiculos'],prevencion:['infoprevencion','prevencion'],tiempo:['mapastiempo'],memorias:['memorias'],documentos:['documentos'],enlaces:['enlaces']};
 const DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt', IMGS='image/png,image/jpeg,image/webp';
@@ -838,7 +842,7 @@ function render(){
   side();menu();
   $('privTools').innerHTML=S.edit?'<button class="btn mini pri" data-act="add" data-col="personal">Añadir enlace privado</button>':'';
   $('edbar').hidden=!S.edit;document.body.classList.toggle('edtext',S.edit&&S.edText);
-  $('edNote').innerHTML=S.edit?'<div class="note"><b>Modo edición.</b> Solo tú, como propietario, puedes editar. En el menú lateral: flechas para mover los apartados y ★ para ponerlos en el menú superior. En la barra de abajo: «Editar textos» deja cambiar cualquier texto de la página (pulsa encima de las letras); también colores, botones, avisos y enlaces del menú. Las alertas del 112 se ponen solas en la web pública. Las noticias del carrusel se añaden en Noticias. Dentro de cada sección puedes cambiar su foto, añadir fichas y subir archivos: PDF, imágenes, CSV y TXT, hasta 20 MB.</div>':'';
+  $('edNote').innerHTML=S.edit?'<div class="note"><b>Modo edición.</b> Solo tú, como propietario, puedes editar. En el menú lateral: flechas para mover los apartados y ★ para ponerlos en el menú superior. En la barra de abajo: «Editar textos» deja cambiar cualquier texto, botón o enlace de la página, también adónde lleva (pulsa encima); también colores, botones, avisos y enlaces del menú. Las alertas del 112 se ponen solas en la web pública. Las noticias del carrusel se añaden en Noticias. Dentro de cada sección puedes cambiar su foto, añadir fichas y subir archivos: PDF, imágenes, CSV y TXT, hasta 20 MB.</div>':'';
   const av=S.data.avisos,ord={rojo:3,naranja:2,amarillo:1},top=[...av].sort((a,b)=>(ord[b.nivel]||0)-(ord[a.nivel]||0))[0];
   $('banner').innerHTML=top?`<a class="banner ${esc(top.nivel)}" href="#alertas"><span>Aviso ${esc(top.nivel)} por ${esc(top.fenomeno)}</span><span class="small">${esc(top.vigencia)}</span><span style="margin-left:auto">Ver alertas →</span></a>`:'';
   const c=S.cifras; const med=S.data.vehiculos.length, per=S.data.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);
@@ -980,21 +984,29 @@ $('fileinp').addEventListener('change',async e=>{const fs=[...e.target.files];e.
   try{await ref(col,id).update({files});toast(mal?`Subido, salvo ${mal} archivo(s) de un tipo no admitido o con error.`:'Archivo subido')}catch(err){toast('No se pudo guardar el archivo.')}});
 
 /* edición de cualquier texto fijo */
-let edN=null;const toArr=o=>Object.entries(o||{}).map(([k,v])=>({k,v})),toObj=a=>Object.fromEntries((Array.isArray(a)?a:[]).map(x=>[x.k,x.v]));
+let edN=null,edA=null;const toArr=o=>Object.entries(o||{}).map(([k,v])=>({k,v})),toObj=a=>Object.fromEntries((Array.isArray(a)?a:[]).map(x=>[x.k,x.v]));
 document.addEventListener('click',e=>{if(!S.edit||!S.edText)return;const el=e.target;if(!el.closest||el.closest('dialog,#edbar,input,select,textarea,#langbtn,#editbtn,#toast'))return;
   e.preventDefault();e.stopPropagation();
   let t=el,n=null;while(t&&t!==document.body&&!n){n=[...t.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());if(!n)t=t.parentElement}
-  if(!n||n._o===undefined){toast('Aquí no hay texto. Pulsa encima de las letras.');return}
+  const A=el.closest('a[href]');if(n&&A&&!A.contains(n))n=null;
+  if((!n||n._o===undefined)&&!A){toast('Aquí no hay texto. Pulsa encima de las letras.');return}
+  edA=A;$('txt-lw').hidden=!A;if(A)$('txt-l').value=A.getAttribute('href')||'';
+  if(!n||n._o===undefined){edN=null;$('txt-o').textContent='(botón sin texto)';$('txt-v').value='';$('txt-v').disabled=true;$('txt').showModal();return}
+  $('txt-v').disabled=false;
   edN=n;$('txt-o').textContent=n._o.trim();$('txt-v').value=n.nodeValue.trim();$('txt').showModal()},true);
-async function guardaTexto(v){const k=edN._o.trim(),m=S.cfg.textos;m[LANG]=m[LANG]||{};if(v==null||v===''||(LANG==='es'&&v===k))delete m[LANG][k];else m[LANG][k]=v;$('txt').close();tr();
-  try{await S.db.doc('config/textos').set({es:toArr(m.es),gl:toArr(m.gl)});toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}}
-$('txt-f').addEventListener('submit',e=>{e.preventDefault();guardaTexto($('txt-v').value.trim())});
+async function guardaTexto(v,l,reset){const m=S.cfg.textos;m[LANG]=m[LANG]||{};m.links=m.links||{};
+  if(edN){const k=edN._o.trim();if(reset||v==null||v===''||(LANG==='es'&&v===k))delete m[LANG][k];else m[LANG][k]=v}
+  if(edA){const k=edA._oh||edA.getAttribute('href');l=(l||'').trim();
+    if(reset||!l||l===k)delete m.links[k];else if(/^https:\/\/\S+$/i.test(l)||/^#[a-z]+$/.test(l)||l==='/personal')m.links[k]=l;else{toast('El destino tiene que empezar por https:// o ser una sección como #prevencion.');return}}
+  $('txt').close();tr();
+  try{await S.db.doc('config/textos').set({es:toArr(m.es),gl:toArr(m.gl),links:toArr(m.links)});toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}}
+$('txt-f').addEventListener('submit',e=>{e.preventDefault();guardaTexto($('txt-v').value.trim(),$('txt-l').value)});
 function abreTema(){const t=S.cfg.tema||{},cs=getComputedStyle(document.documentElement),hex=v=>{v=v.trim();return /^#[0-9a-f]{6}$/i.test(v)?v:'#d3271c'};
   $('t-accent').value=hex(t.accent||cs.getPropertyValue('--accent'));$('t-menu').value=hex(t.menu||cs.getPropertyValue('--surface'));$('t-pie').value=hex(t.pie||cs.getPropertyValue('--foot'));
   $('t-boton').value=t.boton||'redondo';$('t-relleno').value=t.relleno||'relleno';$('t-anim').checked=t.anim!==false;$('t-carAuto').checked=t.carAuto!==false;$('t-carSecs').value=t.carSecs||6;$('tema').showModal()}
 async function guardaTema(t){S.cfg.tema=t;$('tema').close();render();try{await S.db.doc('config/tema').set(t);toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}}
 $('tema-f').addEventListener('submit',e=>{e.preventDefault();guardaTema({accent:$('t-accent').value,menu:$('t-menu').value,pie:$('t-pie').value,boton:$('t-boton').value,relleno:$('t-relleno').value,anim:$('t-anim').checked,carAuto:$('t-carAuto').checked,carSecs:+$('t-carSecs').value||6})});
-document.addEventListener('click',e=>{const x=e.target.closest('[data-x]');if(!x)return;const a=x.dataset.x;if(a==='priv-c')$('priv').close();if(a==='txt-c')$('txt').close();if(a==='tema-c')$('tema').close();if(a==='txt-r')guardaTexto(null);if(a==='tema-r')guardaTema({})});
+document.addEventListener('click',e=>{const x=e.target.closest('[data-x]');if(!x)return;const a=x.dataset.x;if(a==='priv-c')$('priv').close();if(a==='txt-c')$('txt').close();if(a==='tema-c')$('tema').close();if(a==='txt-r')guardaTexto(null,'',true);if(a==='tema-r')guardaTema({})});
 
 document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .dd>button');if(ddb){const o=ddb.parentElement.classList.toggle('open');ddb.setAttribute('aria-expanded',o);return}
   const ac=e.target.closest('#accbtn');if(ac&&!PUB){e.preventDefault();$('priv').showModal();return}
@@ -1039,7 +1051,7 @@ render();ruta();
       if(!s.metadata.fromCache){clearTimeout(t);$('estado').textContent=''} render()},
       ()=>{S.listo[col]=true;clearTimeout(t);render()})});
   db.doc('config/tema').onSnapshot(s=>{S.cfg.tema=s.exists?s.data():{};render()},()=>{});
-  db.doc('config/textos').onSnapshot(s=>{const d=s.exists?s.data():{};S.cfg.textos={es:toObj(d.es),gl:toObj(d.gl)};render()},()=>{});
+  db.doc('config/textos').onSnapshot(s=>{const d=s.exists?s.data():{};S.cfg.textos={es:toObj(d.es),gl:toObj(d.gl),links:toObj(d.links)};render()},()=>{});
   db.doc('config/layout').onSnapshot(s=>{const o=s.exists&&s.data().order,m=s.exists&&s.data().menu;if(Array.isArray(m))S.menu=m.filter(x=>SECS[x]);if(Array.isArray(o)){const ok=o.filter(x=>SECS[x]);S.order=[...ok,...Object.keys(SECS).filter(x=>!ok.includes(x))];render()}},()=>{});
   db.collection('secciones').onSnapshot(s=>{S.fotos={};s.docs.forEach(d=>{const f=(d.data().files||[])[0];if(f&&/^[0-9a-f]{32}$/.test(f.id))S.fotos[d.id]=f.id});render()},()=>{});
   db.doc('config/cifras').onSnapshot(s=>{S.cifras=s.exists?s.data():null;render()},()=>{});
