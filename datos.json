@@ -76,6 +76,7 @@
    "data": {
     "order": [
      "avisos",
+     "mapas",
      "noticias",
      "servicio",
      "alertas",
@@ -930,6 +931,34 @@
     "url": "#memorias",
     "files": [],
     "orden": 1
+   }
+  }
+ ],
+ "mapasweb": [
+  {
+   "id": "incidencias112",
+   "data": {
+    "titulo": "Incidencias en Galicia · 112 Galicia",
+    "url": "https://www.axega112.gal/gl",
+    "x": "0",
+    "y": "0",
+    "zoom": "0.8",
+    "alto": "560",
+    "files": [],
+    "orden": 1
+   }
+  },
+  {
+   "id": "irdi",
+   "data": {
+    "titulo": "Índice de risco diario de incendio (IRDI)",
+    "url": "https://mediorural.xunta.gal/gl/temas/alimentacion",
+    "x": "0",
+    "y": "0",
+    "zoom": "0.8",
+    "alto": "560",
+    "files": [],
+    "orden": 2
    }
   }
  ]
