@@ -17,7 +17,14 @@
    "id": "ordenanzas",
    "data": {
     "apartado": "Ordenanzas y tasas",
-    "files": [],
+    "files": [
+     {
+      "id": "369a53f1988a14a052d0643a5e3d1331",
+      "name": "ordenanza 23 tasas.pdf",
+      "size": 236876,
+      "type": "application/pdf"
+     }
+    ],
     "orden": 5,
     "texto": "Ordenanzas fiscales, tasas y reglamentos del Concello de Narón en su portal de transparencia.",
     "titulo": "Normativa municipal vigente",
@@ -153,6 +160,10 @@
      "prevencion",
      "ciudadania"
     ],
+    "oculto": [
+     "mapas",
+     "enlaces"
+    ],
     "order": [
      "avisos",
      "noticias",
@@ -166,7 +177,6 @@
      "plantilla",
      "vehiculos",
      "prevencion",
-     "tiempo",
      "memorias",
      "documentos",
      "enlaces"
@@ -285,38 +295,6 @@
     "orden": 1,
     "texto": "El SPEIS presta desde 2015 un servicio esencial en Narón: cubre 66 km² y cerca de 40.000 habitantes, con 3 polígonos industriales, 2 líneas de ferrocarril, 14 centros de enseñanza, 58 km de vías rápidas con tránsito de mercancías peligrosas y zona de costa.\n\nAdemás de las emergencias, el servicio revisa los 214 hidrantes del municipio, elabora planes de intervención operativa (PIO) y realiza simulacros y formación continua.\n\nPara pedir ayuda llama al 112 o al 080. Esta web no recibe avisos de emergencia.",
     "titulo": "Qué hacemos"
-   }
-  }
- ],
- "mapastiempo": [
-  {
-   "id": "ma0",
-   "data": {
-    "detalle": "Windy, centrado en Narón",
-    "files": [],
-    "nombre": "Viento y rachas",
-    "orden": 1,
-    "url": "https://www.windy.com/?43.50,-8.19,10"
-   }
-  },
-  {
-   "id": "ma1",
-   "data": {
-    "detalle": "MeteoGalicia",
-    "files": [],
-    "nombre": "Radar y predicción",
-    "orden": 2,
-    "url": "https://www.meteogalicia.gal"
-   }
-  },
-  {
-   "id": "ma2",
-   "data": {
-    "detalle": "AEMET",
-    "files": [],
-    "nombre": "Mapa de avisos",
-    "orden": 3,
-    "url": "https://www.aemet.es/es/eltiempo/prediccion/avisos"
    }
   }
  ],
