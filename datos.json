@@ -1005,5 +1005,93 @@
     "uso": "Rescates, tráfico y mercancías peligrosas"
    }
   }
+ ],
+ "directo": [
+  {
+   "id": "d1",
+   "data": {
+    "nombre": "Concello de Narón",
+    "url": "https://www.naron.gal",
+    "files": [],
+    "orden": 1
+   }
+  },
+  {
+   "id": "d2",
+   "data": {
+    "nombre": "112 Galicia · Axega",
+    "url": "https://www.axega112.gal/gl",
+    "files": [],
+    "orden": 2
+   }
+  },
+  {
+   "id": "d3",
+   "data": {
+    "nombre": "Convocatorias",
+    "url": "#convocatorias",
+    "files": [],
+    "orden": 3
+   }
+  },
+  {
+   "id": "d4",
+   "data": {
+    "nombre": "Prevención",
+    "url": "#prevencion",
+    "files": [],
+    "orden": 4
+   }
+  },
+  {
+   "id": "d5",
+   "data": {
+    "nombre": "Alertas meteorológicas",
+    "url": "#alertas",
+    "files": [],
+    "orden": 5
+   }
+  },
+  {
+   "id": "d6",
+   "data": {
+    "nombre": "Documentos",
+    "url": "#documentos",
+    "files": [],
+    "orden": 6
+   }
+  }
+ ],
+ "historia": [
+  {
+   "id": "h2015",
+   "data": {
+    "anio": "2015",
+    "titulo": "Nace el servicio",
+    "texto": "El Concello de Narón pone en marcha su Servicio de Prevención, Extinción de Incendios y Salvamento.",
+    "files": [],
+    "orden": 1
+   }
+  },
+  {
+   "id": "h2018",
+   "data": {
+    "anio": "2018",
+    "titulo": "Reglamento del servicio",
+    "texto": "Se publica en el Boletín Oficial de la Provincia el reglamento de organización y funcionamiento del servicio municipal de emergencias.",
+    "files": [],
+    "orden": 2
+   }
+  },
+  {
+   "id": "h2025",
+   "data": {
+    "anio": "2025",
+    "titulo": "Décimo aniversario",
+    "texto": "El servicio cumple diez años con 783 intervenciones en el año.",
+    "files": [],
+    "orden": 3
+   }
+  }
  ]
 }
