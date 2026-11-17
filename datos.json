@@ -75,6 +75,7 @@
    "id": "layout",
    "data": {
     "order": [
+     "avisos",
      "noticias",
      "servicio",
      "alertas",
@@ -88,6 +89,14 @@
      "memorias",
      "documentos",
      "enlaces"
+    ],
+    "menu": [
+     "avisos",
+     "noticias",
+     "servicio",
+     "alertas",
+     "intervenciones",
+     "prevencion"
     ]
    }
   }
@@ -832,6 +841,95 @@
     "orden": 6,
     "tipo": "furgon",
     "uso": "Rescates, tráfico y mercancías peligrosas"
+   }
+  }
+ ],
+ "menuextra": [
+  {
+   "id": "concello",
+   "data": {
+    "nombre": "Concello de Narón",
+    "url": "https://www.naron.gal",
+    "files": [],
+    "orden": 1
+   }
+  },
+  {
+   "id": "g112",
+   "data": {
+    "nombre": "Alertas 112 Galicia",
+    "url": "https://www.axega112.gal/gl",
+    "files": [],
+    "orden": 2
+   }
+  }
+ ],
+ "rapidos": [
+  {
+   "id": "r1",
+   "data": {
+    "nombre": "Convocatorias abiertas",
+    "url": "#convocatorias",
+    "files": [],
+    "orden": 1
+   }
+  },
+  {
+   "id": "r2",
+   "data": {
+    "nombre": "Memorias de actividades",
+    "url": "#memorias",
+    "files": [],
+    "orden": 2
+   }
+  },
+  {
+   "id": "r3",
+   "data": {
+    "nombre": "Consejos de prevención",
+    "url": "#prevencion",
+    "files": [],
+    "orden": 3
+   }
+  },
+  {
+   "id": "r4",
+   "data": {
+    "nombre": "Avisos del 112",
+    "url": "https://www.axega112.gal/gl",
+    "files": [],
+    "orden": 4
+   }
+  },
+  {
+   "id": "r5",
+   "data": {
+    "nombre": "Vehículos del parque",
+    "url": "#vehiculos",
+    "files": [],
+    "orden": 5
+   }
+  },
+  {
+   "id": "r6",
+   "data": {
+    "nombre": "Dónde estamos",
+    "url": "#servicio",
+    "files": [],
+    "orden": 6
+   }
+  }
+ ],
+ "avisosweb": [
+  {
+   "id": "memoria2025",
+   "data": {
+    "titulo": "Publicada la memoria de actividades 2025",
+    "texto": "Ya se puede consultar y descargar la memoria anual del servicio.",
+    "nivel": "Informativo",
+    "url": "#memorias",
+    "files": [],
+    "orden": 1
    }
   }
  ]

@@ -365,12 +365,40 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
   .foot .fgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 18px;padding-block:28px}
   .fbrand{grid-column:1/-1}
 }
+
+/* avisos destacados, barra de edición y opciones de apariencia */
+.btn{border-radius:var(--btn-r,6px)}
+body.outline .btn.pri{background:transparent;color:var(--accent);border-color:var(--accent)}
+body.noanim *,body.noanim *::before,body.noanim *::after{animation:none!important;transition:none!important}
+.menu{background:var(--menu-bg,var(--accent));color:var(--menu-ink,var(--on-accent))}
+.menu a,.menu .dd>button,.burger{color:var(--menu-ink,var(--on-accent))}
+.menu .sub a{color:var(--ink)}
+.fbar{background:rgba(0,0,0,.22)}
+.avw{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:18px 20px;border-radius:14px;margin-bottom:14px;background:var(--ink);color:var(--bg);box-shadow:0 8px 22px rgba(20,30,45,.16)}
+.avw.imp{background:var(--a-amarillo);color:var(--on-signal)} .avw.urg{background:var(--a-rojo);color:var(--on-strong)}
+.avw svg.ic{width:44px;height:44px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.avw .main{flex:1 1 260px;min-width:0}
+.avw .label{color:inherit;opacity:.85}
+.avw b{display:block;font:700 1.35rem/1.2 var(--display);margin:2px 0 4px}
+.avw p{white-space:pre-line}
+.avw .file{background:rgba(255,255,255,.22)} .avw .file a{color:inherit}
+.avw .btn{background:var(--surface);color:var(--ink);border-color:var(--surface)}
+.qc{display:inline-flex;align-items:center;gap:4px}
+.sidebar a.ext{border-top:0;margin-top:0;padding-top:8px;border-radius:8px;font-weight:500}
+.sa .btn[aria-pressed="true"]{background:var(--gold);color:var(--on-signal);border-color:var(--gold)}
+#edbar{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--ink);color:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
+#edbar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:8px}
+#edbar .btn[aria-pressed="true"]{background:var(--gold);color:var(--on-signal);border-color:var(--gold)}
+body.edtext :is(h1,h2,h3,p,a,span,b,small,td,th,dt,dd,text):hover{outline:2px dashed var(--link);outline-offset:2px;cursor:text}
+dialog input[type=color]{height:42px;padding:3px}
+@media (max-width:860px){.menu .sub a{color:var(--menu-ink,var(--on-accent))}}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-concello" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M9 21v-7h6v7M2 10l10-6 10 6zM12 4V2"/></symbol>
+  <symbol id="i-avisos" viewBox="0 0 24 24"><path d="M3 10v4h3l7 4V6l-7 4zM16 9a4 4 0 0 1 0 6M6 14l1 5h3l-1-4"/></symbol>
   <symbol id="i-noticias" viewBox="0 0 24 24"><path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 13h7M7 16h4"/></symbol>
   <symbol id="i-alertas" viewBox="0 0 24 24"><path d="M12 3 2 20h20zM12 10v4M12 17v.5"/></symbol>
   <symbol id="i-servicio" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-6h4v6M9 10h.5M14.5 10h.5"/></symbol>
@@ -409,19 +437,7 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
 </div></div>
 <nav class="menu" id="menu" aria-label="Menú principal"><div class="wrap">
   <button class="burger" id="burger" aria-expanded="false">☰ Menú</button>
-  <div class="items">
-    <a href="#inicio">Inicio</a>
-    <a href="#noticias">Noticias</a>
-    <div class="dd"><button aria-expanded="false">El servicio ▾</button><div class="sub">
-      <a href="#servicio">Presentación y localización</a><a href="#plantilla">Plantilla</a><a href="#vehiculos">Vehículos y medios</a><a href="#memorias">Memorias de actividades</a><a href="#redes">Redes sociales</a></div></div>
-    <a href="#intervenciones">Intervenciones</a>
-    <a href="#prevencion">Prevención</a>
-    <a href="#convocatorias">Convocatorias</a>
-    <div class="dd"><button aria-expanded="false">Alertas ▾</button><div class="sub">
-      <a href="#alertas">Alertas meteorológicas</a><a href="#tiempo">Mapas del tiempo</a></div></div>
-    <a href="#documentos">Documentos</a>
-    <a href="#enlaces">Enlaces</a>
-  </div>
+  <div class="items" id="menuItems"></div>
 </div></nav>
 
 <div id="v-inicio">
@@ -431,12 +447,13 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
       <div class="card e112"><span class="label">En una emergencia</span><b class="num">112</b><b class="num">080</b><span class="muted small">Parque: 981 390 000</span></div>
     </div>
     <div class="mid">
+      <div id="avisosTop"></div>
       <div class="car" id="car" aria-roledescription="carrusel" aria-label="Noticias de prensa"></div>
       <div id="banner"></div>
       <div id="edNote"></div>
       <div class="dest" id="dest"></div>
       <h2 class="blk">Lo más consultado</h2>
-      <div class="qchips"><a href="#convocatorias">Convocatorias abiertas</a><a href="#memorias">Memorias de actividades</a><a href="#prevencion">Consejos de prevención</a><a href="#alertas">Avisos del 112</a><a href="#vehiculos">Vehículos del parque</a><a href="#servicio">Dónde estamos</a></div>
+      <div class="qchips" id="b-rapidos"></div>
       <h2 class="blk">Noticias</h2>
       <div class="card rows" id="newsList"></div>
       <a class="btn" href="#noticias" style="margin-top:12px">Todas las noticias</a>
@@ -467,6 +484,12 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
 </div>
 
 <div class="wrap shell" id="shell" hidden><aside id="side1" class="sidebar" aria-label="Accesos"></aside><main>
+<section class="view" id="v-avisos" hidden><div class="wrap"><a class="back" href="#inicio">← Inicio</a>
+  <div class="head"><h2>Avisos del servicio</h2><span class="tools" data-sec="avisos"></span>
+    <p>Comunicados y avisos importantes de Bombeiros Narón.</p></div>
+  <div class="grid" id="b-avisosweb"></div>
+</div></section>
+
 <section class="view" id="v-noticias" hidden><div class="wrap"><a class="back" href="#inicio">← Inicio</a>
   <div class="head"><h2>Noticias de prensa</h2><span class="tools" data-sec="noticias"></span>
     <p>Lo que publican los medios sobre el servicio. Cada noticia enlaza a su fuente.</p></div>
@@ -475,8 +498,9 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
 
 <section class="view" id="v-alertas" hidden><div class="wrap"><a class="back" href="#inicio">← Inicio</a>
   <div class="head"><h2>Alertas meteorológicas</h2><span class="tools" data-sec="alertas"></span>
-    <p>Avisos difundidos por el 112 Galicia que afectan a Narón. <a href="https://www.axega112.gal" target="_blank" rel="noopener">Ver avisos en 112 Galicia</a></p></div>
+    <p>Avisos difundidos por el 112 Galicia que afectan a Narón. <a href="https://www.axega112.gal/gl" target="_blank" rel="noopener">Ver avisos en 112 Galicia</a></p></div>
   <div class="grid" id="b-avisos"></div>
+  <a class="btn pri" style="margin-top:14px" href="https://www.axega112.gal/gl" target="_blank" rel="noopener">Abrir la página de alertas del 112 Galicia ↗</a>
 </div></section>
 
 <section class="view" id="v-servicio" hidden><div class="wrap"><a class="back" href="#inicio">← Inicio</a>
@@ -567,6 +591,19 @@ h2.blk{font-size:1.35rem;margin:30px 0 12px;padding-left:12px;border-left:5px so
 
 <dialog id="dlg"><form id="frm"><h3 id="dlg-t"></h3><div id="dlg-f" style="display:flex;flex-direction:column;gap:12px"></div>
   <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" id="dlg-x">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
+<dialog id="txt"><form id="txt-f"><h3>Editar texto</h3><p class="muted small">Original: <span id="txt-o"></span></p><textarea id="txt-v" rows="4"></textarea>
+  <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" data-x="txt-r">Volver al original</button><button type="button" class="btn" data-x="txt-c">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
+<dialog id="tema"><form id="tema-f"><h3>Colores, botones e interacciones</h3>
+  <label>Color principal (botones, cabeceras, iconos)<input type="color" id="t-accent"></label>
+  <label>Color del menú superior<input type="color" id="t-menu"></label>
+  <label>Color del pie de página<input type="color" id="t-pie"></label>
+  <label>Forma de los botones<select id="t-boton"><option value="redondo">Redondeados</option><option value="recto">Rectos</option><option value="pildora">Píldora</option></select></label>
+  <label>Estilo de los botones principales<select id="t-relleno"><option value="relleno">Con relleno</option><option value="contorno">Solo contorno</option></select></label>
+  <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="t-anim" style="width:auto">Animaciones (vehículos del plano, parpadeos, transiciones)</label>
+  <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="t-carAuto" style="width:auto">Las noticias del carrusel pasan solas</label>
+  <label>Segundos entre noticias<input type="number" id="t-carSecs" min="3" max="30"></label>
+  <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" data-x="tema-r">Restablecer</button><button type="button" class="btn" data-x="tema-c">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
+<div id="edbar" hidden><div class="wrap"><b>Edición</b><button class="btn mini" data-act="edtext" aria-pressed="false">Editar textos</button><button class="btn mini" data-act="tema">Colores y botones</button><button class="btn mini" data-act="add" data-col="avisosweb">Añadir aviso</button><button class="btn mini" data-act="add" data-col="menuextra">Añadir enlace al menú</button></div></div>
 <input type="file" id="fileinp" hidden multiple>
 <div id="toast" hidden role="status"></div>
 
@@ -582,23 +619,27 @@ window.claude={use:async n=>{if(n!=='db')return null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let LANG='es';try{LANG=localStorage.getItem('bn-lang')==='gl'?'gl':'es'}catch(e){}
-const GL={"Terminar": "Rematar", "Servicio de Prevención, Extinción de Incendios y Salvamento · Concello de Narón": "Servizo de Prevención, Extinción de Incendios e Salvamento · Concello de Narón", "Emergencias": "Emerxencias", "Noticias": "Novas", "El servicio ▾": "O servizo ▾", "El servicio": "O servizo", "Presentación y localización": "Presentación e localización", "Plantilla": "Cadro de persoal", "Vehículos y medios": "Vehículos e medios", "Redes sociales": "Redes sociais", "Intervenciones": "Intervencións", "Alertas meteorológicas": "Alertas meteorolóxicas", "Mapas del tiempo": "Mapas do tempo", "Enlaces": "Ligazóns", "En una emergencia": "Nunha emerxencia", "Lo más consultado": "O máis consultado", "Convocatorias abiertas": "Convocatorias abertas", "Consejos de prevención": "Consellos de prevención", "Avisos del 112": "Avisos do 112", "Dónde estamos": "Onde estamos", "Vehículos del parque": "Vehículos do parque", "Todas las noticias": "Todas as novas", "Dónde actuamos": "Onde actuamos", "Plano esquemático, no a escala.": "Plano esquemático, non a escala.", "Sin avisos activos": "Sen avisos activos", "Fuente: 112 Galicia": "Fonte: 112 Galicia", "Ninguna abierta": "Ningunha aberta", "Empleo y formación": "Emprego e formación", "Datos del servicio": "Datos do servizo", "personas en plantilla": "persoas no cadro de persoal", "vehículos y medios": "vehículos e medios", "de término municipal": "de termo municipal", "Puestos y divisas": "Postos e divisas", "Parque móvil": "Parque móbil", "Actuaciones destacadas": "Actuacións destacadas", "Impresos y normativa": "Impresos e normativa", "Síguenos": "Séguenos", "Dónde estamos y contacto": "Onde estamos e contacto", "Hidrantes, planes y simulacros": "Hidrantes, plans e simulacros", "Viento, radar y avisos": "Vento, radar e avisos", "Noticias de prensa": "Novas de prensa", "Lo que publican los medios sobre el servicio. Cada noticia enlaza a su fuente.": "O que publican os medios sobre o servizo. Cada nova enlaza coa súa fonte.", "Avisos difundidos por el 112 Galicia que afectan a Narón.": "Avisos difundidos polo 112 Galicia que afectan a Narón.", "Sin avisos": "Sen avisos", "No hay avisos activos para Narón.": "Non hai avisos activos para Narón.", "Se publican aquí cuando el 112 Galicia activa una alerta.": "Publícanse aquí cando o 112 Galicia activa unha alerta.", "Guardia": "Garda", "24 horas, los 365 días": "24 horas, os 365 días", "Procesos selectivos, bolsas de empleo y formación, con sus bases y documentos.": "Procesos selectivos, bolsas de emprego e formación, coas súas bases e documentos.", "Intervenciones relevantes": "Intervencións relevantes", "El trabajo que se hace antes de la emergencia: conocer los riesgos, revisar los medios y entrenar la respuesta.": "O traballo que se fai antes da emerxencia: coñecer os riscos, revisar os medios e adestrar a resposta.", "salidas de revisión en 2025": "saídas de revisión en 2025", "actuaciones de prevención en 2025": "actuacións de prevención en 2025", "Consejos y documentos": "Consellos e documentos", "Se abren en una pestaña nueva.": "Ábrense nunha lapela nova.", "Memoria anual de actividad del servicio.": "Memoria anual de actividade do servizo.", "Enlaces de interés": "Ligazóns de interese", "Aún no hay noticias publicadas.": "Aínda non hai novas publicadas.", "Aún no hay noticias publicadas": "Aínda non hai novas publicadas", "Cargando noticias...": "Cargando novas...", "Aún no hay redes sociales.": "Aínda non hai redes sociais.", "No hay convocatorias publicadas.": "Non hai convocatorias publicadas.", "Aún no hay intervenciones publicadas.": "Aínda non hai intervencións publicadas.", "Plantilla pendiente de añadir.": "Cadro de persoal pendente de engadir.", "Vehículos pendientes de añadir.": "Vehículos pendentes de engadir.", "Aún no hay memorias publicadas.": "Aínda non hai memorias publicadas.", "Aún no hay consejos ni documentos de prevención.": "Aínda non hai consellos nin documentos de prevención.", "Aún no hay documentos.": "Aínda non hai documentos.", "Aún no hay enlaces.": "Aínda non hai ligazóns.", "Aún no hay contenido.": "Aínda non hai contido.", "Leer la noticia": "Ler a nova", "Sin archivo": "Sen ficheiro", "Cuenta pendiente": "Conta pendente", "Enlace pendiente": "Ligazón pendente", "Capacidad": "Capacidade", "Año": "Ano", "Intervenciones por tipo": "Intervencións por tipo", "Servicios apícolas": "Servizos apícolas", "Acciones formativas": "Accións formativas", "Rescate de animales": "Rescate de animais", "Rescate de personas": "Rescate de persoas", "Jefe de servicio": "Xefe de servizo", "Sargento": "Sarxento", "Jefe de dotación": "Xefe de dotación", "Bombero": "Bombeiro", "Mantenimiento": "Mantemento", "Uno por cada turno de guardia": "Un por cada quenda de garda", "Cuatro turnos de 3 y uno de 4": "Catro quendas de 3 e unha de 4", "Encargado de mantenimiento": "Encargado de mantemento", "Bomba urbana ligera": "Bomba urbana lixeira", "Bomba forestal ligera": "Bomba forestal lixeira", "Bomba nodriza ligera": "Bomba nodriza lixeira", "Autoescalera automática": "Autoescada automática", "Vehículo de mando y jefatura": "Vehículo de mando e xefatura", "Vehículo de personal": "Vehículo de persoal", "Personal": "Persoal", "Incendios forestales": "Incendios forestais", "Abastecimiento de agua": "Abastecemento de auga", "Rescate y trabajos en altura": "Rescate e traballos en altura", "Rescates, tráfico y mercancías peligrosas": "Rescates, tráfico e mercadorías perigosas", "Inspecciones y jefatura": "Inspeccións e xefatura", "Cobertura en grandes siniestros": "Cobertura en grandes sinistros", "Transporte de personal y material": "Transporte de persoal e material", "Trajes secos, neoprenos y material acuático": "Traxes secos, neoprenos e material acuático", "783 intervenciones. Décimo aniversario del servicio.": "783 intervencións. Décimo aniversario do servizo.", "Qué hacemos": "Que facemos", "Planes de intervención operativa (PIO)": "Plans de intervención operativa (PIO)", "Predicción y observación": "Predición e observación", "Agencia Estatal de Meteorología": "Axencia Estatal de Meteoroloxía", "Dirección General": "Dirección Xeral", "Gestión interna del parque": "Xestión interna do parque", "Viento y rachas": "Vento e refachos", "Radar y predicción": "Radar e predición", "Guardia 24 horas, los 365 días": "Garda 24 horas, os 365 días", "Inicia sesión para ver el contenido guardado": "Inicia sesión para ver o contido gardado", "No se pueden cargar los datos ahora mismo": "Non se poden cargar os datos agora mesmo", "Vista sin datos guardados": "Vista sen datos gardados", "amarillo": "amarelo", "naranja": "laranxa", "rojo": "vermello", "Abierta": "Aberta", "Cerrada": "Pechada", "Servicio apícola": "Servizo apícola", "Otros": "Outros", "Rescate de persoas": "Rescate de persoas", "El SPEIS presta desde 2015 un servicio esencial en Narón: cubre 66 km² y cerca de 40.000 habitantes, con 3 polígonos industriales, 2 líneas de ferrocarril, 14 centros de enseñanza, 58 km de vías rápidas con tránsito de mercancías peligrosas y zona de costa.\n\nAdemás de las emergencias, el servicio revisa los 214 hidrantes del municipio, elabora planes de intervención operativa (PIO) y realiza simulacros y formación continua.\n\nPara pedir ayuda llama al 112 o al 080. Esta web no recibe avisos de emergencia.": "O SPEIS presta desde 2015 un servizo esencial en Narón: cobre 66 km² e preto de 40.000 habitantes, con 3 polígonos industriais, 2 liñas de ferrocarril, 14 centros de ensino, 58 km de vías rápidas con tránsito de mercadorías perigosas e zona de costa.\n\nAdemais das emerxencias, o servizo revisa os 214 hidrantes do municipio, elabora plans de intervención operativa (PIO) e realiza simulacros e formación continua.\n\nPara pedir axuda chama ao 112 ou ao 080. Esta web non recibe avisos de emerxencia.", "Visitamos instalaciones para preparar fichas con planos y datos técnicos: llaves de gas, hidrantes y rutas de evacuación. Así la dotación conoce el edificio antes de llegar. También se inspeccionan fiestas y eventos.": "Visitamos instalacións para preparar fichas con planos e datos técnicos: chaves de gas, hidrantes e rutas de evacuación. Así a dotación coñece o edificio antes de chegar. Tamén se inspeccionan festas e eventos.", "Cada año dos bomberos de guardia revisan todos los hidrantes urbanos, rurales e industriales del municipio. Están geolocalizados en los dispositivos de cada vehículo. En 2025 empezó su señalización vertical y en 2026 comienza la horizontal en zona industrial.": "Cada ano dous bombeiros de garda revisan todos os hidrantes urbanos, rurais e industriais do municipio. Están xeolocalizados nos dispositivos de cada vehículo. En 2025 comezou a súa sinalización vertical e en 2026 comeza a horizontal en zona industrial.", "Sirven para detectar fallos del plan, automatizar protocolos, medir tiempos de respuesta y coordinarse con Policía, servicios sanitarios y Protección Civil.": "Serven para detectar fallos do plan, automatizar protocolos, medir tempos de resposta e coordinarse con Policía, servizos sanitarios e Protección Civil.", "Prácticas programadas todos los días del año en extinción, tráficos, mercancías peligrosas, rescate en altura, autoescalas, rescate acuático, toponimia y área sanitaria. En 2025 los 5 efectivos interinos recibieron 105 horas de formación en el parque.": "Prácticas programadas todos os días do ano en extinción, tráficos, mercadorías perigosas, rescate en altura, autoescadas, rescate acuático, toponimia e área sanitaria. En 2025 os 5 efectivos interinos recibiron 105 horas de formación no parque."};
+const GL={"Terminar": "Rematar", "Servicio de Prevención, Extinción de Incendios y Salvamento · Concello de Narón": "Servizo de Prevención, Extinción de Incendios e Salvamento · Concello de Narón", "Emergencias": "Emerxencias", "Noticias": "Novas", "El servicio ▾": "O servizo ▾", "El servicio": "O servizo", "Presentación y localización": "Presentación e localización", "Plantilla": "Cadro de persoal", "Vehículos y medios": "Vehículos e medios", "Redes sociales": "Redes sociais", "Intervenciones": "Intervencións", "Alertas meteorológicas": "Alertas meteorolóxicas", "Mapas del tiempo": "Mapas do tempo", "Enlaces": "Ligazóns", "En una emergencia": "Nunha emerxencia", "Lo más consultado": "O máis consultado", "Convocatorias abiertas": "Convocatorias abertas", "Consejos de prevención": "Consellos de prevención", "Avisos del 112": "Avisos do 112", "Dónde estamos": "Onde estamos", "Vehículos del parque": "Vehículos do parque", "Todas las noticias": "Todas as novas", "Dónde actuamos": "Onde actuamos", "Plano esquemático, no a escala.": "Plano esquemático, non a escala.", "Sin avisos activos": "Sen avisos activos", "Fuente: 112 Galicia": "Fonte: 112 Galicia", "Ninguna abierta": "Ningunha aberta", "Empleo y formación": "Emprego e formación", "Datos del servicio": "Datos do servizo", "personas en plantilla": "persoas no cadro de persoal", "vehículos y medios": "vehículos e medios", "de término municipal": "de termo municipal", "Puestos y divisas": "Postos e divisas", "Parque móvil": "Parque móbil", "Actuaciones destacadas": "Actuacións destacadas", "Impresos y normativa": "Impresos e normativa", "Síguenos": "Séguenos", "Dónde estamos y contacto": "Onde estamos e contacto", "Hidrantes, planes y simulacros": "Hidrantes, plans e simulacros", "Viento, radar y avisos": "Vento, radar e avisos", "Noticias de prensa": "Novas de prensa", "Lo que publican los medios sobre el servicio. Cada noticia enlaza a su fuente.": "O que publican os medios sobre o servizo. Cada nova enlaza coa súa fonte.", "Avisos difundidos por el 112 Galicia que afectan a Narón.": "Avisos difundidos polo 112 Galicia que afectan a Narón.", "Sin avisos": "Sen avisos", "No hay avisos activos para Narón.": "Non hai avisos activos para Narón.", "Se publican aquí cuando el 112 Galicia activa una alerta.": "Publícanse aquí cando o 112 Galicia activa unha alerta.", "Guardia": "Garda", "24 horas, los 365 días": "24 horas, os 365 días", "Procesos selectivos, bolsas de empleo y formación, con sus bases y documentos.": "Procesos selectivos, bolsas de emprego e formación, coas súas bases e documentos.", "Intervenciones relevantes": "Intervencións relevantes", "El trabajo que se hace antes de la emergencia: conocer los riesgos, revisar los medios y entrenar la respuesta.": "O traballo que se fai antes da emerxencia: coñecer os riscos, revisar os medios e adestrar a resposta.", "salidas de revisión en 2025": "saídas de revisión en 2025", "actuaciones de prevención en 2025": "actuacións de prevención en 2025", "Consejos y documentos": "Consellos e documentos", "Se abren en una pestaña nueva.": "Ábrense nunha lapela nova.", "Memoria anual de actividad del servicio.": "Memoria anual de actividade do servizo.", "Enlaces de interés": "Ligazóns de interese", "Aún no hay noticias publicadas.": "Aínda non hai novas publicadas.", "Aún no hay noticias publicadas": "Aínda non hai novas publicadas", "Cargando noticias...": "Cargando novas...", "Aún no hay redes sociales.": "Aínda non hai redes sociais.", "No hay convocatorias publicadas.": "Non hai convocatorias publicadas.", "Aún no hay intervenciones publicadas.": "Aínda non hai intervencións publicadas.", "Plantilla pendiente de añadir.": "Cadro de persoal pendente de engadir.", "Vehículos pendientes de añadir.": "Vehículos pendentes de engadir.", "Aún no hay memorias publicadas.": "Aínda non hai memorias publicadas.", "Aún no hay consejos ni documentos de prevención.": "Aínda non hai consellos nin documentos de prevención.", "Aún no hay documentos.": "Aínda non hai documentos.", "Aún no hay enlaces.": "Aínda non hai ligazóns.", "Aún no hay contenido.": "Aínda non hai contido.", "Leer la noticia": "Ler a nova", "Sin archivo": "Sen ficheiro", "Cuenta pendiente": "Conta pendente", "Enlace pendiente": "Ligazón pendente", "Capacidad": "Capacidade", "Año": "Ano", "Intervenciones por tipo": "Intervencións por tipo", "Servicios apícolas": "Servizos apícolas", "Acciones formativas": "Accións formativas", "Rescate de animales": "Rescate de animais", "Rescate de personas": "Rescate de persoas", "Jefe de servicio": "Xefe de servizo", "Sargento": "Sarxento", "Jefe de dotación": "Xefe de dotación", "Bombero": "Bombeiro", "Mantenimiento": "Mantemento", "Uno por cada turno de guardia": "Un por cada quenda de garda", "Cuatro turnos de 3 y uno de 4": "Catro quendas de 3 e unha de 4", "Encargado de mantenimiento": "Encargado de mantemento", "Bomba urbana ligera": "Bomba urbana lixeira", "Bomba forestal ligera": "Bomba forestal lixeira", "Bomba nodriza ligera": "Bomba nodriza lixeira", "Autoescalera automática": "Autoescada automática", "Vehículo de mando y jefatura": "Vehículo de mando e xefatura", "Vehículo de personal": "Vehículo de persoal", "Personal": "Persoal", "Incendios forestales": "Incendios forestais", "Abastecimiento de agua": "Abastecemento de auga", "Rescate y trabajos en altura": "Rescate e traballos en altura", "Rescates, tráfico y mercancías peligrosas": "Rescates, tráfico e mercadorías perigosas", "Inspecciones y jefatura": "Inspeccións e xefatura", "Cobertura en grandes siniestros": "Cobertura en grandes sinistros", "Transporte de personal y material": "Transporte de persoal e material", "Trajes secos, neoprenos y material acuático": "Traxes secos, neoprenos e material acuático", "783 intervenciones. Décimo aniversario del servicio.": "783 intervencións. Décimo aniversario do servizo.", "Qué hacemos": "Que facemos", "Más ▾": "Máis ▾", "Avisos del servicio": "Avisos do servizo", "Comunicados y avisos importantes de Bombeiros Narón.": "Comunicados e avisos importantes de Bombeiros Narón.", "No hay avisos del servicio.": "Non hai avisos do servizo.", "Más información": "Máis información", "Abrir la página de alertas del 112 Galicia ↗": "Abrir a páxina de alertas do 112 Galicia ↗", "Planes de intervención operativa (PIO)": "Plans de intervención operativa (PIO)", "Predicción y observación": "Predición e observación", "Agencia Estatal de Meteorología": "Axencia Estatal de Meteoroloxía", "Dirección General": "Dirección Xeral", "Gestión interna del parque": "Xestión interna do parque", "Viento y rachas": "Vento e refachos", "Radar y predicción": "Radar e predición", "Guardia 24 horas, los 365 días": "Garda 24 horas, os 365 días", "Inicia sesión para ver el contenido guardado": "Inicia sesión para ver o contido gardado", "No se pueden cargar los datos ahora mismo": "Non se poden cargar os datos agora mesmo", "Vista sin datos guardados": "Vista sen datos gardados", "amarillo": "amarelo", "naranja": "laranxa", "rojo": "vermello", "Abierta": "Aberta", "Cerrada": "Pechada", "Servicio apícola": "Servizo apícola", "Otros": "Outros", "Rescate de persoas": "Rescate de persoas", "El SPEIS presta desde 2015 un servicio esencial en Narón: cubre 66 km² y cerca de 40.000 habitantes, con 3 polígonos industriales, 2 líneas de ferrocarril, 14 centros de enseñanza, 58 km de vías rápidas con tránsito de mercancías peligrosas y zona de costa.\n\nAdemás de las emergencias, el servicio revisa los 214 hidrantes del municipio, elabora planes de intervención operativa (PIO) y realiza simulacros y formación continua.\n\nPara pedir ayuda llama al 112 o al 080. Esta web no recibe avisos de emergencia.": "O SPEIS presta desde 2015 un servizo esencial en Narón: cobre 66 km² e preto de 40.000 habitantes, con 3 polígonos industriais, 2 liñas de ferrocarril, 14 centros de ensino, 58 km de vías rápidas con tránsito de mercadorías perigosas e zona de costa.\n\nAdemais das emerxencias, o servizo revisa os 214 hidrantes do municipio, elabora plans de intervención operativa (PIO) e realiza simulacros e formación continua.\n\nPara pedir axuda chama ao 112 ou ao 080. Esta web non recibe avisos de emerxencia.", "Visitamos instalaciones para preparar fichas con planos y datos técnicos: llaves de gas, hidrantes y rutas de evacuación. Así la dotación conoce el edificio antes de llegar. También se inspeccionan fiestas y eventos.": "Visitamos instalacións para preparar fichas con planos e datos técnicos: chaves de gas, hidrantes e rutas de evacuación. Así a dotación coñece o edificio antes de chegar. Tamén se inspeccionan festas e eventos.", "Cada año dos bomberos de guardia revisan todos los hidrantes urbanos, rurales e industriales del municipio. Están geolocalizados en los dispositivos de cada vehículo. En 2025 empezó su señalización vertical y en 2026 comienza la horizontal en zona industrial.": "Cada ano dous bombeiros de garda revisan todos os hidrantes urbanos, rurais e industriais do municipio. Están xeolocalizados nos dispositivos de cada vehículo. En 2025 comezou a súa sinalización vertical e en 2026 comeza a horizontal en zona industrial.", "Sirven para detectar fallos del plan, automatizar protocolos, medir tiempos de respuesta y coordinarse con Policía, servicios sanitarios y Protección Civil.": "Serven para detectar fallos do plan, automatizar protocolos, medir tempos de resposta e coordinarse con Policía, servizos sanitarios e Protección Civil.", "Prácticas programadas todos los días del año en extinción, tráficos, mercancías peligrosas, rescate en altura, autoescalas, rescate acuático, toponimia y área sanitaria. En 2025 los 5 efectivos interinos recibieron 105 horas de formación en el parque.": "Prácticas programadas todos os días do ano en extinción, tráficos, mercadorías perigosas, rescate en altura, autoescadas, rescate acuático, toponimia e área sanitaria. En 2025 os 5 efectivos interinos recibiron 105 horas de formación no parque."};
 const COLOR={amarillo:'amarelo',naranja:'laranxa',rojo:'vermello'};
 const GLR=[[/^Alto del Castaño( · \d+)?$/,'Alto do Castaño$1'],[/^(\d+) noticias$/,'$1 novas'],[/^(\d+) personas$/,'$1 persoas'],[/^(\d+) personas en total\.$/,'$1 persoas en total.'],[/^(\d+) abierta(s?)$/,'$1 aberta$2'],[/^([\d.]+) intervenciones$/,'$1 intervencións'],[/^intervenciones en (\d+)$/,'intervencións en $1'],
  [/^Plano esquemático, no a escala\. Círculos: incendios en (\d+) por zona\.$/,'Plano esquemático, non a escala. Círculos: incendios en $1 por zona.'],[/^Aviso (amarillo|naranja|rojo)$/,(m,a)=>'Aviso '+COLOR[a]],[/^Aviso (amarillo|naranja|rojo) por (.+)$/,(m,a,b)=>'Aviso '+COLOR[a]+' por '+b]];
 const glt=s=>{if(GL[s]!=null)return GL[s];for(const [r,t] of GLR)if(r.test(s))return s.replace(r,t);return null};
-function tr(){const gl=LANG==='gl';document.documentElement.lang=gl?'gl':'es';$('langbtn').textContent=gl?'Castellano':'Galego';
+function tr(){const gl=LANG==='gl',ov=(S.cfg.textos[LANG])||{};document.documentElement.lang=gl?'gl':'es';$('langbtn').textContent=gl?'Castellano':'Galego';
   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode())L.push(n);
-  for(const n of L){const pe=n.parentElement;if(!pe||pe.closest('script,style,#langbtn'))continue;
-    const was=n._gl!==undefined&&n.nodeValue===n._gl,src=was?n._es:n.nodeValue;
-    if(gl){const k=src.trim();if(!k)continue;const t=glt(k);if(t!=null){n._es=src;n.nodeValue=n._gl=src.replace(k,()=>t)}}
-    else if(was){n.nodeValue=n._es;n._gl=undefined}}}
-const SECS={noticias:'Noticias',alertas:'Alertas',servicio:'El servicio',redes:'Redes sociales',convocatorias:'Convocatorias',intervenciones:'Intervenciones',plantilla:'Plantilla',vehiculos:'Vehículos',prevencion:'Prevención',tiempo:'Mapas del tiempo',memorias:'Memorias',documentos:'Documentos',enlaces:'Enlaces'};
-const SEC_COL={noticias:['noticias'],alertas:['avisos'],servicio:['infoservicio'],redes:['redes'],convocatorias:['convocatorias'],intervenciones:['intervenciones'],plantilla:['plantilla'],vehiculos:['vehiculos'],prevencion:['infoprevencion','prevencion'],tiempo:['mapastiempo'],memorias:['memorias'],documentos:['documentos'],enlaces:['enlaces']};
+  for(const n of L){const pe=n.parentElement;if(!pe||pe.closest('script,style,#langbtn,#txt,#tema'))continue;
+    if(n._s===undefined||n.nodeValue!==n._s)n._o=n.nodeValue;
+    const k=n._o.trim();if(!k)continue;let v=n._o;
+    if(ov[k]!=null)v=n._o.replace(k,()=>ov[k]);else if(gl){const t=glt(k);if(t!=null)v=n._o.replace(k,()=>t)}
+    if(n.nodeValue!==v)n.nodeValue=v;n._s=v}}
+const SECS={avisos:'Avisos',noticias:'Noticias',alertas:'Alertas',servicio:'El servicio',redes:'Redes sociales',convocatorias:'Convocatorias',intervenciones:'Intervenciones',plantilla:'Plantilla',vehiculos:'Vehículos',prevencion:'Prevención',tiempo:'Mapas del tiempo',memorias:'Memorias',documentos:'Documentos',enlaces:'Enlaces'};
+const SEC_COL={avisos:['avisosweb'],noticias:['noticias'],alertas:['avisos'],servicio:['infoservicio'],redes:['redes'],convocatorias:['convocatorias'],intervenciones:['intervenciones'],plantilla:['plantilla'],vehiculos:['vehiculos'],prevencion:['infoprevencion','prevencion'],tiempo:['mapastiempo'],memorias:['memorias'],documentos:['documentos'],enlaces:['enlaces']};
 const DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt', IMGS='image/png,image/jpeg,image/webp';
 const COLS={
  noticias:{uno:'noticia',acc:IMGS,img:1,f:[['titulo','Titular'],['medio','Medio (Diario de Ferrol, Ferrol 360...)'],['fecha','Fecha','date'],['url','Enlace a la noticia (https://...)'],['resumen','Resumen','area']]},
- avisos:{uno:'aviso',acc:DOCS,f:[['nivel','Nivel','sel',['amarillo','naranja','rojo']],['fenomeno','Fenómeno (viento, lluvia, costeros...)'],['texto','Descripción','area'],['vigencia','Vigencia']]},
+ avisosweb:{uno:'aviso',acc:DOCS,f:[['titulo','Título'],['texto','Texto','area'],['nivel','Nivel','sel',['Informativo','Importante','Urgente']],['url','Enlace: #seccion o https://... (opcional)']]},
+ rapidos:{uno:'acceso rápido',nofile:1,f:[['nombre','Nombre'],['url','Destino: #seccion o https://...']]},
+ menuextra:{uno:'enlace del menú',nofile:1,f:[['nombre','Nombre'],['url','Enlace (https://...)']]},
+ avisos:{uno:'alerta meteorológica',acc:DOCS,f:[['nivel','Nivel','sel',['amarillo','naranja','rojo']],['fenomeno','Fenómeno (viento, lluvia, costeros...)'],['texto','Descripción','area'],['vigencia','Vigencia']]},
  redes:{uno:'red social',acc:IMGS,img:1,f:[['red','Red','sel',['Facebook','Instagram','TikTok','X','YouTube']],['usuario','Nombre de la cuenta'],['url','Enlace (https://...)']]},
  convocatorias:{uno:'convocatoria',acc:DOCS,f:[['titulo','Título'],['detalle','Detalle','area'],['estado','Estado','sel',['Abierta','En proceso','Cerrada']]]},
  intervenciones:{uno:'intervención',acc:IMGS,img:1,f:[['tipo','Tipo','sel',['Incendio','Asistencia técnica','Accidente de tráfico','Rescate de personas','Rescate de animales','Servicio apícola','Prevención','Otros']],['fecha','Fecha','date'],['titulo','Título'],['texto','Descripción','area']]},
@@ -613,12 +654,14 @@ const COLS={
  enlaces:{uno:'enlace',nofile:1,f:[['nombre','Nombre'],['detalle','Descripción'],['url','Enlace (https://...)']]}
 };
 const ZONAS=[['Gándara',172,316],['Santa Cecilia',262,372],['Alto del Castaño',345,318],['Piñeiros',448,348],['Couto',545,340],['Xuvia',652,366],['Val',345,60],['San Mateo',396,186],['Castro',520,228],['Sedes',680,168],['Pedroso',822,250],['San Xiao',600,290]];
-const S={fotos:{},view:'inicio',edit:false,canEdit:false,db:null,assets:null,dl:null,data:{},cifras:null,order:Object.keys(SECS),filtro:'Todas',listo:{}};
+const MENU_DEF=['avisos','noticias','servicio','intervenciones','prevencion','alertas'];
+const S={cfg:{tema:{},textos:{es:{},gl:{}}},menu:null,edText:false,fotos:{},view:'inicio',edit:false,canEdit:false,db:null,assets:null,dl:null,data:{},cifras:null,order:Object.keys(SECS),filtro:'Todas',listo:{}};
 Object.keys(COLS).forEach(c=>S.data[c]=[]);
 
 function toast(t){const e=$('toast');e.textContent=(LANG==='gl'&&glt(t))||t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,4200)}
 const fecha=s=>{if(!s)return'';const d=new Date(s+'T12:00:00');return isNaN(d)?s:LANG==='gl'?`${d.getDate()} ${['xan','feb','mar','abr','maio','xuño','xul','ago','set','out','nov','dec'][d.getMonth()]} ${d.getFullYear()}`:d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})};
 const href=u=>/^https:\/\//i.test(u||'')?u:'';
+const dest=u=>/^#[a-z]+$/.test(u||'')?u:href(u);
 const isImg=f=>/^image\//.test(f.type||'');
 const imgs=it=>(it.files||[]).filter(isImg), docs=it=>(it.files||[]).filter(f=>!isImg(f));
 const nf=n=>Number(n).toLocaleString('es-ES');
@@ -645,7 +688,12 @@ function insignia(r){ // dibujo esquemático de la divisa
 const porFecha=l=>[...l].sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha)));
 const bloques=col=>l=>l.length?l.map(d=>`<div class="card"><h3>${esc(d.titulo)}</h3><p style="margin-top:8px;white-space:pre-line">${esc(d.texto)}</p>${picList(col,d)}${itemTools(col,d)}</div>`).join(''):vacio(col,'Aún no hay contenido.');
 const links=col=>l=>l.length?l.map(d=>{const u=href(d.url);return `<div class="lk"><${u?`a href="${esc(u)}" target="_blank" rel="noopener"`:'div'} class="mapa"><b>${esc(d.nombre)}</b><span>${esc(d.detalle)}</span></${u?'a':'div'}>${itemTools(col,d)}</div>`}).join(''):vacio(col,'Aún no hay enlaces.');
+const NV={Informativo:'info',Importante:'imp',Urgente:'urg'};
+const avisoHtml=(a,tools)=>{const u=dest(a.url);return `<div class="avw ${NV[a.nivel]||'info'}"><svg class="ic"><use href="#i-avisos"/></svg><div class="main"><span class="label">${esc(a.nivel||'Aviso')}</span><b>${esc(a.titulo)}</b><p>${esc(a.texto)}</p>${fileList('avisosweb',a)}</div>${u?`<a class="btn" href="${esc(u)}"${u[0]==='#'?'':' target="_blank" rel="noopener"'}>Más información</a>`:''}${tools?itemTools('avisosweb',a):''}</div>`};
+const porNivel=l=>[...l].sort((a,b)=>({Urgente:0,Importante:1}[a.nivel]??2)-({Urgente:0,Importante:1}[b.nivel]??2));
 const R={
+ avisosweb:l=>l.length?porNivel(l).map(a=>avisoHtml(a,1)).join(''):vacio('avisosweb','No hay avisos del servicio.'),
+ rapidos:l=>l.map(d=>{const u=dest(d.url);return `<span class="qc"><a href="${esc(u||'#inicio')}"${u&&u[0]!=='#'?' target="_blank" rel="noopener"':''}>${esc(d.nombre)}</a>${S.edit?`<button class="btn mini" data-act="edit" data-col="rapidos" data-id="${d.id}" aria-label="Editar">✎</button><button class="btn mini pel" data-act="del" data-col="rapidos" data-id="${d.id}" aria-label="Eliminar">✕</button>`:''}</span>`}).join('')+(S.edit?'<button class="btn mini pri" data-act="add" data-col="rapidos">Añadir acceso</button>':''),
  infoservicio:bloques('infoservicio'),infoprevencion:bloques('infoprevencion'),mapastiempo:links('mapastiempo'),enlaces:links('enlaces'),
  noticias(l){ l=porFecha(l); if(!l.length) return vacio('noticias','Aún no hay noticias publicadas.');
   return l.map(n=>{const p=imgs(n)[0],u=href(n.url);return `<div class="card news">${p?`<img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy">`:''}<span class="label">${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</span><h3>${esc(n.titulo)}</h3><p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${itemTools('noticias',n)}</div>`}).join('')},
@@ -674,6 +722,7 @@ const R={
 };
 
 function estadoDe(s){const d=S.data,n=c=>d[c].length;
+  if(s==='avisos')return n('avisosweb')?n('avisosweb')+' avisos':'Avisos del servicio';
   if(s==='noticias')return n('noticias')?n('noticias')+' noticias':'Prensa';
   if(s==='alertas'){const a=d.avisos;return a.length?`${a.length} aviso${a.length>1?'s':''} activo${a.length>1?'s':''}`:'Sin avisos activos'}
   if(s==='plantilla'){const t=d.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);return t?t+' personas':'Puestos y divisas'}
@@ -686,6 +735,8 @@ function estadoDe(s){const d=S.data,n=c=>d[c].length;
   return {servicio:'Dónde estamos y contacto',prevencion:'Hidrantes, planes y simulacros',tiempo:'Viento, radar y avisos',enlaces:'112, MeteoGalicia, AEMET'}[s]}
 
 function render(){
+  applyTema();
+  $('avisosTop').innerHTML=porNivel(S.data.avisosweb).map(a=>avisoHtml(a,S.edit)).join('');
   for(const col in R) $('b-'+col).innerHTML=R[col](S.data[col]);
   document.querySelectorAll('.tools[data-sec]').forEach(t=>{const sec=t.dataset.sec;t.innerHTML=S.edit?(SEC_COL[sec]||[]).map(col=>`<button class="btn pri" data-act="add" data-col="${col}">Añadir ${COLS[col].uno}</button>`).join('')+`<button class="btn" data-act="secfoto" data-s="${sec}">Cambiar foto</button>`:''});
   Object.keys(SECS).forEach(s=>$('v-'+s).querySelector('.head').style.setProperty('--ph',S.fotos[s]?`url("/_blob/${S.fotos[s]}")`:'none'));
@@ -695,8 +746,9 @@ function render(){
   $('sat').style.backgroundImage=S.fotos.ubicacion?`url(/_blob/${S.fotos.ubicacion})`:'';
   $('satEd').innerHTML=S.edit?'<button class="btn mini" data-act="secfoto" data-s="ubicacion">Cambiar imagen</button>':'';
   car();
-  side();
-  $('edNote').innerHTML=S.edit?'<div class="note"><b>Modo edición.</b> Solo tú, como propietario, puedes editar. Mueve los accesos con las flechas del menú lateral. Las noticias del carrusel se añaden en Noticias. Dentro de cada sección puedes cambiar su foto, añadir fichas y subir archivos: PDF, imágenes, CSV y TXT, hasta 20 MB.</div>':'';
+  side();menu();
+  $('edbar').hidden=!S.edit;document.body.classList.toggle('edtext',S.edit&&S.edText);
+  $('edNote').innerHTML=S.edit?'<div class="note"><b>Modo edición.</b> Solo tú, como propietario, puedes editar. En el menú lateral: flechas para mover los apartados y ★ para ponerlos en el menú superior. En la barra de abajo: editar textos, colores, botones, avisos y enlaces del menú. Las noticias del carrusel se añaden en Noticias. Dentro de cada sección puedes cambiar su foto, añadir fichas y subir archivos: PDF, imágenes, CSV y TXT, hasta 20 MB.</div>':'';
   const av=S.data.avisos,ord={rojo:3,naranja:2,amarillo:1},top=[...av].sort((a,b)=>(ord[b.nivel]||0)-(ord[a.nivel]||0))[0];
   $('banner').innerHTML=top?`<a class="banner ${esc(top.nivel)}" href="#alertas"><span>Aviso ${esc(top.nivel)} por ${esc(top.fenomeno)}</span><span class="small">${esc(top.vigencia)}</span><span style="margin-left:auto">Ver alertas →</span></a>`:'';
   const c=S.cifras; const med=S.data.vehiculos.length, per=S.data.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);
@@ -709,7 +761,15 @@ function render(){
   $('mapnote').textContent=c&&c.zonas?`Plano esquemático, no a escala. Círculos: incendios en ${c.anio} por zona.`:'Plano esquemático, no a escala.';
   tr();
 }
-function side(){const h='<span class="label">Accesos</span>'+S.order.map((s,i)=>`<div class="sa"><a href="#${s}" class="${s===S.view?'on':''}"><svg class="ic"><use href="#i-${s}"/></svg><span>${esc(SECS[s])}</span></a>${S.edit?`<button class="btn mini" data-act="up" data-s="${s}" ${i?'':'disabled'} aria-label="Subir">↑</button><button class="btn mini" data-act="down" data-s="${s}" ${i<S.order.length-1?'':'disabled'} aria-label="Bajar">↓</button>`:''}</div>`).join('')+'<a class="ext" href="https://www.naron.gal" target="_blank" rel="noopener"><svg class="ic"><use href="#i-concello"/></svg><span>Concello de Narón ↗</span></a>';$('side0').innerHTML=h;$('side1').innerHTML=h}
+function side(){const top=S.menu||MENU_DEF;const h='<span class="label">Accesos</span>'+S.order.map((s,i)=>`<div class="sa"><a href="#${s}" class="${s===S.view?'on':''}"><svg class="ic"><use href="#i-${s}"/></svg><span>${esc(SECS[s])}</span></a>${S.edit?`<button class="btn mini" data-act="star" data-s="${s}" aria-pressed="${top.includes(s)}" title="Mostrar en el menú superior" aria-label="Mostrar en el menú superior">★</button><button class="btn mini" data-act="up" data-s="${s}" ${i?'':'disabled'} aria-label="Subir">↑</button><button class="btn mini" data-act="down" data-s="${s}" ${i<S.order.length-1?'':'disabled'} aria-label="Bajar">↓</button>`:''}</div>`).join('')+S.data.menuextra.map(x=>{const u=href(x.url);return `<div class="sa"><a class="ext"${u?` href="${esc(u)}" target="_blank" rel="noopener"`:''}><svg class="ic"><use href="#i-enlaces"/></svg><span>${esc(x.nombre)} ↗</span></a>${S.edit?`<button class="btn mini" data-act="edit" data-col="menuextra" data-id="${x.id}" aria-label="Editar">✎</button><button class="btn mini pel" data-act="del" data-col="menuextra" data-id="${x.id}" aria-label="Eliminar">✕</button>`:''}</div>`}).join('');$('side0').innerHTML=h;$('side1').innerHTML=h}
+function menu(){const top=S.menu||MENU_DEF,a=s=>`<a href="#${s}" class="${s===S.view?'on':''}">${esc(SECS[s])}</a>`,mas=S.order.filter(s=>!top.includes(s));
+  $('menuItems').innerHTML=`<a href="#inicio" class="${S.view==='inicio'?'on':''}">Inicio</a>`+S.order.filter(s=>top.includes(s)).map(a).join('')+(mas.length?`<div class="dd"><button aria-expanded="false">Más ▾</button><div class="sub">${mas.map(a).join('')}</div></div>`:'')+S.data.menuextra.filter(x=>href(x.url)).map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.nombre)} ↗</a>`).join('')}
+const lum=h=>{const m=/^#([0-9a-f]{6})$/i.exec(h||'');if(!m)return null;const v=parseInt(m[1],16);return (.299*(v>>16)+.587*(v>>8&255)+.114*(v&255))/255};
+function applyTema(){const t=S.cfg.tema||{},st=document.documentElement.style,ink=l=>l>.6?'#161a22':'#ffffff';
+  const set=(k,vars,inks)=>{const l=lum(t[k]);vars.forEach(v=>l==null?st.removeProperty(v):st.setProperty(v,t[k]));inks.forEach(v=>l==null?st.removeProperty(v):st.setProperty(v,ink(l)))};
+  set('accent',['--accent'],['--on-accent']);set('menu',['--menu-bg'],['--menu-ink']);set('pie',['--foot'],['--foot-ink','--foot-head','--foot-mut']);
+  st.setProperty('--btn-r',{recto:'0px',redondo:'6px',pildora:'99px'}[t.boton]||'6px');
+  document.body.classList.toggle('outline',t.relleno==='contorno');document.body.classList.toggle('noanim',t.anim===false)}
 let carI=0;
 function car(){const l=porFecha(S.data.noticias).slice(0,5),el=$('car');
   const key=JSON.stringify([LANG,S.listo.noticias,l.map(n=>[n.id,n.titulo,n.fecha,n.medio,n.url,(imgs(n)[0]||{}).id])]);
@@ -717,12 +777,12 @@ function car(){const l=porFecha(S.data.noticias).slice(0,5),el=$('car');
   const sl=l.length?l.map(n=>{const p=imgs(n)[0],u=href(n.url),t=u?'a':'div';return `<${t}${u?` href="${esc(u)}" target="_blank" rel="noopener"`:''} class="slide"${p?` style="background-image:linear-gradient(to top,rgba(10,14,20,.92),rgba(10,14,20,.08) 70%),url(/_blob/${esc(p.id)})"`:''}><span class="cap"><small>${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</small><b>${esc(n.titulo)}</b></span></${t}>`}).join(''):`<div class="slide"><span class="cap"><small>Noticias de prensa</small><b>${S.listo.noticias===false?'Cargando noticias...':'Aún no hay noticias publicadas'}</b></span></div>`;
   el.innerHTML=`<div class="track" id="track">${sl}</div>`+(l.length>1?`<button class="nav prev" data-act="car" data-d="-1" aria-label="Noticia anterior">‹</button><button class="nav next" data-act="car" data-d="1" aria-label="Noticia siguiente">›</button><div class="dots">${l.map((_,i)=>`<button data-act="car" data-i="${i}" aria-label="Noticia ${i+1}"></button>`).join('')}</div>`:'');
   carGo(0)}
-function carGo(i){const t=$('track');if(!t)return;const n=t.children.length;carI=(i+n)%n;t.style.transform=`translateX(-${carI*100}%)`;document.querySelectorAll('#car .dots button').forEach((b,k)=>b.setAttribute('aria-current',k===carI))}
-setInterval(()=>{if(!matchMedia('(prefers-reduced-motion:reduce)').matches&&!$('car').matches(':hover,:focus-within')&&!$('v-inicio').hidden)carGo(carI+1)},6000);
+function carGo(i){carTick=0;const t=$('track');if(!t)return;const n=t.children.length;carI=(i+n)%n;t.style.transform=`translateX(-${carI*100}%)`;document.querySelectorAll('#car .dots button').forEach((b,k)=>b.setAttribute('aria-current',k===carI))}
+let carTick=0;setInterval(()=>{const t=S.cfg.tema||{};if(t.carAuto===false||t.anim===false||matchMedia('(prefers-reduced-motion:reduce)').matches||$('car').matches(':hover,:focus-within')||$('v-inicio').hidden)return;if(++carTick>=Math.min(30,Math.max(3,+t.carSecs||6)))carGo(carI+1)},1000);
 $('burger').onclick=()=>{const o=$('menu').classList.toggle('open');$('burger').setAttribute('aria-expanded',o)};
-document.querySelectorAll('#menu .dd>button').forEach(b=>b.onclick=()=>{const o=b.parentElement.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+
 function ruta(){let h=location.hash.slice(1);if(!SECS[h])h='inicio';
-  S.view=h;$('menu').classList.remove('open');document.querySelectorAll('#menu .dd').forEach(d=>d.classList.remove('open'));document.querySelectorAll('#menu a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));$('shell').hidden=h==='inicio';side();$('v-inicio').hidden=h!=='inicio';Object.keys(SECS).forEach(s=>$('v-'+s).hidden=s!==h);window.scrollTo(0,0);tr()}
+  S.view=h;$('menu').classList.remove('open');document.querySelectorAll('#menu .dd').forEach(d=>d.classList.remove('open'));document.querySelectorAll('#menu a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));$('shell').hidden=h==='inicio';side();menu();$('v-inicio').hidden=h!=='inicio';Object.keys(SECS).forEach(s=>$('v-'+s).hidden=s!==h);window.scrollTo(0,0);tr()}
 addEventListener('hashchange',ruta);
 /* vehículos del plano: vista cenital con rotativos azules */
 const NS='http://www.w3.org/2000/svg';
@@ -734,7 +794,7 @@ const VE=[['top-bnl5.png',.39,'M215 232C235 215 255 195 270 170S310 100 345 60',
 function mover(t){VE.forEach(v=>{const u=((t+v.off)%v.dur)/v.dur,back=u>.5,q=Math.min(1,(back?1-u:u)*2.15)*v.len;
   const a=v.p.getPointAtLength(q),b=v.p.getPointAtLength(Math.min(v.len,q+1.5)),c=v.p.getPointAtLength(Math.max(0,q-1.5));
   v.g.setAttribute('transform',`translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${(Math.atan2(b.y-c.y,b.x-c.x)*180/Math.PI+(back?180:0)).toFixed(1)})`)})}
-if(matchMedia('(prefers-reduced-motion:reduce)').matches)mover(4000);else (function loop(t){if(!$('v-inicio').hidden)mover(t||0);requestAnimationFrame(loop)})(0);
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)mover(4000);else (function loop(t){if(!$('v-inicio').hidden&&(S.cfg.tema||{}).anim!==false)mover(t||0);requestAnimationFrame(loop)})(0);
 
 
 /* edición */
@@ -759,18 +819,40 @@ $('fileinp').addEventListener('change',async e=>{const fs=[...e.target.files];e.
     catch(err){mal++;if(err&&err.code==='too_large')toast('«'+f.name+'» supera los 20 MB.')}}
   try{await ref(col,id).update({files});toast(mal?`Subido, salvo ${mal} archivo(s) de un tipo no admitido o con error.`:'Archivo subido')}catch(err){toast('No se pudo guardar el archivo.')}});
 
-document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const {act,col,id,fid}=b.dataset;
+/* edición de cualquier texto fijo */
+let edN=null;const toArr=o=>Object.entries(o||{}).map(([k,v])=>({k,v})),toObj=a=>Object.fromEntries((Array.isArray(a)?a:[]).map(x=>[x.k,x.v]));
+document.addEventListener('click',e=>{if(!S.edit||!S.edText)return;const el=e.target;if(!el.closest||el.closest('dialog,#edbar,[data-act],input,select,textarea,#langbtn,#editbtn'))return;
+  e.preventDefault();e.stopPropagation();
+  if(el.closest('[id^="b-"],#car,#newsList,#avisosTop,#dest,#cifras,#tablaCifras,#zonas,.sidebar,#menuItems')){toast('Esto se cambia con los botones de edición de su apartado.');return}
+  const n=[...el.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());if(!n||n._o===undefined)return;
+  edN=n;$('txt-o').textContent=n._o.trim();$('txt-v').value=n.nodeValue.trim();$('txt').showModal()},true);
+async function guardaTexto(v){const k=edN._o.trim(),m=S.cfg.textos;m[LANG]=m[LANG]||{};if(v==null||v===''||(LANG==='es'&&v===k))delete m[LANG][k];else m[LANG][k]=v;$('txt').close();tr();
+  try{await S.db.doc('config/textos').set({es:toArr(m.es),gl:toArr(m.gl)});toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}}
+$('txt-f').addEventListener('submit',e=>{e.preventDefault();guardaTexto($('txt-v').value.trim())});
+function abreTema(){const t=S.cfg.tema||{},cs=getComputedStyle(document.documentElement),hex=v=>{v=v.trim();return /^#[0-9a-f]{6}$/i.test(v)?v:'#d3271c'};
+  $('t-accent').value=hex(t.accent||cs.getPropertyValue('--accent'));$('t-menu').value=hex(t.menu||t.accent||cs.getPropertyValue('--accent'));$('t-pie').value=hex(t.pie||cs.getPropertyValue('--foot'));
+  $('t-boton').value=t.boton||'redondo';$('t-relleno').value=t.relleno||'relleno';$('t-anim').checked=t.anim!==false;$('t-carAuto').checked=t.carAuto!==false;$('t-carSecs').value=t.carSecs||6;$('tema').showModal()}
+async function guardaTema(t){S.cfg.tema=t;$('tema').close();render();try{await S.db.doc('config/tema').set(t);toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}}
+$('tema-f').addEventListener('submit',e=>{e.preventDefault();guardaTema({accent:$('t-accent').value,menu:$('t-menu').value,pie:$('t-pie').value,boton:$('t-boton').value,relleno:$('t-relleno').value,anim:$('t-anim').checked,carAuto:$('t-carAuto').checked,carSecs:+$('t-carSecs').value||6})});
+document.addEventListener('click',e=>{const x=e.target.closest('[data-x]');if(!x)return;const a=x.dataset.x;if(a==='txt-c')$('txt').close();if(a==='tema-c')$('tema').close();if(a==='txt-r')guardaTexto(null);if(a==='tema-r')guardaTema({})});
+
+document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .dd>button');if(ddb){const o=ddb.parentElement.classList.toggle('open');ddb.setAttribute('aria-expanded',o);return}
+  const b=e.target.closest('[data-act]');if(!b)return;const {act,col,id,fid}=b.dataset;
   if(act==='car'){e.preventDefault();return carGo(b.dataset.i!=null?+b.dataset.i:carI+ +b.dataset.d)}
   if(act==='filtro'){S.filtro=b.dataset.t;return render()}
   if(act==='dl'){ if(!S.dl){const a=document.createElement('a');a.href='/_blob/'+fid;a.download=b.dataset.name||'';document.body.appendChild(a);a.click();a.remove();return}
     try{const r=await fetch('/_blob/'+fid);if(!r.ok)throw 0;await S.dl.save({filename:b.dataset.name,data:await r.blob()})}catch(err){if(!err||!err.code||!/dismiss|declin|cancel/.test(err.code))toast('No se pudo descargar. Ábrelo con su enlace.')}return}
   if(!S.edit)return;
+  if(act==='edtext'){S.edText=!S.edText;b.setAttribute('aria-pressed',S.edText);toast(S.edText?'Pulsa cualquier texto fijo de la página para cambiarlo.':'Edición de textos desactivada.');return render()}
+  if(act==='tema')return abreTema();
+  if(act==='star'){const m=[...(S.menu||MENU_DEF)],i=m.indexOf(b.dataset.s);i<0?m.push(b.dataset.s):m.splice(i,1);S.menu=m;render();
+    try{await S.db.doc('config/layout').set({order:S.order,menu:m})}catch(err){toast('No se pudo guardar el menú.')}return}
   if(act==='secfoto'){target={sec:b.dataset.s};$('fileinp').accept=IMGS;return $('fileinp').click()}
   if(act==='add')return abrir(col);
   if(act==='edit')return abrir(col,id);
   if(act==='file'){target={col,id};$('fileinp').accept=COLS[col].acc;return $('fileinp').click()}
   if(act==='up'||act==='down'){const o=[...S.order],i=o.indexOf(b.dataset.s),j=i+(act==='up'?-1:1);if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];S.order=o;render();
-    try{await S.db.doc('config/layout').set({order:o})}catch(err){toast('No se pudo guardar el orden.')}return}
+    try{await S.db.doc('config/layout').set({order:o,menu:S.menu||MENU_DEF})}catch(err){toast('No se pudo guardar el orden.')}return}
   if(act==='del'||act==='delfile'){ if(!b.dataset.armed){b.dataset.armed=1;b.textContent='Confirmar';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent=act==='del'?'Eliminar':'Quitar'}},4000);return}
     const it=item(col,id);if(!it)return;
     try{ if(act==='del'){await ref(col,id).delete();for(const f of it.files||[])S.assets?.delete(f.id).catch(()=>{})}
@@ -778,7 +860,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]
       toast('Eliminado')}catch(err){toast('No se pudo eliminar.')}}
 });
 $('langbtn').onclick=()=>{LANG=LANG==='gl'?'es':'gl';try{localStorage.setItem('bn-lang',LANG)}catch(e){}render()};
-$('editbtn').onclick=()=>{S.edit=!S.edit;$('editbtn').setAttribute('aria-pressed',S.edit);$('editbtn').textContent=S.edit?'Terminar':'Editar';render()};
+$('editbtn').onclick=()=>{S.edit=!S.edit;$('editbtn').setAttribute('aria-pressed',S.edit);$('editbtn').textContent=S.edit?'Terminar':'Editar';if(!S.edit)S.edText=false;render()};
 
 Object.keys(SECS).forEach(s=>{const h=$('v-'+s).querySelector('.head');if(!h.querySelector('.tools')){const t=document.createElement('span');t.className='tools';t.dataset.sec=s;h.querySelector('h2').after(t)}});
 render();ruta();
@@ -794,7 +876,9 @@ render();ruta();
     db.collection(col).onSnapshot(s=>{S.listo[col]=true;S.data[col]=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.orden||0)-(b.orden||0));
       if(!s.metadata.fromCache){clearTimeout(t);$('estado').textContent=''} render()},
       ()=>{S.listo[col]=true;clearTimeout(t);render()})});
-  db.doc('config/layout').onSnapshot(s=>{const o=s.exists&&s.data().order;if(Array.isArray(o)){const ok=o.filter(x=>SECS[x]);S.order=[...ok,...Object.keys(SECS).filter(x=>!ok.includes(x))];render()}},()=>{});
+  db.doc('config/tema').onSnapshot(s=>{S.cfg.tema=s.exists?s.data():{};render()},()=>{});
+  db.doc('config/textos').onSnapshot(s=>{const d=s.exists?s.data():{};S.cfg.textos={es:toObj(d.es),gl:toObj(d.gl)};render()},()=>{});
+  db.doc('config/layout').onSnapshot(s=>{const o=s.exists&&s.data().order,m=s.exists&&s.data().menu;if(Array.isArray(m))S.menu=m.filter(x=>SECS[x]);if(Array.isArray(o)){const ok=o.filter(x=>SECS[x]);S.order=[...ok,...Object.keys(SECS).filter(x=>!ok.includes(x))];render()}},()=>{});
   db.collection('secciones').onSnapshot(s=>{S.fotos={};s.docs.forEach(d=>{const f=(d.data().files||[])[0];if(f&&/^[0-9a-f]{32}$/.test(f.id))S.fotos[d.id]=f.id});render()},()=>{});
   db.doc('config/cifras').onSnapshot(s=>{S.cifras=s.exists?s.data():null;render()},()=>{});
   render();
