@@ -2,152 +2,56 @@
  "cleanUrls": true,
  "rewrites": [
   {
-   "source": "/_blob/02d6011d5436437bdd1c5f6de723649f",
-   "destination": "/archivos/02d6011d5436437bdd1c5f6de723649f.png"
-  },
-  {
-   "source": "/_blob/03e6f019df1e6d8448a6b9ed567f9637",
-   "destination": "/archivos/03e6f019df1e6d8448a6b9ed567f9637.jpg"
-  },
-  {
-   "source": "/_blob/04b4fb2d29b809bc5c09c65cb7bb5cc6",
-   "destination": "/archivos/04b4fb2d29b809bc5c09c65cb7bb5cc6.jpg"
-  },
-  {
-   "source": "/_blob/09e47d973013f632cffd624397cca4a9",
-   "destination": "/archivos/09e47d973013f632cffd624397cca4a9.jpg"
-  },
-  {
-   "source": "/_blob/15e41f84e1059926f27403d0c3654bee",
-   "destination": "/archivos/15e41f84e1059926f27403d0c3654bee.jpg"
-  },
-  {
-   "source": "/_blob/19490541108260bdbf4a547196bbeacc",
-   "destination": "/archivos/19490541108260bdbf4a547196bbeacc.png"
-  },
-  {
-   "source": "/_blob/1eaf78b9b74b893a196d1a9827f7a207",
-   "destination": "/archivos/1eaf78b9b74b893a196d1a9827f7a207.png"
-  },
-  {
-   "source": "/_blob/26d3c44a0327c4409455c5113825060f",
-   "destination": "/archivos/26d3c44a0327c4409455c5113825060f.png"
-  },
-  {
-   "source": "/_blob/33322d2b13ba088b179443029806e2a6",
-   "destination": "/archivos/33322d2b13ba088b179443029806e2a6.jpg"
-  },
-  {
-   "source": "/_blob/369a53f1988a14a052d0643a5e3d1331",
-   "destination": "/archivos/369a53f1988a14a052d0643a5e3d1331.pdf"
-  },
-  {
-   "source": "/_blob/3d01ca45fcfc7c3d7adb875f1a644b03",
-   "destination": "/archivos/3d01ca45fcfc7c3d7adb875f1a644b03.jpg"
-  },
-  {
-   "source": "/_blob/486a08bcfd5c2639a8f6448a3257032d",
-   "destination": "/archivos/486a08bcfd5c2639a8f6448a3257032d.jpg"
-  },
-  {
    "source": "/_blob/5391ced626338e3d3a77f4d48b390c4d",
    "destination": "/archivos/5391ced626338e3d3a77f4d48b390c4d.jpg"
-  },
-  {
-   "source": "/_blob/59dc8eb85f99f9a2b2877ba762c225b8",
-   "destination": "/archivos/59dc8eb85f99f9a2b2877ba762c225b8.png"
   },
   {
    "source": "/_blob/6127dd1c38629db85484be7f2e25e70b",
    "destination": "/archivos/6127dd1c38629db85484be7f2e25e70b.jpg"
   },
   {
-   "source": "/_blob/69e5e06e53cb23c0311c2678572faee6",
-   "destination": "/archivos/69e5e06e53cb23c0311c2678572faee6.png"
+   "source": "/_blob/09e47d973013f632cffd624397cca4a9",
+   "destination": "/archivos/09e47d973013f632cffd624397cca4a9.jpg"
   },
   {
-   "source": "/_blob/771ce66b821e0e73f0589323916d7c81",
-   "destination": "/archivos/771ce66b821e0e73f0589323916d7c81.png"
-  },
-  {
-   "source": "/_blob/7dcc9f5314cb3f03d46f012e3f427c84",
-   "destination": "/archivos/7dcc9f5314cb3f03d46f012e3f427c84.jpg"
-  },
-  {
-   "source": "/_blob/805e217f3effcc12924743a4d7c3503d",
-   "destination": "/archivos/805e217f3effcc12924743a4d7c3503d.jpg"
-  },
-  {
-   "source": "/_blob/8212e93bce7fa093bed33ed1159a4fde",
-   "destination": "/archivos/8212e93bce7fa093bed33ed1159a4fde.png"
-  },
-  {
-   "source": "/_blob/84ca98656479d2d90e51c025de6d1c3d",
-   "destination": "/archivos/84ca98656479d2d90e51c025de6d1c3d.png"
-  },
-  {
-   "source": "/_blob/895f2231bc0924cc36a20689cec13dde",
-   "destination": "/archivos/895f2231bc0924cc36a20689cec13dde.jpg"
-  },
-  {
-   "source": "/_blob/905d54403ab5f78c4bd4630b51d68a08",
-   "destination": "/archivos/905d54403ab5f78c4bd4630b51d68a08.png"
-  },
-  {
-   "source": "/_blob/9b2c59645627d2cc065c14e04997f04a",
-   "destination": "/archivos/9b2c59645627d2cc065c14e04997f04a.png"
+   "source": "/_blob/369a53f1988a14a052d0643a5e3d1331",
+   "destination": "/archivos/369a53f1988a14a052d0643a5e3d1331.pdf"
   },
   {
    "source": "/_blob/a69336b3e632fc63e8bca2c220271963",
    "destination": "/archivos/a69336b3e632fc63e8bca2c220271963.jpg"
   },
   {
-   "source": "/_blob/a987a9022e04dce98eb7f2989ad52f50",
-   "destination": "/archivos/a987a9022e04dce98eb7f2989ad52f50.jpg"
+   "source": "/_blob/9b2c59645627d2cc065c14e04997f04a",
+   "destination": "/archivos/9b2c59645627d2cc065c14e04997f04a.png"
   },
   {
-   "source": "/_blob/b070be18d9817d2ec8857f622ded2d93",
-   "destination": "/archivos/b070be18d9817d2ec8857f622ded2d93.jpg"
-  },
-  {
-   "source": "/_blob/b2fbdeb8859001f8e42e8a3b0cf0716c",
-   "destination": "/archivos/b2fbdeb8859001f8e42e8a3b0cf0716c.jpg"
-  },
-  {
-   "source": "/_blob/c7222fdbc02d3a4c1e1006db73ac9cd6",
-   "destination": "/archivos/c7222fdbc02d3a4c1e1006db73ac9cd6.jpg"
-  },
-  {
-   "source": "/_blob/cb74c18b0555a9b2e9a93329048b88ad",
-   "destination": "/archivos/cb74c18b0555a9b2e9a93329048b88ad.jpg"
+   "source": "/_blob/84ca98656479d2d90e51c025de6d1c3d",
+   "destination": "/archivos/84ca98656479d2d90e51c025de6d1c3d.png"
   },
   {
    "source": "/_blob/cea59016a1d46b60b3035cc00ea43ff6",
    "destination": "/archivos/cea59016a1d46b60b3035cc00ea43ff6.png"
   },
   {
-   "source": "/_blob/cf3423f19506f9d2a087a066bc87e327",
-   "destination": "/archivos/cf3423f19506f9d2a087a066bc87e327.jpg"
+   "source": "/_blob/8212e93bce7fa093bed33ed1159a4fde",
+   "destination": "/archivos/8212e93bce7fa093bed33ed1159a4fde.png"
   },
   {
-   "source": "/_blob/d695ba7ea414321c4c0a8df70ae87c12",
-   "destination": "/archivos/d695ba7ea414321c4c0a8df70ae87c12.jpg"
+   "source": "/_blob/02d6011d5436437bdd1c5f6de723649f",
+   "destination": "/archivos/02d6011d5436437bdd1c5f6de723649f.png"
   },
   {
-   "source": "/_blob/d6c9affaf5323f7538346bbae0c977e2",
-   "destination": "/archivos/d6c9affaf5323f7538346bbae0c977e2.png"
+   "source": "/_blob/19490541108260bdbf4a547196bbeacc",
+   "destination": "/archivos/19490541108260bdbf4a547196bbeacc.png"
   },
   {
-   "source": "/_blob/d89500150bccd99112e8ec9ff289a04c",
-   "destination": "/archivos/d89500150bccd99112e8ec9ff289a04c.png"
+   "source": "/_blob/905d54403ab5f78c4bd4630b51d68a08",
+   "destination": "/archivos/905d54403ab5f78c4bd4630b51d68a08.png"
   },
   {
-   "source": "/_blob/dd80805d4942464c8ef1d270d03f37de",
-   "destination": "/archivos/dd80805d4942464c8ef1d270d03f37de.pdf"
-  },
-  {
-   "source": "/_blob/dff2d071e7659d15173c6aebe57196ca",
-   "destination": "/archivos/dff2d071e7659d15173c6aebe57196ca.png"
+   "source": "/_blob/771ce66b821e0e73f0589323916d7c81",
+   "destination": "/archivos/771ce66b821e0e73f0589323916d7c81.png"
   },
   {
    "source": "/_blob/e223e47dfbc49ce7fe00991bfd63e30b",
@@ -158,25 +62,107 @@
    "destination": "/archivos/e2b7039027f1d40ef2481a5f8618b4d3.png"
   },
   {
-   "source": "/_blob/e87948f64c337629d1e99c06ca82bf01",
-   "destination": "/archivos/e87948f64c337629d1e99c06ca82bf01.jpg"
+   "source": "/_blob/69e5e06e53cb23c0311c2678572faee6",
+   "destination": "/archivos/69e5e06e53cb23c0311c2678572faee6.png"
   },
   {
-   "source": "/_blob/e93186b5976c0d6f7bb0cded32bf6afc",
-   "destination": "/archivos/e93186b5976c0d6f7bb0cded32bf6afc.png"
+   "source": "/_blob/26d3c44a0327c4409455c5113825060f",
+   "destination": "/archivos/26d3c44a0327c4409455c5113825060f.png"
   },
   {
-   "source": "/_blob/eea78ef1b4d0bec6acff460bc2a22a9d",
-   "destination": "/archivos/eea78ef1b4d0bec6acff460bc2a22a9d.png"
+   "source": "/_blob/d89500150bccd99112e8ec9ff289a04c",
+   "destination": "/archivos/d89500150bccd99112e8ec9ff289a04c.png"
+  },
+  {
+   "source": "/_blob/1eaf78b9b74b893a196d1a9827f7a207",
+   "destination": "/archivos/1eaf78b9b74b893a196d1a9827f7a207.png"
+  },
+  {
+   "source": "/_blob/59dc8eb85f99f9a2b2877ba762c225b8",
+   "destination": "/archivos/59dc8eb85f99f9a2b2877ba762c225b8.png"
+  },
+  {
+   "source": "/_blob/d6c9affaf5323f7538346bbae0c977e2",
+   "destination": "/archivos/d6c9affaf5323f7538346bbae0c977e2.png"
+  },
+  {
+   "source": "/_blob/dd80805d4942464c8ef1d270d03f37de",
+   "destination": "/archivos/dd80805d4942464c8ef1d270d03f37de.pdf"
+  },
+  {
+   "source": "/_blob/04b4fb2d29b809bc5c09c65cb7bb5cc6",
+   "destination": "/archivos/04b4fb2d29b809bc5c09c65cb7bb5cc6.jpg"
+  },
+  {
+   "source": "/_blob/cf3423f19506f9d2a087a066bc87e327",
+   "destination": "/archivos/cf3423f19506f9d2a087a066bc87e327.jpg"
+  },
+  {
+   "source": "/_blob/7dcc9f5314cb3f03d46f012e3f427c84",
+   "destination": "/archivos/7dcc9f5314cb3f03d46f012e3f427c84.jpg"
+  },
+  {
+   "source": "/_blob/486a08bcfd5c2639a8f6448a3257032d",
+   "destination": "/archivos/486a08bcfd5c2639a8f6448a3257032d.jpg"
+  },
+  {
+   "source": "/_blob/03e6f019df1e6d8448a6b9ed567f9637",
+   "destination": "/archivos/03e6f019df1e6d8448a6b9ed567f9637.jpg"
+  },
+  {
+   "source": "/_blob/15e41f84e1059926f27403d0c3654bee",
+   "destination": "/archivos/15e41f84e1059926f27403d0c3654bee.jpg"
+  },
+  {
+   "source": "/_blob/b2fbdeb8859001f8e42e8a3b0cf0716c",
+   "destination": "/archivos/b2fbdeb8859001f8e42e8a3b0cf0716c.jpg"
+  },
+  {
+   "source": "/_blob/b070be18d9817d2ec8857f622ded2d93",
+   "destination": "/archivos/b070be18d9817d2ec8857f622ded2d93.jpg"
+  },
+  {
+   "source": "/_blob/33322d2b13ba088b179443029806e2a6",
+   "destination": "/archivos/33322d2b13ba088b179443029806e2a6.jpg"
+  },
+  {
+   "source": "/_blob/805e217f3effcc12924743a4d7c3503d",
+   "destination": "/archivos/805e217f3effcc12924743a4d7c3503d.jpg"
+  },
+  {
+   "source": "/_blob/3d01ca45fcfc7c3d7adb875f1a644b03",
+   "destination": "/archivos/3d01ca45fcfc7c3d7adb875f1a644b03.jpg"
+  },
+  {
+   "source": "/_blob/d695ba7ea414321c4c0a8df70ae87c12",
+   "destination": "/archivos/d695ba7ea414321c4c0a8df70ae87c12.jpg"
   }
  ],
  "headers": [
   {
-   "source": "/archivos/(.*)",
+   "source": "/",
    "headers": [
     {
      "key": "Cache-Control",
-     "value": "public, max-age=604800"
+     "value": "no-cache"
+    }
+   ]
+  },
+  {
+   "source": "/index.html",
+   "headers": [
+    {
+     "key": "Cache-Control",
+     "value": "no-cache"
+    }
+   ]
+  },
+  {
+   "source": "/datos.json",
+   "headers": [
+    {
+     "key": "Cache-Control",
+     "value": "no-cache"
     }
    ]
   }
