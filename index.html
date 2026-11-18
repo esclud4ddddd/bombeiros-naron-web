@@ -822,7 +822,7 @@ const COLS={
 const ZONAS=[['Gándara',172,316],['Santa Cecilia',262,372],['Alto del Castaño',345,318],['Piñeiros',448,348],['Couto',545,340],['Xuvia',652,366],['Val',345,60],['San Mateo',396,186],['Castro',520,228],['Sedes',680,168],['Pedroso',822,250],['San Xiao',600,290]];
 const MENU_DEF=['avisos','noticias','servicio','intervenciones','prevencion','alertas'];
 const NIV={1:['amarillo','amarilla','amarela'],2:['naranja','naranja','laranxa'],3:['rojo','roja','vermella']};
-const S={pieOff:[],secFiles:{},oculto:['mapas','enlaces'],alGal:0,al112:[],cfg:{tema:{},textos:{es:{},gl:{}}},menu:null,edText:false,fotos:{},view:'inicio',edit:false,canEdit:false,db:null,assets:null,dl:null,data:{},cifras:null,order:Object.keys(SECS),filtro:'Todas',listo:{}};
+const S={auto:[],pieOff:[],secFiles:{},oculto:['mapas','enlaces'],alGal:0,al112:[],cfg:{tema:{},textos:{es:{},gl:{}}},menu:null,edText:false,fotos:{},view:'inicio',edit:false,canEdit:false,db:null,assets:null,dl:null,data:{},cifras:null,order:Object.keys(SECS),filtro:'Todas',listo:{}};
 Object.keys(COLS).forEach(c=>S.data[c]=[]);
 
 function toast(t){const e=$('toast');e.textContent=(LANG==='gl'&&glt(t))||t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,4200)}
@@ -859,6 +859,13 @@ const hoyISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMont
 const diaNoticia=n=>/^\d{4}-\d{2}-\d{2}/.test(n.fecha||'')?String(n.fecha).slice(0,10):(+n.orden>1e12?new Date(+n.orden).toISOString().slice(0,10):'');
 const caducada=n=>{const f=diaNoticia(n);if(!f)return false;const d=new Date(f+'T12:00:00');d.setDate(d.getDate()+DIAS_NOTICIA);return d.toISOString().slice(0,10)<=hoyISO()};
 const vigentes=l=>porFecha((l||[]).filter(n=>!caducada(n)));
+/* noticias automáticas de prensa (solo en la web publicada: /api/noticias) + las que sube el administrador */
+const FOTOS_ARCH=['09e47d973013f632cffd624397cca4a9','5391ced626338e3d3a77f4d48b390c4d','6127dd1c38629db85484be7f2e25e70b'];
+const clave=t=>String(t||'').toLowerCase().replace(/[^a-z0-9áéíóúñ]/g,'').slice(0,60);
+function todas(){const man=vigentes(S.data.noticias),ks=new Set(man.map(n=>clave(n.titulo)));
+  const au=(S.auto||[]).filter(n=>!ks.has(clave(n.titulo))&&!caducada(n));return porFecha([...man,...au])}
+async function cargaNoticias(){try{const r=await fetch('/api/noticias',{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+  S.auto=(Array.isArray(j.noticias)?j.noticias:[]).map((n,i)=>({id:'auto'+i,auto:true,titulo:n.titulo,medio:n.medio,url:n.url,resumen:n.resumen||'',fecha:String(n.fecha||'').slice(0,10),files:[{id:FOTOS_ARCH[i%FOTOS_ARCH.length],type:'image/jpeg',name:'Foto de archivo'}]}));render()}catch(e){}}
 const bloques=col=>l=>l.length?l.map(d=>`<div class="card"><h3>${esc(d.titulo)}</h3><p style="margin-top:8px;white-space:pre-line">${esc(d.texto)}</p>${picList(col,d)}${itemTools(col,d)}</div>`).join(''):vacio(col,'Aún no hay contenido.');
 const links=col=>l=>l.length?l.map(d=>{const u=href(d.url);return `<div class="lk"><${u?`a href="${esc(u)}" target="_blank" rel="noopener"`:'div'} class="mapa"><b>${esc(d.nombre)}</b><span>${esc(d.detalle)}</span></${u?'a':'div'}>${itemTools(col,d)}</div>`}).join(''):vacio(col,'Aún no hay enlaces.');
 const NV={Informativo:'info',Importante:'imp',Urgente:'urg'};
@@ -869,6 +876,7 @@ const al112Html=()=>S.al112.map(a=>{const n=NIV[a.nivel]||NIV[1],gl=LANG==='gl',
 async function cargaAl112(){try{const r=await fetch('/api/alertas',{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   S.alGal=Math.min(3,Math.max(0,+j.galicia||0));S.al112=(Array.isArray(j.alertas)?j.alertas:[]).filter(a=>a&&[1,2,3].includes(+a.nivel)).map(a=>({...a,nivel:+a.nivel})).sort((a,b)=>b.nivel-a.nivel);render()}catch(e){}}
 cargaAl112();setInterval(cargaAl112,10*60*1000);
+if(window.__PUBLIC__){cargaNoticias();setInterval(cargaNoticias,15*60*1000)}
 const porNivel=l=>[...l].sort((a,b)=>({Urgente:0,Importante:1}[a.nivel]??2)-({Urgente:0,Importante:1}[b.nivel]??2));
 const PUB=!!window.__PUBLIC__;
 const pp=f=>/^\d{1,3}% \d{1,3}%$/.test((f&&f.pos)||'')?f.pos:'50% 50%';
@@ -887,8 +895,8 @@ const R={
  avisosweb:l=>l.length?porNivel(l).map(a=>avisoHtml(a,1)).join(''):vacio('avisosweb','No hay anuncios en el tablón.'),
  rapidos:l=>l.map(d=>{const u=dest(d.url);return `<span class="qc"><a href="${esc(u||'#inicio')}"${u&&u[0]!=='#'?' target="_blank" rel="noopener"':''}>${esc(d.nombre)}</a>${S.edit?`<button class="btn mini" data-act="edit" data-col="rapidos" data-id="${d.id}" aria-label="Editar">✎</button><button class="btn mini pel" data-act="del" data-col="rapidos" data-id="${d.id}" aria-label="Eliminar">✕</button>`:''}</span>`}).join('')+(S.edit?'<button class="btn mini pri" data-act="add" data-col="rapidos">Añadir acceso</button>':''),
  infoservicio:bloques('infoservicio'),infoprevencion:bloques('infoprevencion'),mapastiempo:links('mapastiempo'),enlaces:links('enlaces'),
- noticias(l){ l=S.edit?porFecha(l):vigentes(l); if(!l.length) return vacio('noticias','No hay noticias de los últimos 4 días.');
-  return l.map(n=>{const p=imgs(n)[0],u=href(n.url);return `<div class="card news">${p?`<img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}">`:''}<span class="label">${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</span>${caducada(n)?'<span class="pill">Caducada · ya no se ve en la web</span>':''}<h3>${esc(n.titulo)}</h3><p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}</div>`}).join('')},
+ noticias(l){ l=S.edit?porFecha([...l,...(S.auto||[]).filter(n=>!caducada(n))]):todas(); if(!l.length) return vacio('noticias','No hay noticias de los últimos 4 días.');
+  return l.map(n=>{const p=imgs(n)[0],u=href(n.url);return `<div class="card news">${p?`<img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}">`:''}<span class="label">${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</span>${caducada(n)?'<span class="pill">Caducada · ya no se ve en la web</span>':''}<h3>${esc(n.titulo)}</h3><p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${n.auto?'<span class="pill">Automática · prensa</span>':`${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}`}</div>`}).join('')},
  avisos(l){ if(!l.length&&S.al112.length) return ''; if(!l.length) return `<div class="card aviso"><div class="nivel verde">Sin avisos</div><div><b>No hay avisos activos para Narón.</b><div class="muted small">Se publican aquí cuando el 112 Galicia activa una alerta.</div></div></div>`;
   return l.map(a=>`<div class="card"><div class="aviso"><div class="nivel ${esc(a.nivel)}">${esc(a.nivel)}</div><div><b>${esc(a.fenomeno)}</b> ${esc(a.texto)}<div class="muted small">${esc(a.vigencia)}</div></div></div><div class="row" style="border:0;padding:8px 0 0">${fileList('avisos',a)}${itemTools('avisos',a)}</div></div>`).join('')},
  redes(l){ if(!l.length) return vacio('redes','Aún no hay redes sociales.');
@@ -920,7 +928,7 @@ function estadoDe(s){const d=S.data,n=c=>d[c].length;
   if(s==='mapas')return 'Incidencias 112 e IRDI';
   if(s==='ciudadania')return 'Quemas, velutina, tasas';
   if(s==='avisos')return n('avisosweb')?n('avisosweb')+' anuncios':'Comunicados del servicio';
-  if(s==='noticias'){const v=vigentes(S.data.noticias).length;return v?v+' noticias':'Prensa'}
+  if(s==='noticias'){const v=todas().length;return v?v+' noticias':'Prensa'}
   if(s==='alertas'){const a=d.avisos;return a.length?`${a.length} aviso${a.length>1?'s':''} activo${a.length>1?'s':''}`:'Sin avisos activos'}
   if(s==='plantilla'){const t=d.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);return t?t+' personas':'Puestos y divisas'}
   if(s==='vehiculos')return n('vehiculos')?n('vehiculos')+' medios':'Parque móvil';
@@ -941,7 +949,7 @@ function render(){
   for(const col in R){const el=$('b-'+col);if(el)el.innerHTML=R[col](S.data[col])}
   document.querySelectorAll('.tools[data-sec]').forEach(t=>{const sec=t.dataset.sec;t.innerHTML=S.edit?(SEC_COL[sec]||[]).map(col=>`<button class="btn pri" data-act="add" data-col="${col}">Añadir ${COLS[col].uno}</button>`).join('')+`<button class="btn" data-act="secfoto" data-s="${sec}">Cambiar foto</button>`+(S.fotos[sec]?`<button class="btn" data-act="encuadre" data-col="secciones" data-id="${sec}" data-fid="${S.fotos[sec]}">Encuadrar foto</button>`:''):''});
   Object.keys(SECS).forEach(s=>{const h=$('v-'+s).querySelector('.head');h.style.setProperty('--ph',S.fotos[s]?`url("/_blob/${S.fotos[s]}")`:'none');h.style.setProperty('--php',pp((S.secFiles[s]||[])[0]))});
-  const nl=vigentes(S.data.noticias).slice(0,6);
+  const nl=todas().slice(0,6);
   $('newsList').innerHTML=nl.length?nl.map(n=>{const u=href(n.url);return `<div class="row"><span class="muted num small" style="min-width:5.5em">${esc(n.fecha?new Date(n.fecha+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'}):'')}</span><div class="main"><b>${esc(n.titulo)}</b><span class="muted small">${esc(n.medio)}</span></div>${u?`<a href="${esc(u)}" target="_blank" rel="noopener">[+] info</a>`:''}</div>`}).join(''):vacio('noticias','No hay noticias de los últimos 4 días.');
   $('footRedes').innerHTML=S.data.redes.filter(x=>href(x.url)).map(x=>{const p=imgs(x)[0],ini={Facebook:'FB',Instagram:'IG',TikTok:'TT',YouTube:'YT',X:'X'}[x.red]||String(x.red).slice(0,2);return `<a class="rb" href="${esc(href(x.url))}" target="_blank" rel="noopener"><span class="c"${p?` style="background-image:url(/_blob/${esc(p.id)})"`:''}>${p?'':esc(ini)}</span><small>${esc(x.red)}</small></a>`}).join('')||'<span class="small">Redes pendientes</span>';
   const fl=(col,ext)=>S.data[col].filter(x=>S.edit||dest(x.url)).map(x=>{const u=dest(x.url),out=u&&u[0]!=='#';return `<span class="fl2"><a${u?` href="${esc(u)}"`:''}${out?' target="_blank" rel="noopener"':''}>${esc(x.nombre)}${out?' ↗':''}</a>${S.edit?`<button class="btn mini" data-act="edit" data-col="${col}" data-id="${x.id}" aria-label="Editar">✎</button><button class="btn mini pel" data-act="del" data-col="${col}" data-id="${x.id}" aria-label="Eliminar">✕</button>`:''}</span>`}).join('')+(S.edit?`<button class="btn mini" data-act="add" data-col="${col}">Añadir</button>`:'');
@@ -978,7 +986,7 @@ function applyTema(){const t=S.cfg.tema||{},st=document.documentElement.style,in
   st.setProperty('--btn-r',{recto:'0px',redondo:'6px',pildora:'99px'}[t.boton]||'6px');
   document.body.classList.toggle('outline',t.relleno==='contorno');document.body.classList.toggle('noanim',t.anim===false)}
 let carI=0;
-function car(){const l=vigentes(S.data.noticias).slice(0,5),el=$('car');
+function car(){const l=todas().slice(0,6),el=$('car');
   const key=JSON.stringify([LANG,S.listo.noticias,l.map(n=>[n.id,n.titulo,n.fecha,n.medio,n.url,(imgs(n)[0]||{}).id,(imgs(n)[0]||{}).pos])]);
   if(el.dataset.k===key)return; el.dataset.k=key;
   const sl=l.length?l.map(n=>{const p=imgs(n)[0],u=href(n.url),t=u?'a':'div';return `<${t}${u?` href="${esc(u)}" target="_blank" rel="noopener"`:''} class="slide"${p?` style="background-image:linear-gradient(to top,rgba(10,14,20,.92),rgba(10,14,20,.08) 70%),url(/_blob/${esc(p.id)});background-position:center,${pp(p)}"`:''}><span class="cap"><small>${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</small><b>${esc(n.titulo)}</b></span></${t}>`}).join(''):`<div class="slide"><span class="cap"><small>Noticias de prensa</small><b>${S.listo.noticias===false?'Cargando noticias...':'No hay noticias de los últimos 4 días'}</b></span></div>`;
@@ -1014,12 +1022,25 @@ function abrir(col,id){const c=COLS[col],it=id?item(col,id):(col==='noticias'?{f
   $('dlg-t').textContent=(id?'Editar ':'Añadir ')+c.uno;
   $('dlg-f').innerHTML=c.f.map(([k,l,t,o])=>{const v=it[k]??'';const i=`id="f-${k}" name="${k}"`;
     return `<label>${esc(l)}${t==='sel'?`<select ${i}>${o.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select>`:t==='area'?`<textarea ${i} rows="3">${esc(v)}</textarea>`:`<input ${i} type="${t==='date'?'date':'text'}" value="${esc(v)}">`}</label>`}).join('');
+  if(!id&&c.acc)$('dlg-f').insertAdjacentHTML('beforeend',`<label>${c.img?'Fotos (opcional)':'Fotos o archivos (opcional)'}<input id="f-__files" type="file" multiple accept="${c.img?'image/*':'image/*,.pdf,.csv,.txt'}"></label>`);
   $('dlg').showModal();tr()}
 $('dlg-x').onclick=()=>$('dlg').close();
-$('frm').addEventListener('submit',async e=>{e.preventDefault();const {col,id}=editing,d={};
+let guardando=false;
+$('frm').addEventListener('submit',async e=>{e.preventDefault();if(guardando)return;const {col,id}=editing,d={};
   COLS[col].f.forEach(([k])=>d[k]=$('f-'+k).value.trim());
-  try{ if(id) await ref(col,id).update(d); else await S.db.collection(col).add({...d,files:[],orden:Date.now()});
-    $('dlg').close();toast('Guardado')}catch(err){toast('No se pudo guardar. Inténtalo de nuevo.')}});
+  const sb=$('frm').querySelector('button[type=submit],button:not([type])');guardando=true;if(sb)sb.disabled=true;
+  try{ if(!S.db) throw {code:'sin_conexion'};
+    if(id) await ref(col,id).update(d);
+    else{ const files=[],fi=$('f-__files');let mal=0;
+      if(fi&&fi.files.length){toast('Subiendo fotos...');for(const f of fi.files){const type=tipoDe(f);if(!type||(COLS[col].img&&!/^image/.test(type))){mal++;continue}
+        try{const r=await S.assets.upload(f,{type});files.push({id:r.id,name:f.name,type:r.contentType,size:r.sizeBytes})}catch(err){mal++;if(err&&err.code==='too_large')toast('«'+f.name+'» supera los 20 MB.')}}}
+      const nid=col.slice(0,3)+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      await S.db.doc(col+'/'+nid).set({...d,files,orden:Date.now()});
+      if(mal)setTimeout(()=>toast(mal+' archivo(s) no se pudieron subir (tipo no admitido o muy grande).'),1800);
+      if(col==='noticias'&&caducada(d))setTimeout(()=>toast('Guardada, pero su fecha tiene más de 4 días: no se verá en la web.'),3600)}
+    $('dlg').close();toast('Guardado')}
+  catch(err){console.error(err);toast('No se pudo guardar'+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')+'. Inténtalo de nuevo.')}
+  finally{guardando=false;if(sb)sb.disabled=false}});
 function tipoDe(f){const x=f.name.split('.').pop().toLowerCase();return {pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',csv:'text/csv',txt:'text/plain'}[x]}
 $('fileinp').addEventListener('change',async e=>{const fs=[...e.target.files];e.target.value='';if(!target||!fs.length)return;if(target.sec){const sec=target.sec,f=fs[0],type=tipoDe(f);if(!type||!/^image/.test(type)){toast('Sube una imagen JPG, PNG o WEBP.');return}toast('Subiendo...');try{const old=S.fotos[sec];const r=await S.assets.upload(f,{type});await S.db.doc('secciones/'+sec).set({files:[{id:r.id,name:f.name,type:r.contentType}]});if(old)S.assets.delete(old).catch(()=>{});toast('Foto cambiada')}catch(err){toast('No se pudo subir la foto.')}return}const {col,id}=target,it=item(col,id);if(!it)return;
   const files=[...(it.files||[])];let mal=0;toast('Subiendo...');
