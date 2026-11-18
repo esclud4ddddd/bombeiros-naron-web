@@ -5,10 +5,14 @@
 // Sin variables configuradas, nadie puede entrar.
 export const config = { matcher: ['/personal', '/personal/:path*'] };
 
+// ACCESO ABIERTO por ahora (lo pidió el administrador). Para volver a pedir usuario y contraseña,
+// cambia ABIERTO a false y vuelve a publicar.
+const ABIERTO = true;
 const COOKIE = 'bn_admin';
 const seguir = () => new Response(null, { headers: { 'x-middleware-next': '1' } });
 
 export default function middleware(request) {
+  if (ABIERTO) return seguir();
   const usuario = process.env.PERSONAL_USUARIO, clave = process.env.PERSONAL_CLAVE, llave = process.env.PERSONAL_LLAVE;
   const url = new URL(request.url);
 

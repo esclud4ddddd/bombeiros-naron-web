@@ -849,6 +849,9 @@ const imgs=it=>(it.files||[]).filter(isImg), docs=it=>(it.files||[]).filter(f=>!
 const nf=n=>Number(n).toLocaleString('es-ES');
 
 function itemTools(col,it){ if(!S.edit) return '';
+  if(col==='noticias'&&!it.auto){const b=(a,t,c='')=>`<button class="btn mini ${c}" data-act="${a}" data-col="noticias" data-id="${it.id}">${t}</button>`;
+    if(it.retirada)return `<span class="tools" style="flex-basis:100%">${b('nrest','Restablecer','pri')}${b('del','Borrar del todo','pel')}</span>`;
+    return `<span class="tools" style="flex-basis:100%">${b('edit','Editar')}${b('file','Subir fotos')}${visible(it)?'':b('nfija','Volver a portada')}${b('nretira','Retirar','pel')}</span>`}
   return `<span class="tools" style="flex-basis:100%"><button class="btn mini" data-act="edit" data-col="${col}" data-id="${it.id}">Editar</button>
   ${COLS[col].nofile?'':`<button class="btn mini" data-act="file" data-col="${col}" data-id="${it.id}">${COLS[col].both?'Subir fotos o archivos':COLS[col].img?'Subir fotos':'Adjuntar archivo'}</button>`}
   <button class="btn mini pel" data-act="del" data-col="${col}" data-id="${it.id}">Eliminar</button></span>`}
@@ -871,7 +874,9 @@ const porFecha=l=>[...l].sort((a,b)=>String(b.fecha).localeCompare(String(a.fech
 /* noticias: desaparecen solas al cumplir 4 días desde su fecha (o desde que se subieron, si no tienen fecha) */
 const DIAS_NOTICIA=4;
 const hoyISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const diaNoticia=n=>/^\d{4}-\d{2}-\d{2}/.test(n.fecha||'')?String(n.fecha).slice(0,10):(+n.orden>1e12?new Date(+n.orden).toISOString().slice(0,10):'');
+const diaBase=n=>/^\d{4}-\d{2}-\d{2}/.test(n.fecha||'')?String(n.fecha).slice(0,10):(+n.orden>1e12?new Date(+n.orden).toISOString().slice(0,10):'');
+/* «Volver a portada» guarda la fecha en `fijada`: cuenta como noticia nueva desde ese día */
+const diaNoticia=n=>{const b=diaBase(n),f=/^\d{4}-\d{2}-\d{2}/.test(n.fijada||'')?n.fijada.slice(0,10):'';return f>b?f:b};
 const caducada=n=>{const f=diaNoticia(n);if(!f)return false;const d=new Date(f+'T12:00:00');d.setDate(d.getDate()+DIAS_NOTICIA);return d.toISOString().slice(0,10)<=hoyISO()};
 const vigentes=l=>porFecha((l||[]).filter(n=>!caducada(n)));
 /* noticias automáticas de prensa (solo en la web publicada: /api/noticias) + las que sube el administrador */
@@ -879,8 +884,9 @@ const FOTOS_ARCH=['09e47d973013f632cffd624397cca4a9','5391ced626338e3d3a77f4d48b
 const clave=t=>String(t||'').toLowerCase().replace(/[^a-z0-9áéíóúñ]/g,'').slice(0,60);
 const MIN_NOTICIAS=4;
 /* todas las noticias (subidas + automáticas) sin repetir, de la más nueva a la más antigua */
-function todasLista(){const man=porFecha(S.data.noticias||[]),ks=new Set(man.map(n=>clave(n.titulo)));
-  return porFecha([...man,...(S.auto||[]).filter(n=>!ks.has(clave(n.titulo)))])}
+const porPortada=l=>[...l].sort((a,b)=>diaNoticia(b).localeCompare(diaNoticia(a))||(+b.orden||0)-(+a.orden||0));
+function todasLista(conRetiradas){const man=S.data.noticias||[],ks=new Set(man.map(n=>clave(n.titulo)));
+  return porPortada([...man.filter(n=>conRetiradas||!n.retirada),...(S.auto||[]).filter(n=>!ks.has(clave(n.titulo)))])}
 /* visibles: las de los últimos 4 días; si son menos de 4, se completan con las más recientes */
 function todas(){const l=todasLista(),nuevas=l.filter(n=>!caducada(n));return nuevas.length>=MIN_NOTICIAS?nuevas:l.slice(0,MIN_NOTICIAS)}
 const visible=n=>todas().some(x=>x.id===n.id);
@@ -918,8 +924,8 @@ const R={
  avisosweb:l=>l.length?porNivel(l).map(a=>avisoHtml(a,1)).join(''):vacio('avisosweb','No hay anuncios en el tablón.'),
  rapidos:l=>l.map(d=>{const u=dest(d.url);return `<span class="qc"><a href="${esc(u||'#inicio')}"${u&&u[0]!=='#'?' target="_blank" rel="noopener"':''}>${esc(d.nombre)}</a>${S.edit?`<button class="btn mini" data-act="edit" data-col="rapidos" data-id="${d.id}" aria-label="Editar">✎</button><button class="btn mini pel" data-act="del" data-col="rapidos" data-id="${d.id}" aria-label="Eliminar">✕</button>`:''}</span>`}).join('')+(S.edit?'<button class="btn mini pri" data-act="add" data-col="rapidos">Añadir acceso</button>':''),
  infoservicio:bloques('infoservicio'),infoprevencion:bloques('infoprevencion'),mapastiempo:links('mapastiempo'),enlaces:links('enlaces'),
- noticias(l){ l=S.edit?todasLista():todas(); if(!l.length) return vacio('noticias','No hay noticias de los últimos 4 días.');
-  return l.map(n=>{const p=imgs(n)[0],u=href(n.url);return `<div class="card news">${p?`<img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}">`:''}<span class="label">${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</span>${S.edit&&!visible(n)?'<span class="pill">Caducada · ya no se ve en la web</span>':''}<h3>${esc(n.titulo)}</h3><p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${n.auto?'<span class="pill">Automática · prensa</span>':`${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}`}</div>`}).join('')},
+ noticias(l){ l=S.edit?todasLista(true):todasLista(); if(!l.length) return vacio('noticias','No hay noticias de los últimos 4 días.');
+  return l.map(n=>{const p=imgs(n)[0],u=href(n.url);return `<div class="card news">${p?`<img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}">`:''}<span class="label">${esc(n.medio)}${n.fecha?' · '+esc(fecha(n.fecha)):''}</span>${S.edit?(n.retirada?'<span class="pill warn">Retirada · no se ve en la web</span>':visible(n)?'<span class="pill ok">En portada</span>':'<span class="pill">Ya no está en portada · sigue en Noticias</span>'):''}<h3>${esc(n.titulo)}</h3><p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${n.auto?'<span class="pill">Automática · prensa</span>':`${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}`}</div>`}).join('')},
  avisos(l){ if(!l.length&&S.al112.length) return ''; if(!l.length) return `<div class="card aviso"><div class="nivel verde">Sin avisos</div><div><b>No hay avisos activos para Narón.</b><div class="muted small">Se publican aquí cuando el 112 Galicia activa una alerta.</div></div></div>`;
   return l.map(a=>`<div class="card"><div class="aviso"><div class="nivel ${esc(a.nivel)}">${esc(a.nivel)}</div><div><b>${esc(a.fenomeno)}</b> ${esc(a.texto)}<div class="muted small">${esc(a.vigencia)}</div></div></div><div class="row" style="border:0;padding:8px 0 0">${fileList('avisos',a)}${itemTools('avisos',a)}</div></div>`).join('')},
  redes(l){ if(!l.length) return vacio('redes','Aún no hay redes sociales.');
@@ -1177,6 +1183,8 @@ document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .d
   if(act==='file'){target={col,id};$('fileinp').accept=COLS[col].acc;return $('fileinp').click()}
   if(act==='up'||act==='down'){const o=[...S.order],i=o.indexOf(b.dataset.s),j=i+(act==='up'?-1:1);if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];S.order=o;render();
     try{await S.db.doc('config/layout').set({order:o,menu:S.menu||MENU_DEF,oculto:S.oculto})}catch(err){toast('No se pudo guardar el orden.')}return}
+  if(act==='nretira'||act==='nrest'||act==='nfija'){try{await ref(col,id).update(act==='nretira'?{retirada:true}:act==='nrest'?{retirada:false}:{fijada:hoyISO(),retirada:false});
+      toast(act==='nretira'?'Noticia retirada. Puedes restablecerla en Noticias.':act==='nrest'?'Noticia restablecida':'Vuelve a estar en portada')}catch(err){toast('No se pudo cambiar la noticia.')}return}
   if(act==='del'||act==='delfile'){ if(!b.dataset.armed){b.dataset.armed=1;b.textContent='Confirmar';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent=act==='del'?'Eliminar':'Quitar'}},4000);return}
     const it=item(col,id);if(!it)return;
     try{ if(act==='del'){await ref(col,id).delete();for(const f of it.files||[])S.assets?.delete(f.id).catch(()=>{})}
