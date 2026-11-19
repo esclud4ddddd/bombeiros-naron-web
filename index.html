@@ -735,6 +735,29 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
 .bqd-meta span{background:var(--soft);border-radius:99px;padding:4px 12px;font-weight:600;font-size:.88rem}
 @media (prefers-reduced-motion:reduce){.scard{animation:none;transition:none}.sc-m{transition:none}}
 
+/* botón Editar siempre a mano */
+.edfab{display:inline-flex;align-items:center;gap:8px;font:700 .9rem var(--body);padding:10px 16px;border-radius:99px;border:0;cursor:pointer;background:var(--gold);color:#1b1500;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.edfab svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.edfab[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+#editfab{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:26}
+body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+.edin{box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.sbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+/* fotos en edición: portada y centrar */
+.pic{position:relative}
+.pic img{height:120px;width:auto;max-width:200px;object-fit:cover}
+.pic.cov img{outline:3px solid var(--gold);outline-offset:-3px}
+.pic .covtag{position:absolute;left:4px;top:4px;background:var(--gold);color:#1b1500;font:700 .7rem var(--body);padding:2px 7px;border-radius:99px}
+.pic .pbtns{position:absolute;left:4px;right:4px;bottom:4px;display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-end}
+.pic .pbtns .btn{position:static;padding:2px 6px;font-size:.72rem;background:rgba(255,255,255,.94);color:#14181f}
+.pic .pbtns .btn.pel{color:#c41a12}
+.pic>.btn{display:none}
+/* página de Prevención: sombra verde al pasar */
+#subp .scard:hover{border-color:#2e9d5b;box-shadow:0 18px 36px rgba(46,157,91,.35),0 0 0 2px rgba(46,157,91,.35)}
+#subp .scard:focus-visible{outline:3px solid #2e9d5b}
+.sw .pics,.bqtools .pics,#bqd .pics{flex-wrap:wrap;overflow:visible}
+.sw .pic img{height:96px;max-width:140px}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -974,10 +997,10 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
   <label>Segundos entre noticias<input type="number" id="t-carSecs" min="3" max="30"></label>
   <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="t-alertas" style="width:auto">Mostrar la barra de alertas meteorológicas</label>
   <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" data-x="tema-r">Restablecer</button><button type="button" class="btn" data-x="tema-c">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
-<dialog id="subp"><div class="shead" id="sp-head"><div class="shead-in"><button type="button" class="btn sback" data-x="sp-c">← Volver</button><div><span class="label" id="sp-sec">Prevención</span><h2 id="sp-tit"></h2><p id="sp-txt"></p></div></div></div>
+<dialog id="subp"><div class="shead" id="sp-head"><div class="shead-in"><div class="sbar"><button type="button" class="btn sback" data-x="sp-c">← Volver</button><button type="button" class="edfab edin" data-edtg hidden aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button></div><div><span class="label" id="sp-sec">Prevención</span><h2 id="sp-tit"></h2><p id="sp-txt"></p></div></div></div>
   <div class="sbody"><div class="sfil" id="sp-fil"></div><div id="sp-add"></div><div class="sgrid" id="sp-grid"></div></div></dialog>
 <dialog id="bqd"><div class="vhead"><div><span class="bqd-tipo" id="bqd-tipo"></span><h3 id="bqd-tit"></h3></div><button type="button" class="btn" data-x="bqd-c">Cerrar</button></div><div id="bqd-body"></div></dialog>
-<dialog id="priv"><div class="phead"><img src="escudo.png" alt=""><div><h3>Acceso personal</h3><small>Bombeiros Narón · elige el módulo con el que vas a trabajar</small></div><button type="button" class="btn" data-x="priv-c">✕ Cerrar</button></div>
+<dialog id="priv"><div class="phead"><img src="escudo.png" alt=""><div><h3>Acceso personal</h3><small>Bombeiros Narón · elige el módulo con el que vas a trabajar</small></div><button type="button" class="edfab edin" data-edtg hidden aria-pressed="false" style="margin-left:auto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button><button type="button" class="btn" data-x="priv-c">✕ Cerrar</button></div>
   <div class="pbody"><div class="pgrid" id="b-personal"></div><div class="tools" id="privTools" style="margin-top:16px"></div></div></dialog>
 <dialog id="enc"><h3>Encuadrar foto</h3><p class="muted small" style="margin:6px 0 10px">Pulsa o arrastra sobre la foto el punto que tiene que quedar siempre a la vista.</p>
   <div class="encbox" id="enc-box"><img id="enc-i" alt=""><span class="encdot" id="enc-d"></span></div>
@@ -990,6 +1013,7 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
   <p id="bd-txt"></p><div id="bd-files"></div><div class="tools" id="bd-lk" style="margin-top:12px"></div><div id="bd-tools"></div><div id="bd-blq"></div></dialog>
 <dialog id="heat"><div class="vhead"><h3 id="ht-tit"></h3><button type="button" class="btn" data-x="ht-c">Cerrar</button></div><div class="vbig"><img id="ht-img" alt="Mapa de calor de intervenciones de la memoria 2025"></div><p class="muted small" style="margin-top:8px">Fuente: Memoria de actividad 2025 del Speis de Narón.</p></dialog>
 <dialog id="vgrp"><div class="vhead"><h3 id="vg-tit"></h3><button type="button" class="btn" data-x="vg-c">Cerrar</button></div><div id="vg-list"></div></dialog>
+<button type="button" class="edfab" id="editfab" data-edtg hidden aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button>
 <div id="edbar" hidden><div class="wrap"><b>Edición</b><button class="btn mini" data-act="edtext" aria-pressed="false">Editar textos</button><button class="btn mini" data-act="tema">Colores y botones</button><button class="btn mini" data-act="alertasbar" id="alBarBtn">Barra de alertas: visible</button><button class="btn mini" data-act="add" data-col="avisosweb">Añadir anuncio</button><button class="btn mini" data-act="add" data-col="menuextra">Añadir enlace al menú</button><button class="btn mini pri" data-act="exportar">Descargar para Vercel</button></div></div>
 <input type="file" id="fileinp" hidden multiple>
 <div id="toast" hidden role="status"></div>
@@ -1088,8 +1112,8 @@ function fileList(col,it){const d=docs(it); if(!d.length) return '';
   return `<div class="files">${d.map(f=>`<div class="file"><a href="/_blob/${esc(f.id)}" target="_blank" rel="noopener">${esc(f.name)}</a>
    <button class="btn mini" data-act="dl" data-fid="${esc(f.id)}" data-name="${esc(f.name)}">Descargar</button>
    ${S.edit?`<button class="btn mini pel" data-act="delfile" data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}">Quitar</button>`:''}</div>`).join('')}</div>`}
-function picList(col,it,skip){const p=imgs(it).slice(skip||0); if(!p.length) return '';
-  return `<div class="pics">${p.map(f=>`<div class="pic"><img src="/_blob/${esc(f.id)}" alt="${esc(f.name)}" loading="lazy">${S.edit?`<button class="btn mini pel" data-act="delfile" data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}">Quitar</button>`:''}</div>`).join('')}</div>`}
+function picList(col,it,skip){const all=imgs(it),p=all.slice(skip||0); if(!p.length) return '';
+  return `<div class="pics">${p.map(f=>{const cov=all[0]&&all[0].id===f.id,a=`data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}"`;return `<div class="pic${cov?' cov':''}"><img src="/_blob/${esc(f.id)}" alt="${esc(f.name||'')}" loading="lazy" style="object-position:${pp(f)}">${S.edit?`${cov?'<span class="covtag">★ Portada</span>':''}<span class="pbtns">${cov||all.length<2?'':`<button class="btn mini" data-act="portada" ${a} title="Usar como foto de portada">★ Portada</button>`}<button class="btn mini" data-act="encuadre" ${a} title="Centrar la foto">Centrar</button><button class="btn mini pel" data-act="delfile" ${a}>Quitar</button></span>`:''}</div>`}).join('')}</div>`}
 const vacio=(col,t)=>`<p class="vacio">${S.listo[col]===false?'Cargando...':t}${S.edit?' Usa «Añadir».':''}</p>`;
 
 function insignia(r){ // dibujo esquemático de la divisa
@@ -1595,6 +1619,8 @@ document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .d
   if(act==='star'){const m=[...(S.menu||MENU_DEF)],i=m.indexOf(b.dataset.s);i<0?m.push(b.dataset.s):m.splice(i,1);S.menu=m;render();
     try{await S.db.doc('config/layout').set({order:S.order,menu:m,oculto:S.oculto})}catch(err){toast('No se pudo guardar el menú.')}return}
   if(act==='encuadre')return encAbre(col,id,fid);
+  if(act==='portada'){const it=item(col,id);if(!it)return;const fs=[...(it.files||[])],i=fs.findIndex(f=>f.id===fid);if(i<1)return;const [f]=fs.splice(i,1);
+    const j=fs.findIndex(x=>/^image/.test(x.type||''));fs.splice(j<0?0:j,0,f);try{await ref(col,id).update({files:fs});toast('Foto de portada cambiada')}catch(err){toast('No se pudo cambiar la portada.')}return}
   if(act==='pie'){const k=b.dataset.k,o=S.pieOff||[];S.pieOff=o.includes(k)?o.filter(x=>x!==k):[...o,k];render();
     try{await S.db.doc('config/pie').set({oculto:S.pieOff})}catch(err){toast('No se pudo guardar el pie de página.')}return}
   if(act==='secfoto'){target={sec:b.dataset.s};$('fileinp').accept=IMGS;return $('fileinp').click()}
@@ -1616,7 +1642,11 @@ document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .d
       toast('Eliminado')}catch(err){toast('No se pudo eliminar.')}}
 });
 $('langbtn').onclick=()=>{LANG=LANG==='gl'?'es':'gl';try{localStorage.setItem('bn-lang',LANG)}catch(e){}render()};
-$('editbtn').onclick=()=>{S.edit=!S.edit;$('editbtn').setAttribute('aria-pressed',S.edit);$('editbtn').textContent=S.edit?'Terminar':'Editar';if(!S.edit)S.edText=false;render()};
+function syncEd(){const t=S.edit?'Terminar de editar':'Editar';$('editbtn').setAttribute('aria-pressed',S.edit);$('editbtn').textContent=S.edit?'Terminar':'Editar';
+  document.querySelectorAll('[data-edtg]').forEach(b=>{b.hidden=!S.canEdit;b.setAttribute('aria-pressed',S.edit);b.querySelector('span').textContent=t})}
+function toggleEdit(){S.edit=!S.edit;if(!S.edit)S.edText=false;syncEd();render()}
+$('editbtn').onclick=toggleEdit;
+document.addEventListener('click',e=>{if(e.target.closest('[data-edtg]'))toggleEdit()});
 
 Object.keys(SECS).forEach(s=>{const h=$('v-'+s).querySelector('.head');if(!h.querySelector('.tools')){const t=document.createElement('span');t.className='tools';t.dataset.sec=s;h.querySelector('h2').after(t)}});
 render();ruta();
@@ -1626,7 +1656,7 @@ render();ruta();
   S.db=db;S.assets=assets;S.dl=dl;
   if(!db){$('estado').textContent='Inicia sesión para ver el contenido guardado';return}
   try{S.canEdit=!!(user&&await user.isOwner())&&!!assets}catch(e){}
-  $('editbtn').hidden=!S.canEdit;
+  $('editbtn').hidden=!S.canEdit;syncEd();
   const t=setTimeout(()=>{$('estado').textContent='No se pueden cargar los datos ahora mismo'},10000);
   Object.keys(COLS).forEach(col=>{S.listo[col]=false;
     db.collection(col).onSnapshot(s=>{S.listo[col]=true;S.data[col]=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.orden||0)-(b.orden||0));
