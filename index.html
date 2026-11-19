@@ -769,6 +769,11 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 @keyframes etqin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.etq{animation:none}}
 
+/* vídeos en cualquier parte */
+.vlist{display:grid;gap:10px;margin:10px 0;width:100%}
+.vfig{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.vfig video{width:100%;max-height:60vh;border-radius:10px;background:#000;display:block}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -1080,7 +1085,7 @@ const ETQ_F=[['etiqueta','Etiqueta corta resaltada (opcional, sale encima)'],['i
 const etqHtml=b=>{const t=(b.etiqueta||'').trim();if(!t)return '';const ic=ETQ_IC[b.icono];const C=BQC[b.tipo]||BQC.texto;return `<div class="etq" style="--c1:${C[0]};--c2:${C[1]}">${ic?`<span class="etq-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg></span>`:''}<span>${esc(t)}</span></div>`};
 const BQT={noticia:'Noticia',evento:'Evento',consejo:'Consejo',anuncio:'Anuncio',fotos:'Fotos',video:'Vídeo',enlace:'Enlace',texto:'Texto',boton:'Botón'};
 Object.keys(BQF).forEach(k=>BQF[k]=[...ETQ_F,...BQF[k]]);
-const DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt', IMGS='image/png,image/jpeg,image/webp';
+const VIDS='video/*,.mp4,.webm,.mov,.m4v',DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt,'+VIDS, IMGS='image/png,image/jpeg,image/webp,image/*,'+VIDS;
 const COLS={
  noticias:{uno:'noticia',acc:IMGS,img:1,f:[['titulo','Titular'],['medio','Medio (Diario de Ferrol, Ferrol 360...)'],['fecha','Fecha','date'],['url','Enlace a la noticia (https://...)'],['resumen','Resumen','area']]},
  avisosweb:{uno:'anuncio',acc:DOCS,both:1,f:[['titulo','Título'],['texto','Texto','area'],['nivel','Nivel','sel',['Informativo','Importante','Urgente']],['fecha','Fecha (opcional)','date'],['url','Enlace: #seccion o https://... (opcional)'],['fuente','Fuente (opcional: si lo dejas vacío se pone la web del enlace)']]},
@@ -1120,21 +1125,25 @@ const fecha=s=>{if(!s)return'';const d=new Date(s+'T12:00:00');return isNaN(d)?s
 const href=u=>/^https:\/\//i.test(u||'')?u:'';
 const dest=u=>/^#[a-z]+$/.test(u||'')?u:href(u);
 const isImg=f=>/^image\//.test(f.type||'');
-const imgs=it=>(it.files||[]).filter(isImg), docs=it=>(it.files||[]).filter(f=>!isImg(f));
+const isVid=f=>/^video\//.test(f.type||'')||/\.(mp4|webm|mov|m4v)$/i.test(f.name||'');
+const imgs=it=>(it.files||[]).filter(isImg), vids=it=>(it.files||[]).filter(isVid), docs=it=>(it.files||[]).filter(f=>!isImg(f)&&!isVid(f));
+const vidHtml=(col,it)=>{const v=vids(it);return v.length?`<div class="vlist">${v.map(f=>`<figure class="vfig"><video controls preload="metadata" playsinline src="/_blob/${esc(f.id)}"></video>${S.edit?`<button class="btn mini pel" data-act="delfile" data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}">Quitar vídeo</button>`:''}</figure>`).join('')}</div>`:''};
+const VID_EN_PIC=new Set(['historia','infoservicio','infoprevencion','intervenciones','plantilla','mapasweb','personal','redes']);
 const nf=n=>Number(n).toLocaleString('es-ES');
 
 function itemTools(col,it){ if(!S.edit) return '';
   if(col==='noticias'&&!it.auto){const b=(a,t,c='')=>`<button class="btn mini ${c}" data-act="${a}" data-col="noticias" data-id="${it.id}">${t}</button>`;
     if(it.retirada)return `<span class="tools" style="flex-basis:100%">${b('nrest','Restablecer','pri')}${b('del','Borrar del todo','pel')}</span>`;
-    return `<span class="tools" style="flex-basis:100%">${b('edit','Editar')}${b('file','Subir fotos')}${visible(it)?'':b('nfija','Volver a portada')}${b('nretira','Retirar','pel')}</span>`}
+    return `<span class="tools" style="flex-basis:100%">${b('edit','Editar')}${b('file','Subir fotos o vídeos')}${visible(it)?'':b('nfija','Volver a portada')}${b('nretira','Retirar','pel')}</span>`}
   return `<span class="tools" style="flex-basis:100%"><button class="btn mini" data-act="edit" data-col="${col}" data-id="${it.id}">Editar</button>
-  ${COLS[col].nofile?'':`<button class="btn mini" data-act="file" data-col="${col}" data-id="${it.id}">${COLS[col].both?'Subir fotos o archivos':COLS[col].img?'Subir fotos':'Adjuntar archivo'}</button>`}
+  ${COLS[col].nofile?'':`<button class="btn mini" data-act="file" data-col="${col}" data-id="${it.id}">${COLS[col].both?'Subir fotos, vídeos o archivos':COLS[col].img?'Subir fotos o vídeos':'Adjuntar archivo o vídeo'}</button>`}
   <button class="btn mini pel" data-act="del" data-col="${col}" data-id="${it.id}">Eliminar</button></span>`}
-function fileList(col,it){const d=docs(it); if(!d.length) return '';
-  return `<div class="files">${d.map(f=>`<div class="file"><a href="/_blob/${esc(f.id)}" target="_blank" rel="noopener">${esc(f.name)}</a>
+function fileList(col,it){const d=docs(it),vh=col==='vehiculos'||col==='bloques'?'':vidHtml(col,it); if(!d.length) return vh;
+  return vh+`<div class="files">${d.map(f=>`<div class="file"><a href="/_blob/${esc(f.id)}" target="_blank" rel="noopener">${esc(f.name)}</a>
    <button class="btn mini" data-act="dl" data-fid="${esc(f.id)}" data-name="${esc(f.name)}">Descargar</button>
    ${S.edit?`<button class="btn mini pel" data-act="delfile" data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}">Quitar</button>`:''}</div>`).join('')}</div>`}
-function picList(col,it,skip){const all=imgs(it),p=all.slice(skip||0); if(!p.length) return '';
+function picList(col,it,skip){const vh=VID_EN_PIC.has(col)?vidHtml(col,it):'';return picList0(col,it,skip)+vh}
+function picList0(col,it,skip){const all=imgs(it),p=all.slice(skip||0); if(!p.length) return '';
   return `<div class="pics">${p.map(f=>{const cov=all[0]&&all[0].id===f.id,a=`data-col="${col}" data-id="${it.id}" data-fid="${esc(f.id)}"`;return `<div class="pic${cov?' cov':''}"><img src="/_blob/${esc(f.id)}" alt="${esc(f.name||'')}" loading="lazy" style="object-position:${pp(f)}">${S.edit?`${cov?'<span class="covtag">★ Portada</span>':''}<span class="pbtns">${cov||all.length<2?'':`<button class="btn mini" data-act="portada" ${a} title="Usar como foto de portada">★ Portada</button>`}<button class="btn mini" data-act="encuadre" ${a} title="Centrar la foto">Centrar</button><button class="btn mini pel" data-act="delfile" ${a}>Quitar</button></span>`:''}</div>`}).join('')}</div>`}
 const vacio=(col,t)=>`<p class="vacio">${S.listo[col]===false?'Cargando...':t}${S.edit?' Usa «Añadir».':''}</p>`;
 
@@ -1233,7 +1242,7 @@ const R={
   const ea=$('nAnios');if(ea)ea.innerHTML=anios.length>1?anios.map(a=>`<button type="button" class="anio" data-anio="${esc(a)}" aria-pressed="${S.anioN===a}">${esc(a)}<small>${cuenta[a]}</small></button>`).join('')+`<button type="button" class="anio" data-anio="todas" aria-pressed="${S.anioN==='todas'}">Todas<small>${l.length}</small></button>`:'';
   if(S.anioN!=='todas')l=l.filter(n=>anio(n)===S.anioN);
   if(!l.length) return vacio('noticias','No hay noticias de los últimos 4 días.');
-  return l.map((n,i)=>{const p=imgs(n)[0],u=href(n.url),T=tema(n);return `<div class="card news nw t-${T.k}" style="--c1:${T.c1};--c2:${T.c2};--d:${Math.min(i,12)*45}ms">${p?`<div class="nimg"><img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}"><span class="ntag">${temaIc(T)}${esc(T.l)}</span></div>`:`<div class="nph">${temaIc(T,'big')}<span class="ntag">${temaIc(T)}${esc(T.l)}</span><span class="nmed">${esc(fuente(n)||'Prensa')}</span><span class="nday">${n.fecha?esc(fecha(n.fecha)):''}</span></div>`}<span class="label">${n.fecha?esc(fecha(n.fecha)):''}</span>${S.edit?(n.retirada?'<span class="pill warn">Retirada · no se ve en la web</span>':visible(n)?'<span class="pill ok">En portada</span>':'<span class="pill">Ya no está en portada · sigue en Noticias</span>'):''}<h3>${esc(n.titulo)}</h3>${fuente(n)?`<span class="fte2">Fuente: ${esc(fuente(n))}</span>`:''}<p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${n.auto?'<span class="pill">Automática · prensa</span>':`${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}`}</div>`}).join('')},
+  return l.map((n,i)=>{const p=imgs(n)[0],u=href(n.url),T=tema(n);return `<div class="card news nw t-${T.k}" style="--c1:${T.c1};--c2:${T.c2};--d:${Math.min(i,12)*45}ms">${p?`<div class="nimg"><img class="foto" src="/_blob/${esc(p.id)}" alt="" loading="lazy" style="object-position:${pp(p)}"><span class="ntag">${temaIc(T)}${esc(T.l)}</span></div>`:`<div class="nph">${temaIc(T,'big')}<span class="ntag">${temaIc(T)}${esc(T.l)}</span><span class="nmed">${esc(fuente(n)||'Prensa')}</span><span class="nday">${n.fecha?esc(fecha(n.fecha)):''}</span></div>`}<span class="label">${n.fecha?esc(fecha(n.fecha)):''}</span>${S.edit?(n.retirada?'<span class="pill warn">Retirada · no se ve en la web</span>':visible(n)?'<span class="pill ok">En portada</span>':'<span class="pill">Ya no está en portada · sigue en Noticias</span>'):''}<h3>${esc(n.titulo)}</h3>${vidHtml('noticias',n)}${fuente(n)?`<span class="fte2">Fuente: ${esc(fuente(n))}</span>`:''}<p class="muted small">${esc(n.resumen)}</p>${u?`<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">Leer la noticia</a>`:''}${n.auto?'<span class="pill">Automática · prensa</span>':`${S.edit&&p?`<button class="btn mini pel" data-act="delfile" data-col="noticias" data-id="${n.id}" data-fid="${esc(p.id)}">Quitar foto</button>`:''}${encBtn('noticias',n)}${itemTools('noticias',n)}`}</div>`}).join('')},
  avisos(l){ if(!l.length&&S.al112.length) return ''; if(!l.length) return `<div class="card aviso"><div class="nivel verde">Sin avisos</div><div><b>No hay avisos activos para Narón.</b><div class="muted small">Se publican aquí cuando el 112 Galicia activa una alerta.</div></div></div>`;
   return l.map(a=>`<div class="card"><div class="aviso"><div class="nivel ${esc(a.nivel)}">${esc(a.nivel)}</div><div><b>${esc(a.fenomeno)}</b> ${esc(a.texto)}<div class="muted small">${esc(a.vigencia)}</div></div></div><div class="row" style="border:0;padding:8px 0 0">${fileList('avisos',a)}${itemTools('avisos',a)}</div></div>`).join('')},
  redes(l){ if(!l.length) return vacio('redes','Aún no hay redes sociales.');
@@ -1363,8 +1372,8 @@ function abrir(col,id,init){const c=COLS[col],it=id?item(col,id):(init?{...init}
   $('dlg-t').textContent=(id?'Editar ':'Añadir ')+(col==='bloques'?(BQT[it.tipo]||'contenido').toLowerCase():c.uno);
   $('dlg-f').innerHTML=ff.map(([k,l,t,o])=>{const v=it[k]??'';const i=`id="f-${k}" name="${k}"`;
     return `<label>${esc(l)}${t==='sel'?`<select ${i}>${o.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select>`:t==='area'?`<textarea ${i} rows="3">${esc(v)}</textarea>`:`<input ${i} type="${t==='date'?'date':'text'}" value="${esc(v)}">`}</label>`}).join('');
-  const sube=col!=='bloques'||['fotos','video','noticia','anuncio','evento','consejo'].includes(it.tipo),acc=col==='bloques'?(it.tipo==='video'?'video/*':'image/*'):col==='vehiculos'?'image/*,video/*':c.img?'image/*':'image/*,.pdf,.csv,.txt';
-  if(!id&&c.acc&&sube)$('dlg-f').insertAdjacentHTML('beforeend',`<label>${col==='bloques'&&it.tipo==='video'?'Vídeo (opcional, máx. 20 MB)':c.img||col==='bloques'?'Fotos (opcional)':col==='vehiculos'?'Fotos o vídeos (opcional)':'Fotos o archivos (opcional)'}<input id="f-__files" type="file" multiple accept="${acc}"></label>`);
+  const sube=true,acc=col==='bloques'&&it.tipo==='video'?'video/*':(c.img?'image/*,video/*':'image/*,video/*,.pdf,.csv,.txt');
+  if(!id&&c.acc&&sube)$('dlg-f').insertAdjacentHTML('beforeend',`<label>${col==='bloques'&&it.tipo==='video'?'Vídeo (opcional, máx. 20 MB)':c.img?'Fotos o vídeos (opcional, vídeos máx. 20 MB)':'Fotos, vídeos o archivos (opcional)'}<input id="f-__files" type="file" multiple accept="${acc}"></label>`);
   $('dlg').showModal();tr()}
 $('dlg-x').onclick=()=>$('dlg').close();
 let guardando=false;
@@ -1394,7 +1403,7 @@ async function prepFoto(f){const ext=(f.name.split('.').pop()||'').toLowerCase()
   return new File([b],f.name.replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'})}
 /* sube un archivo y devuelve su ficha {id,name,type,size}; lanza un error con mensaje claro */
 async function subeArchivo(f,soloImg){const g=await prepFoto(f),type=/^image\//.test(g.type)?g.type:tipoDe(g);
-  if(!type)throw {code:'tipo',message:'«'+f.name+'»: tipo de archivo no admitido.'};if(soloImg&&!/^image/.test(type))throw {code:'tipo',message:'«'+f.name+'» no es una foto.'};
+  if(!type)throw {code:'tipo',message:'«'+f.name+'»: tipo de archivo no admitido.'};if(soloImg&&!/^(image|video)/.test(type))throw {code:'tipo',message:'«'+f.name+'» no es una foto ni un vídeo.'};
   if(!S.assets)throw {code:'sin_permiso',message:'No tienes permiso para subir archivos en este visor.'};
   try{const r=await S.assets.upload(g,{type});return {id:r.id,name:g.name,type:r.contentType||type,size:r.sizeBytes}}
   catch(err){throw {code:err&&err.code,message:'«'+f.name+'»: '+(err&&err.code==='too_large'?'supera los 20 MB.':'no se pudo subir'+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')+'.')}}}
@@ -1574,7 +1583,7 @@ function bqDetalle(id){const b=item('bloques',id);if(!b){$('bqd').close();return
   const ph=imgs(b),u=dest(b.url),ext=u&&u[0]!=='#',vids=(b.files||[]).filter(f=>/^video/.test(f.type||'')),y=ytId(b.url);
   const meta=[b.tipo==='evento'&&b.fecha?'📅 '+fecha(b.fecha):'',b.hora?'🕒 '+b.hora:'',b.lugar?'📍 '+b.lugar:'',b.tipo==='noticia'?[b.fecha?fecha(b.fecha):'',b.medio||(u?fuente({url:b.url}):'')].filter(Boolean).join(' · '):'',(b.tipo!=='noticia'&&b.tipo!=='evento'&&b.fecha)?fecha(b.fecha):''].filter(Boolean);
   $('bqd-body').innerHTML=`${ph.length?`<div class="vbig"><img id="bqd-img" src="/_blob/${esc(ph[0].id)}" alt=""></div>${ph.length>1?`<div class="vthumbs">${ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-bqth="${esc(f.id)}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join('')}</div>`:''}`:''}
-   ${vids.map(f=>`<video class="bqvid" controls preload="metadata" src="/_blob/${esc(f.id)}"></video>`).join('')}${y&&PUB?`<div class="bqyt"><iframe src="https://www.youtube-nocookie.com/embed/${y}" title="${esc(b.titulo||'Vídeo')}" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`:''}
+   ${vids.map(f=>`<video class="bqvid" controls preload="metadata" playsinline src="/_blob/${esc(f.id)}"></video>`).join('')}${y&&PUB?`<div class="bqyt"><iframe src="https://www.youtube-nocookie.com/embed/${y}" title="${esc(b.titulo||'Vídeo')}" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`:''}
    ${meta.length?`<div class="bqd-meta">${meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>`:''}${b.texto?`<p class="bqx" style="font-size:1.02rem">${esc(b.texto)}</p>`:''}
    ${u?`<a class="btn pri" style="margin-top:12px"${` href="${esc(u)}"`}${ext?' target="_blank" rel="noopener"':''}>${y&&!PUB?'Ver el vídeo en YouTube ↗':b.tipo==='noticia'?'Leer la noticia ↗':ext?'Abrir enlace ↗':'Ver'}</a>`:''}
    ${S.edit?`<div class="bqtools" style="margin-top:14px">${itemTools('bloques',b)}${picList('bloques',b)}</div>`:''}`;
@@ -1593,7 +1602,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-vth]');if(
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.veh[data-act="vehver"]')){e.preventDefault();vehAbre(e.target.dataset.id)}});
 /* edición de cualquier texto fijo */
 let edN=null,edA=null;const toArr=o=>Object.entries(o||{}).map(([k,v])=>({k,v})),toObj=a=>Object.fromEntries((Array.isArray(a)?a:[]).map(x=>[x.k,x.v]));
-document.addEventListener('click',e=>{if(!S.edit||!S.edText)return;const el=e.target;if(!el.closest||el.closest('dialog,#edbar,input,select,textarea,#langbtn,#editbtn,#toast'))return;
+document.addEventListener('click',e=>{if(!S.edit||!S.edText)return;const el=e.target;if(!el.closest||el.closest('dialog,#edbar,input,select,textarea,#langbtn,#editbtn,#toast,[data-edtg],.btn.mini,.sa .btn,.tools,.bqtools,.pbtns,.bqadd,.pics,[data-act="star"],[data-act="up"],[data-act="down"],[data-act="ojo"]'))return;
   e.preventDefault();e.stopPropagation();
   let t=el,n=null;while(t&&t!==document.body&&!n){n=[...t.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());if(!n)t=t.parentElement}
   const A=el.closest('a[href]');if(n&&A&&!A.contains(n))n=null;
@@ -1648,7 +1657,7 @@ document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .d
   if(act==='secfoto'){target={sec:b.dataset.s};$('fileinp').accept=IMGS;return $('fileinp').click()}
   if(act==='add')return abrir(col);
   if(act==='edit')return abrir(col,id);
-  if(act==='file'){target={col,id};const it=item(col,id)||{};$('fileinp').accept=col==='bloques'?(it.tipo==='video'?'video/*':'image/*,.pdf'):COLS[col].acc;return $('fileinp').click()}
+  if(act==='file'){target={col,id};const it=item(col,id)||{};$('fileinp').accept=col==='bloques'&&it.tipo==='video'?'video/*':'image/*,video/*,.pdf,.csv,.txt';return $('fileinp').click()}
   if(act==='up'||act==='down'){const o=[...S.order],i=o.indexOf(b.dataset.s),j=i+(act==='up'?-1:1);if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];S.order=o;render();
     try{await S.db.doc('config/layout').set({order:o,menu:S.menu||MENU_DEF,oculto:S.oculto})}catch(err){toast('No se pudo guardar el orden.')}return}
   if(act==='exportar')return exportVercel();
