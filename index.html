@@ -644,6 +644,20 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
 .sidebar svg.ic{transition:transform .2s}
 @media (prefers-reduced-motion:reduce){.sa a,.sidebar a.ext,.sidebar svg.ic{transition:none}.sa a:hover{transform:none}}
 
+/* pase de fotos en la cabecera de Noticias */
+.shell .head.conpase{background:var(--ink);overflow:hidden;min-height:320px}
+.head .hslides{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden}
+.head.conpase>*:not(.hslides){position:relative;z-index:1}
+.hslides .hs{position:absolute;inset:0;background-size:cover;opacity:0;transform:scale(1.08);transition:opacity 1.2s ease,transform 6s ease}
+.hslides .hs.on{opacity:1;transform:scale(1)}
+.hslides::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,14,20,.92),rgba(10,14,20,.25) 60%,rgba(10,14,20,.1))}
+.hslides .hcap{position:absolute;right:18px;top:16px;z-index:1;max-width:min(420px,60%);background:rgba(10,14,20,.6);color:#fff;font:600 .82rem var(--body);padding:6px 12px;border-radius:99px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(4px)}
+.hslides .hdots{position:absolute;right:20px;bottom:16px;z-index:1;display:flex;gap:6px}
+.hslides .hdots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);transition:background .3s,transform .3s}
+.hslides .hdots i.on{background:#fff;transform:scale(1.3)}
+@media (max-width:640px){.hslides .hcap{display:none}}
+@media (prefers-reduced-motion:reduce){.hslides .hs{transition:none;transform:none}}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -1135,6 +1149,7 @@ function render(){
   $('avisosTop').innerHTML=porNivel(S.data.avisosweb).map(a=>avisoHtml(a,S.edit)).join('');
   for(const col in R){const el=$('b-'+col);if(el)el.innerHTML=R[col](S.data[col])}
   document.querySelectorAll('.tools[data-sec]').forEach(t=>{const sec=t.dataset.sec;t.innerHTML=S.edit?(SEC_COL[sec]||[]).map(col=>`<button class="btn pri" data-act="add" data-col="${col}">Añadir ${COLS[col].uno}</button>`).join('')+`<button class="btn" data-act="secfoto" data-s="${sec}">Cambiar foto</button>`+(S.fotos[sec]?`<button class="btn" data-act="encuadre" data-col="secciones" data-id="${sec}" data-fid="${S.fotos[sec]}">Encuadrar foto</button>`:''):''});
+  cabNoticias();
   Object.keys(SECS).forEach(s=>{const h=$('v-'+s).querySelector('.head');h.style.setProperty('--ph',S.fotos[s]?`url("/_blob/${S.fotos[s]}")`:'none');h.style.setProperty('--php',pp((S.secFiles[s]||[])[0]))});
   const nl=todas().slice(0,6);
   $('newsList').innerHTML=nl.length?nl.map(n=>{const u=href(n.url),T=tema(n);return `<div class="row nrow" style="--c1:${T.c1};--c2:${T.c2}"><span class="nbad" title="${esc(T.l)}">${temaIc(T)}</span><span class="muted num small" style="min-width:5.5em">${esc(n.fecha?new Date(n.fecha+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'}):'')}</span><div class="main"><b>${esc(n.titulo)}</b>${fuente(n)?`<span class="fte2">Fuente: ${esc(fuente(n))}</span>`:''}</div>${u?`<a href="${esc(u)}" target="_blank" rel="noopener">[+] info</a>`:''}</div>`}).join(''):vacio('noticias','No hay noticias de los últimos 4 días.');
@@ -1350,6 +1365,19 @@ function mapaTipo(){const sel=$('tipSel');if(!sel)return;
    ${T.heat?`<button type="button" class="btn mini" data-act="heat" data-k="${T.k}">Ver mapa de calor de la memoria</button>`:''}`;
   $('map').setAttribute('aria-label','Plano esquemático de Narón: '+T.n+' en 2025');tr()}
 function heatAbre(k){const T=TIPOS25.find(t=>t.k===k);if(!T||!T.heat)return;$('ht-tit').textContent=T.n+' · 2025';$('ht-img').src='/_blob/'+T.heat;$('heat').showModal()}
+/* cabecera de Noticias: pase de fotos de las noticias con foto */
+let cabT=null,cabI=0;
+function cabNoticias(){const h=$('v-noticias')&&$('v-noticias').querySelector('.head');if(!h)return;
+  const vistos=new Set(),L=[];if(S.fotos.noticias){vistos.add(S.fotos.noticias);L.push({id:S.fotos.noticias,pos:pp((S.secFiles.noticias||[])[0]),t:''})}
+  for(const n of todasLista()){if(n.auto)continue;for(const f of imgs(n)){if(vistos.has(f.id))continue;vistos.add(f.id);L.push({id:f.id,pos:pp(f),t:n.titulo,u:href(n.url)})}if(L.length>=14)break}
+  const key=L.map(x=>x.id+x.pos).join('|');let box=h.querySelector('.hslides');
+  if(L.length<2){if(box){box.remove();clearInterval(cabT);cabT=null}h.classList.remove('conpase');return}
+  if(box&&box.dataset.k===key)return;
+  if(!box){box=document.createElement('div');box.className='hslides';box.setAttribute('aria-hidden','true');h.prepend(box)}
+  box.dataset.k=key;cabI=0;h.classList.add('conpase');
+  box.innerHTML=L.map((x,i)=>`<div class="hs${i?'':' on'}" style="background-image:url(/_blob/${esc(x.id)});background-position:${x.pos}"></div>`).join('')+`<span class="hcap"></span><span class="hdots">${L.map((x,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</span>`;
+  const cap=box.querySelector('.hcap'),pon=i=>{box.querySelectorAll('.hs').forEach((e,j)=>e.classList.toggle('on',j===i));box.querySelectorAll('.hdots i').forEach((e,j)=>e.classList.toggle('on',j===i));cap.textContent=L[i].t||'';cap.hidden=!L[i].t};
+  pon(0);clearInterval(cabT);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)cabT=setInterval(()=>{cabI=(cabI+1)%L.length;pon(cabI)},5000)}
 function vehAbre(id){const v=item('vehiculos',id);if(!v)return;const ph=imgs(v);$('vd-cod').textContent=v.codigo||'';$('vd-nom').textContent=v.nombre||'';
   const big=$('vd-img');big.hidden=!ph.length;if(ph.length){big.src=`/_blob/${ph[0].id}`;big.alt=v.codigo||''}
   $('vd-th').innerHTML=ph.length>1?ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-vth="${esc(f.id)}" aria-label="Foto ${i+1}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join(''):(ph.length?'':'<p class="muted">Aún no hay fotos de este vehículo.</p>');
