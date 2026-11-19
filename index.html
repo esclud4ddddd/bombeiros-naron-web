@@ -765,6 +765,7 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 .etq-ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .etq:not(:has(.etq-ic)){padding-left:14px}
 .bq .etq{margin-bottom:8px}
+#bd-tit .etq{display:flex;width:max-content;margin-bottom:8px;font-size:.78rem}
 #bqd-etq .etq{margin-bottom:8px}
 @keyframes etqin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.etq{animation:none}}
@@ -1082,7 +1083,7 @@ const ETQ_IC={'Aviso':'<path d="M12 3 2 20h20zM12 10v4M12 17v.5"/>','Informació
  'Extintor':'<path d="M9 7h6v14H9zM12 7V4M12 4h4l2 2M9 11h6"/>','Primeros auxilios':'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M9 6V4h6v2M12 10v6M9 13h6"/>','Teléfono 112':'<path d="M5 3h4l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
  'Evacuación':'<path d="M4 20V4h9M13 12h7M17 9l3 3-3 3"/><circle cx="9" cy="8" r="1.5"/>','Calendario':'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'};
 const ETQ_F=[['etiqueta','Etiqueta corta resaltada (opcional, sale encima)'],['icono','Icono de la etiqueta','sel',['(ninguno)',...Object.keys(ETQ_IC)]]];
-const etqHtml=b=>{const t=(b.etiqueta||'').trim();if(!t)return '';const ic=ETQ_IC[b.icono];const C=BQC[b.tipo]||BQC.texto;return `<div class="etq" style="--c1:${C[0]};--c2:${C[1]}">${ic?`<span class="etq-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg></span>`:''}<span>${esc(t)}</span></div>`};
+const etqHtml=(b,C0)=>{const t=(b.etiqueta||'').trim();if(!t)return '';const ic=ETQ_IC[b.icono];const C=C0||BQC[b.tipo]||BQC.texto;return `<div class="etq" style="--c1:${C[0]};--c2:${C[1]}">${ic?`<span class="etq-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg></span>`:''}<span>${esc(t)}</span></div>`};
 const BQT={noticia:'Noticia',evento:'Evento',consejo:'Consejo',anuncio:'Anuncio',fotos:'Fotos',video:'Vídeo',enlace:'Enlace',texto:'Texto',boton:'Botón'};
 Object.keys(BQF).forEach(k=>BQF[k]=[...ETQ_F,...BQF[k]]);
 const VIDS='video/*,.mp4,.webm,.mov,.m4v',DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt,'+VIDS, IMGS='image/png,image/jpeg,image/webp,image/*,'+VIDS;
@@ -1106,7 +1107,7 @@ const COLS={
  vehiculos:{uno:'vehículo',acc:'image/*,video/*',both:1,f:[['descripcion','Descripción','area'],['codigo','Indicativo (AEA-2, BUL-1...)'],['nombre','Nombre'],['grupo','Grupo','sel',['Extinción','Técnicos','Mando','Personal','Acuático']],['tipo','Tipo (agrupa los vehículos y elige el dibujo)','sel',['bomba','nodriza','autoescala','furgon','mando','bus','remolque','trineo']],['uso','Uso'],['capacidad','Capacidad o alcance'],['anio','Año']]},
  memorias:{uno:'memoria',acc:DOCS,f:[['anio','Año'],['nota','Nota']]},
  documentos:{uno:'documento',acc:DOCS,f:[['nombre','Nombre'],['categoria','Categoría'],['fecha','Fecha','date']]},
- formacion:{uno:'formación',acc:DOCS,both:1,f:[['titulo','Título'],['desarrollo','Desarrollo','area'],['fecha','Fecha (opcional)','date'],['url','Enlace: #seccion o https://... (opcional)'],['color','Color del botón','sel',['rojo','verde','azul','gris']]]},
+ formacion:{uno:'formación',acc:DOCS,both:1,fx:()=>[...ETQ_F,...COLS.formacion.f],f:[['titulo','Título'],['desarrollo','Desarrollo','area'],['fecha','Fecha (opcional)','date'],['url','Enlace: #seccion o https://... (opcional)'],['color','Color del botón','sel',['rojo','verde','azul','gris']]]},
  prevbotones:{uno:'botón',acc:DOCS,both:1,f:[['titulo','Texto del botón'],['desarrollo','Desarrollo','area'],['url','Enlace: #seccion o https://... (opcional)'],['color','Color del botón','sel',['verde','rojo','azul','gris']]]},
  prevencion:{uno:'consejo o enlace',acc:DOCS,both:1,f:[['titulo','Título'],['texto','Texto','area'],['url','Enlace (https://... o #seccion, opcional)']]},
  infoservicio:{uno:'bloque de texto',acc:IMGS,img:1,f:[['titulo','Título'],['texto','Texto','area']]},
@@ -1438,10 +1439,10 @@ function botonera(col,l,vac){if(!l.length)return vac?vacio(col,vac):(S.edit?vaci
   return l.map(d=>{const u=dest(d.url),ph=imgs(d),ficha=!!(String(d.desarrollo||'').trim()||(d.files||[]).length||bloquesDe(col+'/'+d.id).length||S.edit),c='c-'+(d.color||(col==='prevbotones'?'verde':'rojo'));
     const inner=`${ph[0]?`<span class="bimg" style="background-image:url(/_blob/${esc(ph[0].id)});background-position:${pp(ph[0])}"></span>`:''}<span class="btx"><b>${esc(d.titulo||'Sin título')}</b>${d.fecha?`<small>${esc(fecha(d.fecha))}</small>`:''}${ficha&&ph.length>1?`<small>${ph.length} fotos</small>`:''}</span>`;
     const t=!ficha&&u?`<a class="btile ${c}" href="${esc(u)}"${u[0]==='#'?'':' target="_blank" rel="noopener"'}>${inner}${u[0]==='#'?'':' ↗'}</a>`:`<button type="button" class="btile ${c}" data-act="btnver" data-col="${col}" data-id="${d.id}">${inner}</button>`;
-    return `<div class="bw">${t}${S.edit?picList(col,d)+fileList(col,d):''}${encBtn(col,d)}${itemTools(col,d)}</div>`}).join('')}
+    return `<div class="bw">${col==='formacion'?etqHtml(d,['#c41a12','#ff5b4e']):''}${t}${S.edit?picList(col,d)+fileList(col,d):''}${encBtn(col,d)}${itemTools(col,d)}</div>`}).join('')}
 let bdRef=null;
 function btnAbre(col,id){const d=item(col,id);if(!d)return;bdRef={col,id};const ph=imgs(d);
-  $('bd-tit').textContent=d.titulo||'';$('bd-big').hidden=!ph.length;if(ph.length){$('bd-img').src='/_blob/'+ph[0].id;$('bd-img').alt=d.titulo||''}
+  $('bd-tit').innerHTML=(col==='formacion'?etqHtml(d,['#c41a12','#ff5b4e']):'')+esc(d.titulo||'');$('bd-big').hidden=!ph.length;if(ph.length){$('bd-img').src='/_blob/'+ph[0].id;$('bd-img').alt=d.titulo||''}
   $('bd-th').innerHTML=ph.length>1?ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-bth="${esc(f.id)}" aria-label="Foto ${i+1}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join(''):'';
   $('bd-txt').textContent=d.desarrollo||(ph.length||(d.files||[]).length||bloquesDe(col+'/'+id).length?'':'Aún no hay contenido.');$('bd-files').innerHTML=fileList(col,{...d,id});
   $('bd-blq').innerHTML=bloquesHtml(col+'/'+id);$('bd-tools').innerHTML=S.edit?itemTools(col,{...d,id}):'';
