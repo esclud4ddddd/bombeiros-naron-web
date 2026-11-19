@@ -758,6 +758,17 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 .sw .pics,.bqtools .pics,#bqd .pics{flex-wrap:wrap;overflow:visible}
 .sw .pic img{height:96px;max-width:140px}
 
+/* etiqueta resaltada encima de cada publicación */
+.etq{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:5px 14px 5px 5px;border-radius:99px;color:#fff;font:800 .82rem/1.2 var(--body);letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 4px 12px color-mix(in srgb,var(--c1) 35%,transparent);animation:etqin .5s ease-out both}
+.etq span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.etq-ic{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.95);color:var(--c1)}
+.etq-ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.etq:not(:has(.etq-ic)){padding-left:14px}
+.bq .etq{margin-bottom:8px}
+#bqd-etq .etq{margin-bottom:8px}
+@keyframes etqin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.etq{animation:none}}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -999,7 +1010,7 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
   <div class="tools" style="justify-content:flex-end"><button type="button" class="btn" data-x="tema-r">Restablecer</button><button type="button" class="btn" data-x="tema-c">Cancelar</button><button class="btn pri">Guardar</button></div></form></dialog>
 <dialog id="subp"><div class="shead" id="sp-head"><div class="shead-in"><div class="sbar"><button type="button" class="btn sback" data-x="sp-c">← Volver</button><button type="button" class="edfab edin" data-edtg hidden aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button></div><div><span class="label" id="sp-sec">Prevención</span><h2 id="sp-tit"></h2><p id="sp-txt"></p></div></div></div>
   <div class="sbody"><div class="sfil" id="sp-fil"></div><div id="sp-add"></div><div class="sgrid" id="sp-grid"></div></div></dialog>
-<dialog id="bqd"><div class="vhead"><div><span class="bqd-tipo" id="bqd-tipo"></span><h3 id="bqd-tit"></h3></div><button type="button" class="btn" data-x="bqd-c">Cerrar</button></div><div id="bqd-body"></div></dialog>
+<dialog id="bqd"><div class="vhead"><div><div id="bqd-etq"></div><span class="bqd-tipo" id="bqd-tipo"></span><h3 id="bqd-tit"></h3></div><button type="button" class="btn" data-x="bqd-c">Cerrar</button></div><div id="bqd-body"></div></dialog>
 <dialog id="priv"><div class="phead"><img src="escudo.png" alt=""><div><h3>Acceso personal</h3><small>Bombeiros Narón · elige el módulo con el que vas a trabajar</small></div><button type="button" class="edfab edin" data-edtg hidden aria-pressed="false" style="margin-left:auto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button><button type="button" class="btn" data-x="priv-c">✕ Cerrar</button></div>
   <div class="pbody"><div class="pgrid" id="b-personal"></div><div class="tools" id="privTools" style="margin-top:16px"></div></div></dialog>
 <dialog id="enc"><h3>Encuadrar foto</h3><p class="muted small" style="margin:6px 0 10px">Pulsa o arrastra sobre la foto el punto que tiene que quedar siempre a la vista.</p>
@@ -1057,7 +1068,18 @@ const BQF={
  noticia:[['titulo','Titular'],['fecha','Fecha','date'],['medio','Medio'],['url','Enlace a la noticia'],['texto','Resumen (opcional)','area']],
  evento:[['titulo','Nombre del evento'],['fecha','Fecha','date'],['hora','Hora (opcional)'],['lugar','Lugar'],['texto','Descripción','area'],['url','Enlace (opcional)']],
  consejo:[['titulo','Título del consejo'],['texto','Consejo','area'],['url','Enlace para saber más (opcional)']]};
+/* iconos para la etiqueta resaltada de cada publicación */
+const ETQ_IC={'Aviso':'<path d="M12 3 2 20h20zM12 10v4M12 17v.5"/>','Información':'<circle cx="12" cy="12" r="9"/><path d="M12 8v.5M12 11v6"/>','Fuego':'<path d="M12 3c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-6 1-10z"/>',
+ 'Detector de humo':'<circle cx="12" cy="9" r="6"/><path d="M9 9h6M8 18c1-1 2-1 3 0s2 1 3 0M7 21c1.5-1 3-1 5 0s3.5 1 5 0"/>','Gas':'<path d="M9 3h6v3H9zM8 6h8l1 4v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9z"/><path d="M10 14c1-2 3-2 4 0"/>','Electricidad':'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+ 'Agua e inundaciones':'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>','Tráfico':'<path d="M3 16l2-6h14l2 6v3h-3M3 16v3h3M3 16h18"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/>','Hogar':'<path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/>',
+ 'Niños':'<circle cx="12" cy="6" r="3"/><path d="M8 21v-6l-2-4h12l-2 4v6M10 21v-4h4v4"/>','Mayores':'<circle cx="11" cy="5" r="2.5"/><path d="M9 21l1-7-2-3 2-3h3l1 5 3 2M17 13v8"/>','Verano':'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
+ 'Invierno':'<path d="M12 2v20M4 7l16 10M20 7 4 17M9 4l3 2 3-2M9 20l3-2 3 2"/>','Bosque e incendios forestales':'<path d="M12 2 6 11h3l-4 6h14l-4-6h3zM12 17v5"/>','Velutina':'<ellipse cx="12" cy="13" rx="4" ry="6"/><path d="M8 11h8M8 15h8M10 6 8 3M14 6l2-3M8 10 3 8M16 10l5-2"/>',
+ 'Extintor':'<path d="M9 7h6v14H9zM12 7V4M12 4h4l2 2M9 11h6"/>','Primeros auxilios':'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M9 6V4h6v2M12 10v6M9 13h6"/>','Teléfono 112':'<path d="M5 3h4l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
+ 'Evacuación':'<path d="M4 20V4h9M13 12h7M17 9l3 3-3 3"/><circle cx="9" cy="8" r="1.5"/>','Calendario':'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'};
+const ETQ_F=[['etiqueta','Etiqueta corta resaltada (opcional, sale encima)'],['icono','Icono de la etiqueta','sel',['(ninguno)',...Object.keys(ETQ_IC)]]];
+const etqHtml=b=>{const t=(b.etiqueta||'').trim();if(!t)return '';const ic=ETQ_IC[b.icono];const C=BQC[b.tipo]||BQC.texto;return `<div class="etq" style="--c1:${C[0]};--c2:${C[1]}">${ic?`<span class="etq-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg></span>`:''}<span>${esc(t)}</span></div>`};
 const BQT={noticia:'Noticia',evento:'Evento',consejo:'Consejo',anuncio:'Anuncio',fotos:'Fotos',video:'Vídeo',enlace:'Enlace',texto:'Texto',boton:'Botón'};
+Object.keys(BQF).forEach(k=>BQF[k]=[...ETQ_F,...BQF[k]]);
 const DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt', IMGS='image/png,image/jpeg,image/webp';
 const COLS={
  noticias:{uno:'noticia',acc:IMGS,img:1,f:[['titulo','Titular'],['medio','Medio (Diario de Ferrol, Ferrol 360...)'],['fecha','Fecha','date'],['url','Enlace a la noticia (https://...)'],['resumen','Resumen','area']]},
@@ -1514,7 +1536,7 @@ function bloqueHtml(b){const u=dest(b.url),ext=u&&u[0]!=='#',at=u?` href="${esc(
   case 'noticia':{const Tm=tema(b);h=`<div class="card news nw bqnot" style="--c1:${Tm.c1};--c2:${Tm.c2}">${ph[0]?`<div class="nimg"><img class="foto" src="/_blob/${esc(ph[0].id)}" alt="" style="object-position:${pp(ph[0])}"><span class="ntag">${temaIc(Tm)}${esc(Tm.l)}</span></div>`:`<div class="nph">${temaIc(Tm,'big')}<span class="ntag">${temaIc(Tm)}${esc(Tm.l)}</span><span class="nmed">${esc(b.medio||fuente({url:b.url})||'Prensa')}</span><span class="nday">${b.fecha?esc(fecha(b.fecha)):''}</span></div>`}<span class="label">${b.fecha?esc(fecha(b.fecha)):''}</span><h3>${esc(b.titulo||'')}</h3>${(b.medio||u)?`<span class="fte2">Fuente: ${esc(b.medio||fuente({url:b.url}))}</span>`:''}${b.texto?`<p class="muted small">${esc(b.texto)}</p>`:''}${u?`<a class="btn"${at}>Leer la noticia</a>`:''}</div>`;break}
   default:h=`${T}${b.texto?`<p class="bqx">${esc(b.texto)}</p>`:''}`}
   const tl=S.edit?`<div class="bqtools"><span class="bqtag">${esc(BQT[b.tipo]||'Texto')}</span><button class="btn mini" data-act="bqmov" data-dir="-1" data-id="${b.id}" title="Subir">↑</button><button class="btn mini" data-act="bqmov" data-dir="1" data-id="${b.id}" title="Bajar">↓</button>${itemTools('bloques',b)}${['fotos','noticia','anuncio'].includes(b.tipo)?picList('bloques',b):''}</div>`:'';
-  return `<div class="bq bq-${esc(b.tipo||'texto')}">${h}${tl}</div>`}
+  return `<div class="bq bq-${esc(b.tipo||'texto')}">${etqHtml(b)}${h}${tl}</div>`}
 function bloquesHtml(p){const L=bloquesDe(p);const add=S.edit?`<div class="bqadd"><span>Añadir dentro:</span>${Object.entries(BQT).map(([k,v])=>`<button class="btn mini" data-act="bqadd" data-padre="${esc(p)}" data-tipo="${k}">+ ${v}</button>`).join('')}</div>`:'';
   return (L.length?`<div class="bqs">${L.map(bloqueHtml).join('')}</div>`:'')+add}
 function verFoto(fid,t){$('ht-tit').textContent=t||'';$('ht-img').src='/_blob/'+fid;$('ht-img').alt=t||'Foto';const n=$('heat').querySelector('p');if(n)n.hidden=true;$('heat').showModal()}
@@ -1538,7 +1560,7 @@ function bqCard(b,i){const C=BQC[b.tipo]||BQC.texto,u=dest(b.url),ext=u&&u[0]!==
   const meta=[b.tipo==='evento'?[b.hora,b.lugar].filter(Boolean).join(' · '):'',b.tipo==='noticia'?(b.medio||(u?fuente({url:b.url}):'')):'',b.tipo!=='evento'&&b.fecha?fecha(b.fecha):''].filter(Boolean).join(' · ');
   const inner=`${media}${cuando}<span class="sc-chip">${bqIc(b.tipo)}${esc(BQT[b.tipo]||'Texto')}</span><div class="sc-tx"><h3>${esc(b.titulo||BQT[b.tipo]||'')}</h3>${meta?`<span class="sc-meta">${esc(meta)}</span>`:''}${b.texto?`<p>${esc(b.texto)}</p>`:''}<span class="sc-go">${directo?(ext?'Abrir ↗':'Ir'):'Ver más →'}</span></div>`;
   const card=directo?`<a class="scard" href="${esc(u)}"${ext?' target="_blank" rel="noopener"':''} style="--c1:${C[0]};--c2:${C[1]};--d:${Math.min(i,12)*50}ms">${inner}</a>`:`<button type="button" class="scard" data-act="bqver" data-id="${b.id}" style="--c1:${C[0]};--c2:${C[1]};--d:${Math.min(i,12)*50}ms">${inner}</button>`;
-  return `<div class="sw">${card}${S.edit?`<div class="bqtools"><button class="btn mini" data-act="bqmov" data-dir="-1" data-id="${b.id}" title="Antes">←</button><button class="btn mini" data-act="bqmov" data-dir="1" data-id="${b.id}" title="Después">→</button>${itemTools('bloques',b)}${picList('bloques',b)}</div>`:''}</div>`}
+  return `<div class="sw">${etqHtml(b)}${card}${S.edit?`<div class="bqtools"><button class="btn mini" data-act="bqmov" data-dir="-1" data-id="${b.id}" title="Antes">←</button><button class="btn mini" data-act="bqmov" data-dir="1" data-id="${b.id}" title="Después">→</button>${itemTools('bloques',b)}${picList('bloques',b)}</div>`:''}</div>`}
 function subPinta(){if(!spRef)return;const {col,id}=spRef,d=item(col,id);if(!d){$('subp').close();return}const P=col+'/'+id,L=bloquesDe(P),ph=imgs(d)[0];
   $('sp-tit').textContent=d.titulo||'';$('sp-txt').textContent=d.desarrollo||'';$('sp-txt').hidden=!d.desarrollo;
   $('sp-head').style.setProperty('--sph',ph?`url(/_blob/${ph.id})`:'none');
@@ -1548,7 +1570,7 @@ function subPinta(){if(!spRef)return;const {col,id}=spRef,d=item(col,id);if(!d){
   const V=S.subF==='todo'?L:L.filter(b=>b.tipo===S.subF);
   $('sp-grid').innerHTML=V.length?V.map(bqCard).join(''):`<div class="sempty">${bqIc('consejo','sc-big')}<b>Aún no hay contenido en ${esc(d.titulo||'esta sección')}</b><span>${S.edit?'Usa «Añadir» para crear noticias, eventos, consejos, fotos o vídeos.':'Muy pronto publicaremos aquí información.'}</span></div>`;tr()}
 function bqDetalle(id){const b=item('bloques',id);if(!b){$('bqd').close();return}bqdId=id;const C=BQC[b.tipo]||BQC.texto;
-  $('bqd-tipo').innerHTML=bqIc(b.tipo)+esc(BQT[b.tipo]||'');$('bqd-tipo').style.setProperty('--c1',C[0]);$('bqd-tit').textContent=b.titulo||'';
+  $('bqd-tipo').innerHTML=bqIc(b.tipo)+esc(BQT[b.tipo]||'');$('bqd-tipo').style.setProperty('--c1',C[0]);$('bqd-tit').textContent=b.titulo||'';$('bqd-tipo').insertAdjacentHTML('afterend','');$('bqd-etq').innerHTML=etqHtml(b);
   const ph=imgs(b),u=dest(b.url),ext=u&&u[0]!=='#',vids=(b.files||[]).filter(f=>/^video/.test(f.type||'')),y=ytId(b.url);
   const meta=[b.tipo==='evento'&&b.fecha?'📅 '+fecha(b.fecha):'',b.hora?'🕒 '+b.hora:'',b.lugar?'📍 '+b.lugar:'',b.tipo==='noticia'?[b.fecha?fecha(b.fecha):'',b.medio||(u?fuente({url:b.url}):'')].filter(Boolean).join(' · '):'',(b.tipo!=='noticia'&&b.tipo!=='evento'&&b.fecha)?fecha(b.fecha):''].filter(Boolean);
   $('bqd-body').innerHTML=`${ph.length?`<div class="vbig"><img id="bqd-img" src="/_blob/${esc(ph[0].id)}" alt=""></div>${ph.length>1?`<div class="vthumbs">${ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-bqth="${esc(f.id)}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join('')}</div>`:''}`:''}
