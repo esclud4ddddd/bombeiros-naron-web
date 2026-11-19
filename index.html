@@ -775,6 +775,13 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 .vfig{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
 .vfig video{width:100%;max-height:60vh;border-radius:10px;background:#000;display:block}
 
+#bd-txt{margin-top:4px;font-size:1.02rem}
+.bdlk:empty{display:none}
+.bdlink{display:inline-flex;align-items:center;gap:12px;margin:12px 0 16px;padding:10px 16px 10px 10px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .2s,transform .2s}
+.bdlink:hover{border-color:var(--accent);transform:translateX(4px)}
+.bdlink .bqli{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800}
+.bdlink b{display:block}.bdlink small{color:var(--accent);font-weight:700}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -1026,8 +1033,8 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 <dialog id="vehd"><div class="vhead"><div><span class="cod" id="vd-cod"></span><h3 id="vd-nom"></h3></div><button type="button" class="btn" data-x="vd-c">Cerrar</button></div>
   <div class="vbig"><img id="vd-img" alt=""></div><div class="vthumbs" id="vd-th"></div><p id="vd-desc"></p><div class="vd-vids" id="vd-vids"></div><dl id="vd-dl"></dl><div id="vd-tools"></div><div id="vd-blq"></div></dialog>
 <dialog id="btnd"><div class="vhead"><h3 id="bd-tit"></h3><button type="button" class="btn" data-x="bd-c">Cerrar</button></div>
-  <div class="vbig" id="bd-big"><img id="bd-img" alt=""></div><div class="vthumbs" id="bd-th"></div>
-  <p id="bd-txt"></p><div id="bd-files"></div><div class="tools" id="bd-lk" style="margin-top:12px"></div><div id="bd-tools"></div><div id="bd-blq"></div></dialog>
+  <p id="bd-txt"></p><div class="bdlk" id="bd-lk"></div>
+  <div class="vbig" id="bd-big"><img id="bd-img" alt=""></div><div class="vthumbs" id="bd-th"></div><div id="bd-files"></div><div id="bd-tools"></div><div id="bd-blq"></div></dialog>
 <dialog id="heat"><div class="vhead"><h3 id="ht-tit"></h3><button type="button" class="btn" data-x="ht-c">Cerrar</button></div><div class="vbig"><img id="ht-img" alt="Mapa de calor de intervenciones de la memoria 2025"></div><p class="muted small" style="margin-top:8px">Fuente: Memoria de actividad 2025 del Speis de Narón.</p></dialog>
 <dialog id="vgrp"><div class="vhead"><h3 id="vg-tit"></h3><button type="button" class="btn" data-x="vg-c">Cerrar</button></div><div id="vg-list"></div></dialog>
 <button type="button" class="edfab" id="editfab" data-edtg hidden aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button>
@@ -1181,7 +1188,7 @@ const TEMAS=[
  ['general','Servicio','#3a4352','#7c8aa0',/./,'<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 13h7"/>']];
 function tema(n){const t=(n.titulo||'')+' '+(n.resumen||'');const m=TEMAS.find(x=>x[4].test(t));return {k:m[0],l:m[1],c1:m[2],c2:m[3],ic:m[5]}}
 const temaIc=(T,cls='tic')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${T.ic}</svg>`;
-const MEDIOS={'diariodeferrol':'Diario de Ferrol','elidealgallego':'El Ideal Gallego','lavozdegalicia':'La Voz de Galicia','elespanol':'El Español','diariogallego':'Diario Gallego','galiciapress':'Galiciapress','europapress':'Europa Press','crtvg':'CRTVG','quincemil':'Quincemil','farodevigo':'Faro de Vigo','naron.gal':'Concello de Narón','xunta':'Xunta de Galicia'};
+const MEDIOS={'cope.es':'COPE','galiciaartabra':'Galicia Ártabra','boe.es':'BOE','youtube':'YouTube','facebook':'Facebook','instagram':'Instagram','axega112':'112 Galicia','meteogalicia':'MeteoGalicia','diariodeferrol':'Diario de Ferrol','elidealgallego':'El Ideal Gallego','lavozdegalicia':'La Voz de Galicia','elespanol':'El Español','diariogallego':'Diario Gallego','galiciapress':'Galiciapress','europapress':'Europa Press','crtvg':'CRTVG','quincemil':'Quincemil','farodevigo':'Faro de Vigo','naron.gal':'Concello de Narón','xunta':'Xunta de Galicia'};
 /* de dónde sale la noticia: el medio indicado o, si no, la web del enlace */
 function fuente(n){if(n.medio)return n.medio;try{const h=new URL(href(n.url)).hostname.replace(/^www\./,'');for(const k in MEDIOS)if(h.includes(k))return MEDIOS[k];return /news\.google/.test(h)?'Prensa':h}catch(e){return ''}}
 /* todas las noticias (subidas + automáticas) sin repetir, de la más nueva a la más antigua */
@@ -1446,7 +1453,7 @@ function btnAbre(col,id){const d=item(col,id);if(!d)return;bdRef={col,id};const 
   $('bd-th').innerHTML=ph.length>1?ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-bth="${esc(f.id)}" aria-label="Foto ${i+1}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join(''):'';
   $('bd-txt').textContent=d.desarrollo||(ph.length||(d.files||[]).length||bloquesDe(col+'/'+id).length?'':'Aún no hay contenido.');$('bd-files').innerHTML=fileList(col,{...d,id});
   $('bd-blq').innerHTML=bloquesHtml(col+'/'+id);$('bd-tools').innerHTML=S.edit?itemTools(col,{...d,id}):'';
-  const u=dest(d.url);$('bd-lk').innerHTML=u?`<a class="btn pri" href="${esc(u)}"${u[0]==='#'?'':' target="_blank" rel="noopener"'}>Abrir enlace${u[0]==='#'?'':' ↗'}</a>`:'';
+  const u=dest(d.url),ext=u&&u[0]!=='#',fu=ext?fuente({url:u}):'';$('bd-lk').innerHTML=u?`<a class="bdlink" href="${esc(u)}"${ext?' target="_blank" rel="noopener"':''}><span class="bqli">↗</span><span><b>${ext?'Abrir el enlace':'Ver más'}</b>${fu?`<small>Fuente: ${esc(fu)}</small>`:''}</span></a>`:'';
   if(!$('btnd').open)$('btnd').showModal();tr()}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-anio]');if(!a)return;S.anioN=a.dataset.anio;S.anioElegido=true;render();$('nAnios').scrollIntoView({block:'nearest'})});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-bth]');if(!t)return;$('bd-img').src='/_blob/'+t.dataset.bth;document.querySelectorAll('#bd-th .vth').forEach(b=>b.classList.toggle('on',b===t))});
