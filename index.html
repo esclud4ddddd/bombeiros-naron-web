@@ -782,6 +782,56 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 .bdlink .bqli{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800}
 .bdlink b{display:block}.bdlink small{color:var(--accent);font-weight:700}
 
+/* Formación: tarjetas con portada */
+.fgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px;margin-bottom:20px}
+.fw{display:flex;flex-direction:column;gap:8px;min-width:0;animation:nwin .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms)}
+.fw-top{grid-column:1/-1}
+.fcard{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:380px;width:100%;padding:0;border:0;border-radius:20px;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:#fff;background:#1a1d24;box-shadow:0 12px 30px rgba(20,30,45,.22);isolation:isolate;transition:transform .25s,box-shadow .25s}
+.fw-top .fcard{min-height:clamp(380px,46vw,520px)}
+.fcard:hover{transform:translateY(-6px);box-shadow:0 22px 44px rgba(196,26,18,.35)}
+.fc-bg{position:absolute;inset:0;z-index:-2;background:linear-gradient(135deg,#c41a12,#5a0b07) center/cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.fcard:hover .fc-bg{transform:scale(1.08)}
+.fcard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(12,6,6,.95) 0%,rgba(12,6,6,.65) 38%,rgba(12,6,6,.05) 72%),linear-gradient(90deg,rgba(196,26,18,.35),transparent 40%)}
+.fc-date{position:absolute;left:18px;top:18px;display:flex;flex-direction:column;align-items:center;min-width:64px;padding:8px 10px;border-radius:14px;background:#fff;color:#c41a12;box-shadow:0 6px 16px rgba(0,0,0,.35);line-height:1}
+.fc-date b{font:800 1.9rem var(--display)} .fc-date span{font:800 .8rem var(--body);text-transform:uppercase;letter-spacing:.06em;margin-top:2px} .fc-date small{font-size:.68rem;color:#6b7280;margin-top:3px}
+.fc-body{position:relative;display:flex;flex-direction:column;gap:8px;padding:22px 22px 20px;max-width:760px}
+.fc-etq{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;background:linear-gradient(90deg,#c41a12,#ff5b4e);color:#fff;font:800 .74rem var(--body);letter-spacing:.07em;text-transform:uppercase;padding:5px 12px 5px 8px;border-radius:99px;box-shadow:0 4px 14px rgba(196,26,18,.5)}
+.fc-etq svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.fc-t{font:800 clamp(1.35rem,2.4vw,1.9rem)/1.12 var(--display);text-wrap:balance;text-shadow:0 2px 14px rgba(0,0,0,.4)}
+.fw-top .fc-t{font-size:clamp(1.7rem,3.6vw,2.7rem)}
+.fc-x{color:rgba(255,255,255,.88);font-size:.95rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fw-top .fc-x{-webkit-line-clamp:3;font-size:1.02rem}
+.fc-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px}
+.fc-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);padding:4px 10px;border-radius:99px;font:700 .78rem var(--body)}
+.fc-chip svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fc-go{margin-left:auto;font-weight:800;font-size:.9rem;padding:7px 14px;border-radius:99px;background:#fff;color:#c41a12;transition:transform .2s}
+.fcard:hover .fc-go{transform:translateX(4px)}
+.fc-strip{position:absolute;right:16px;top:16px;display:flex;gap:6px}
+.fc-strip i{width:58px;height:58px;border-radius:12px;background:center/cover #333;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 12px rgba(0,0,0,.35);transition:transform .3s}
+.fcard:hover .fc-strip i{transform:translateY(-3px)}
+.fcard:hover .fc-strip i:nth-child(2){transition-delay:.05s}.fcard:hover .fc-strip i:nth-child(3){transition-delay:.1s}
+.fc-strip .more{display:grid;place-items:center;background:rgba(196,26,18,.92);font:800 .95rem var(--display);font-style:normal}
+.fw:not(.fw-top) .fc-strip i:nth-child(n+3):not(.more){display:none}
+.fc-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+.fc-pics{width:100%;background:var(--soft);border-radius:10px;padding:6px 10px}
+.fc-pics summary{cursor:pointer;font-weight:700;font-size:.88rem}
+.fc-pics .pics{flex-wrap:wrap;overflow:visible}
+@media (max-width:640px){.fcard{min-height:340px}.fc-strip i{width:44px;height:44px}.fc-strip i:nth-child(n+3):not(.more){display:none}.fc-go{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.fw{animation:none}.fcard,.fc-bg,.fc-strip i{transition:none}}
+/* galería en mosaico dentro de la formación */
+.fmos{columns:3 200px;column-gap:8px;margin-top:6px}
+.fmi{display:block;width:100%;margin:0 0 8px;padding:0;border:0;border-radius:10px;overflow:hidden;cursor:zoom-in;break-inside:avoid;line-height:0;background:var(--soft)}
+.fmi img{width:100%;height:auto;transition:transform .4s,filter .3s}
+.fmi:hover img{transform:scale(1.05);filter:brightness(1.08)}
+#btnd{width:min(1100px,calc(100vw - 32px))}
+#bd-tit{font:800 clamp(1.3rem,2.6vw,1.9rem)/1.15 var(--display)}
+/* visor con anterior / siguiente */
+.htwrap{position:relative}
+.htnav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#14181f;font-size:2rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.htnav.prev{left:10px}.htnav.next{right:10px}
+.htn{margin-left:auto;margin-right:12px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+#heat .vhead{align-items:center}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -986,7 +1036,7 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 <section class="view" id="v-documentos" hidden><div class="wrap"><a class="back" href="#inicio">← Inicio</a>
   <div class="head"><h2>Formación</h2><span class="tools" data-sec="documentos"></span>
     <p>Cursos, prácticas y maniobras del personal del servicio. Pulsa cada una para ver las fotos y su desarrollo.</p></div>
-  <div class="botonera" id="b-formacion"></div>
+  <div class="fgal" id="b-formacion"></div>
   <div id="docWrap"><h3 style="margin:22px 0 10px">Documentos y archivos</h3><div class="card rows" id="b-documentos"></div></div>
 </div></section>
 
@@ -1035,7 +1085,7 @@ body:has(#edbar:not([hidden])) #editfab{bottom:calc(70px + env(safe-area-inset-b
 <dialog id="btnd"><div class="vhead"><h3 id="bd-tit"></h3><button type="button" class="btn" data-x="bd-c">Cerrar</button></div>
   <p id="bd-txt"></p><div class="bdlk" id="bd-lk"></div>
   <div class="vbig" id="bd-big"><img id="bd-img" alt=""></div><div class="vthumbs" id="bd-th"></div><div id="bd-files"></div><div id="bd-tools"></div><div id="bd-blq"></div></dialog>
-<dialog id="heat"><div class="vhead"><h3 id="ht-tit"></h3><button type="button" class="btn" data-x="ht-c">Cerrar</button></div><div class="vbig"><img id="ht-img" alt="Mapa de calor de intervenciones de la memoria 2025"></div><p class="muted small" style="margin-top:8px">Fuente: Memoria de actividad 2025 del Speis de Narón.</p></dialog>
+<dialog id="heat"><div class="vhead"><h3 id="ht-tit"></h3><span class="htn" id="ht-n"></span><button type="button" class="btn" data-x="ht-c">Cerrar</button></div><div class="vbig htwrap"><button type="button" class="htnav prev" id="ht-prev" aria-label="Foto anterior" hidden>‹</button><button type="button" class="htnav next" id="ht-next" aria-label="Foto siguiente" hidden>›</button><img id="ht-img" alt="Mapa de calor de intervenciones de la memoria 2025"></div><p class="muted small" style="margin-top:8px">Fuente: Memoria de actividad 2025 del Speis de Narón.</p></dialog>
 <dialog id="vgrp"><div class="vhead"><h3 id="vg-tit"></h3><button type="button" class="btn" data-x="vg-c">Cerrar</button></div><div id="vg-list"></div></dialog>
 <button type="button" class="edfab" id="editfab" data-edtg hidden aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></svg><span>Editar</span></button>
 <div id="edbar" hidden><div class="wrap"><b>Edición</b><button class="btn mini" data-act="edtext" aria-pressed="false">Editar textos</button><button class="btn mini" data-act="tema">Colores y botones</button><button class="btn mini" data-act="alertasbar" id="alBarBtn">Barra de alertas: visible</button><button class="btn mini" data-act="add" data-col="avisosweb">Añadir anuncio</button><button class="btn mini" data-act="add" data-col="menuextra">Añadir enlace al menú</button><button class="btn mini pri" data-act="exportar">Descargar para Vercel</button></div></div>
@@ -1265,7 +1315,7 @@ const R={
  plantilla(l){ const t=l.reduce((s,p)=>s+(parseInt(p.numero)||0),0); $('plantillaTotal').textContent=t?`${t} personas en total.`:'';
   if(!l.length) return vacio('plantilla','Plantilla pendiente de añadir.');
   return l.map(p=>{const im=imgs(p)[0];return `<div class="row"><div class="rango main">${im?`<img class="ins" src="/_blob/${esc(im.id)}" alt="Divisa de ${esc(p.rango)}">`:insignia(p.rango)}<div><b>${esc(p.rango)}</b><span class="muted">${esc(p.nota)}</span></div><span class="n num">${esc(p.numero)}</span></div>${S.edit&&im?`<button class="btn mini pel" data-act="delfile" data-col="plantilla" data-id="${p.id}" data-fid="${esc(im.id)}">Quitar imagen</button>`:''}${itemTools('plantilla',p)}</div>`}).join('')},
- formacion:l=>botonera('formacion',l,'Aún no hay formaciones publicadas.'),
+ formacion:l=>formCards(l),
  prevbotones:l=>botonera('prevbotones',l,''),
  vehiculos(l){ if(!l.length) return vacio('vehiculos','Vehículos pendientes de añadir.');
   const gs=vehGrupos(l);if(vgOpen())vgPinta();
@@ -1450,6 +1500,7 @@ function botonera(col,l,vac){if(!l.length)return vac?vacio(col,vac):(S.edit?vaci
 let bdRef=null;
 function btnAbre(col,id){const d=item(col,id);if(!d)return;bdRef={col,id};const ph=imgs(d);
   $('bd-tit').innerHTML=(col==='formacion'?etqHtml(d,['#c41a12','#ff5b4e']):'')+esc(d.titulo||'');$('bd-big').hidden=!ph.length;if(ph.length){$('bd-img').src='/_blob/'+ph[0].id;$('bd-img').alt=d.titulo||''}
+  if(col==='formacion'){$('bd-big').hidden=true;const gl=ph.map(f=>f.id).join(',');$('bd-th').innerHTML=ph.length?`<div class="fmos">${ph.map((f,i)=>`<button type="button" class="fmi" data-act="verfoto" data-fid="${esc(f.id)}" data-gal="${gl}" data-t="${esc(d.titulo||'')}" aria-label="Foto ${i+1}"><img src="/_blob/${esc(f.id)}" alt="" loading="lazy" style="object-position:${pp(f)}"></button>`).join('')}</div>`:''}else
   $('bd-th').innerHTML=ph.length>1?ph.map((f,i)=>`<button type="button" class="vth${i?'':' on'}" data-bth="${esc(f.id)}" aria-label="Foto ${i+1}"><img src="/_blob/${esc(f.id)}" alt=""></button>`).join(''):'';
   $('bd-txt').textContent=d.desarrollo||(ph.length||(d.files||[]).length||bloquesDe(col+'/'+id).length?'':'Aún no hay contenido.');$('bd-files').innerHTML=fileList(col,{...d,id});
   $('bd-blq').innerHTML=bloquesHtml(col+'/'+id);$('bd-tools').innerHTML=S.edit?itemTools(col,{...d,id}):'';
@@ -1524,7 +1575,7 @@ function mapaTipo(){const sel=$('tipSel');if(!sel)return;
    <small class="mpnota">${T.zonas?esc(T.zlab)+' en el plano. ':''}${T.vias?'Accidentes por carretera en el plano. '+esc(T.otras||''):''}${T.fuera?esc(T.fuera):''}${!T.zonas&&!T.vias?esc(T.nota||'La memoria no reparte esta tipología por zonas: aquí tienes su desglose.'):''}</small>
    ${T.heat?`<button type="button" class="btn mini" data-act="heat" data-k="${T.k}">Ver mapa de calor de la memoria</button>`:''}`;
   $('map').setAttribute('aria-label','Plano esquemático de Narón: '+T.n+' en 2025');tr()}
-function heatAbre(k){const T=TIPOS25.find(t=>t.k===k);if(!T||!T.heat)return;{const n=$('heat').querySelector('p');if(n)n.hidden=false}$('ht-tit').textContent=T.n+' · 2025';$('ht-img').src='/_blob/'+T.heat;$('heat').showModal()}
+function heatAbre(k){const T=TIPOS25.find(t=>t.k===k);if(!T||!T.heat)return;galL=[];$('ht-n').textContent='';$('ht-prev').hidden=$('ht-next').hidden=true;{const n=$('heat').querySelector('p');if(n)n.hidden=false}$('ht-tit').textContent=T.n+' · 2025';$('ht-img').src='/_blob/'+T.heat;$('heat').showModal()}
 /* cabecera de Noticias: pase de fotos de las noticias con foto */
 let cabT=null,cabI=0;
 function cabNoticias(){const h=$('v-noticias')&&$('v-noticias').querySelector('.head');if(!h)return;
@@ -1556,7 +1607,12 @@ function bloqueHtml(b){const u=dest(b.url),ext=u&&u[0]!=='#',at=u?` href="${esc(
   return `<div class="bq bq-${esc(b.tipo||'texto')}">${etqHtml(b)}${h}${tl}</div>`}
 function bloquesHtml(p){const L=bloquesDe(p);const add=S.edit?`<div class="bqadd"><span>Añadir dentro:</span>${Object.entries(BQT).map(([k,v])=>`<button class="btn mini" data-act="bqadd" data-padre="${esc(p)}" data-tipo="${k}">+ ${v}</button>`).join('')}</div>`:'';
   return (L.length?`<div class="bqs">${L.map(bloqueHtml).join('')}</div>`:'')+add}
-function verFoto(fid,t){$('ht-tit').textContent=t||'';$('ht-img').src='/_blob/'+fid;$('ht-img').alt=t||'Foto';const n=$('heat').querySelector('p');if(n)n.hidden=true;$('heat').showModal()}
+let galL=[],galI=0;
+function galPon(){const f=galL[galI];if(!f)return;$('ht-img').src='/_blob/'+f;$('ht-n').textContent=galL.length>1?(galI+1)+' / '+galL.length:'';$('ht-prev').hidden=$('ht-next').hidden=galL.length<2}
+function verFoto(fid,t,lista){galL=lista&&lista.length?lista:[fid];galI=Math.max(0,galL.indexOf(fid));$('ht-tit').textContent=t||'';$('ht-img').alt=t||'Foto';const n=$('heat').querySelector('p');if(n)n.hidden=true;galPon();if(!$('heat').open)$('heat').showModal()}
+$('ht-prev').onclick=()=>{galI=(galI-1+galL.length)%galL.length;galPon()};$('ht-next').onclick=()=>{galI=(galI+1)%galL.length;galPon()};
+document.addEventListener('keydown',e=>{if(!$('heat').open||galL.length<2)return;if(e.key==='ArrowLeft')$('ht-prev').click();if(e.key==='ArrowRight')$('ht-next').click()});
+{let x0=null;$('ht-img').addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});$('ht-img').addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)(dx<0?$('ht-next'):$('ht-prev')).click();x0=null})}
 /* ---------- página propia de cada botón de Prevención: tarjetas de noticias, eventos, consejos... ---------- */
 const BQC={noticia:['#d3271c','#ff7a4d','<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 13h7M7 16h4"/>'],
  evento:['#5b3fd6','#a28bff','<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
@@ -1598,6 +1654,25 @@ function bqDetalle(id){const b=item('bloques',id);if(!b){$('bqd').close();return
   if(!$('bqd').open)$('bqd').showModal();tr()}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-bqth]');if(!t)return;$('bqd-img').src='/_blob/'+t.dataset.bqth;t.parentNode.querySelectorAll('.vth').forEach(x=>x.classList.toggle('on',x===t))});
 let vdId=null;
+/* ---------- Formación: galería de tarjetas con portada grande ---------- */
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function formCards(l){if(!l.length)return vacio('formacion','Aún no hay formaciones publicadas.');
+  l=[...l].sort((a,b)=>String(b.fecha||'').localeCompare(String(a.fecha||''))||(+b.orden||0)-(+a.orden||0));
+  return l.map((d,i)=>{const ph=imgs(d),vs=vids(d),cov=ph[0],ic=ETQ_IC[d.icono],f=/^\d{4}-\d{2}-\d{2}/.test(d.fecha||'')?d.fecha:'';
+    const strip=ph.slice(1,4);
+    return `<div class="fw${i===0?' fw-top':''}" style="--d:${Math.min(i,10)*70}ms">
+    <button type="button" class="fcard" data-act="btnver" data-col="formacion" data-id="${d.id}" aria-label="Abrir ${esc(d.titulo||'formación')}">
+      <span class="fc-bg"${cov?` style="background-image:url(/_blob/${esc(cov.id)});background-position:${pp(cov)}"`:''}></span>
+      ${f?`<span class="fc-date"><b>${+f.slice(8,10)}</b><span>${MES[+f.slice(5,7)-1]}</span><small>${f.slice(0,4)}</small></span>`:''}
+      <span class="fc-body">
+        ${d.etiqueta?`<span class="fc-etq">${ic?`<svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>`:''}${esc(d.etiqueta)}</span>`:''}
+        <span class="fc-t">${esc(d.titulo||'Formación')}</span>
+        ${d.desarrollo?`<span class="fc-x">${esc(d.desarrollo)}</span>`:''}
+        <span class="fc-foot">${ph.length?`<span class="fc-chip"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 8"/></svg>${ph.length}</span>`:''}${vs.length?`<span class="fc-chip"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>${vs.length}</span>`:''}${d.url?`<span class="fc-chip">↗ ${esc(fuente({url:d.url})||'Enlace')}</span>`:''}<span class="fc-go">Ver formación →</span></span>
+      </span>
+      ${strip.length?`<span class="fc-strip">${strip.map(x=>`<i style="background-image:url(/_blob/${esc(x.id)});background-position:${pp(x)}"></i>`).join('')}${ph.length>4?`<i class="more">+${ph.length-4}</i>`:''}</span>`:''}
+    </button>
+    ${S.edit?`<div class="fc-tools">${encBtn('formacion',d)}${itemTools('formacion',d)}${ph.length?`<details class="fc-pics"><summary>Fotos (${ph.length}) · portada y centrado</summary>${picList('formacion',d)}</details>`:''}</div>`:''}</div>`}).join('')}
 function vehAbre(id){const v=item('vehiculos',id);if(!v)return;vdId=id;const ph=imgs(v),vids=(v.files||[]).filter(f=>/^video/.test(f.type||''));
   $('vd-desc').textContent=v.descripcion||'';$('vd-desc').hidden=!v.descripcion;
   $('vd-vids').innerHTML=vids.map(f=>`<figure class="bqv"><video controls preload="metadata" src="/_blob/${esc(f.id)}"></video>${S.edit?`<button class="btn mini pel" data-act="delfile" data-col="vehiculos" data-id="${id}" data-fid="${esc(f.id)}">Quitar vídeo</button>`:''}</figure>`).join('');
@@ -1639,7 +1714,7 @@ document.addEventListener('click',async e=>{const ddb=e.target.closest('#menu .d
   if(act==='car'){e.preventDefault();return carGo(b.dataset.i!=null?+b.dataset.i:carI+ +b.dataset.d)}
   if(act==='vehver'){if(e.target.closest('button,a,.pic'))return;return vehAbre(id)}
   if(act==='heat')return heatAbre(b.dataset.k);
-  if(act==='verfoto')return verFoto(b.dataset.fid,b.dataset.t);
+  if(act==='verfoto'){const g=b.dataset.gal?b.dataset.gal.split(','):null;return verFoto(b.dataset.fid,b.dataset.t,g)}
   if(act==='vgver'){if(e.target.closest('button,a,.pic'))return;return vgAbre(b.dataset.k)}
   if(act==='btnver')return col==='prevbotones'?subAbre(col,id):btnAbre(col,id);
   if(act==='bqver')return bqDetalle(id);
