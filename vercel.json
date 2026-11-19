@@ -2,6 +2,38 @@
  "cleanUrls": true,
  "rewrites": [
   {
+   "source": "/_blob/4941d0e766e7c2125b44b944102ff131",
+   "destination": "/archivos/4941d0e766e7c2125b44b944102ff131.png"
+  },
+  {
+   "source": "/_blob/45ce7a714175fa6aae164986e0ebb9d8",
+   "destination": "/archivos/45ce7a714175fa6aae164986e0ebb9d8.jpg"
+  },
+  {
+   "source": "/_blob/b098af9229e119826e771635ce5180af",
+   "destination": "/archivos/b098af9229e119826e771635ce5180af.jpg"
+  },
+  {
+   "source": "/_blob/4a612a3b59c9271bc4d1adea5eca8238",
+   "destination": "/archivos/4a612a3b59c9271bc4d1adea5eca8238.png"
+  },
+  {
+   "source": "/_blob/a3c091eb8c068fdf0c15ecb728b58e7f",
+   "destination": "/archivos/a3c091eb8c068fdf0c15ecb728b58e7f.jpg"
+  },
+  {
+   "source": "/_blob/fb5e0f789649f10c94196339068194f2",
+   "destination": "/archivos/fb5e0f789649f10c94196339068194f2.jpg"
+  },
+  {
+   "source": "/_blob/ee21f555b563ce396bca93e20a33ac57",
+   "destination": "/archivos/ee21f555b563ce396bca93e20a33ac57.jpg"
+  },
+  {
+   "source": "/_blob/19e5b89da0cd507aae2f83a851275829",
+   "destination": "/archivos/19e5b89da0cd507aae2f83a851275829.jpg"
+  },
+  {
    "source": "/_blob/5391ced626338e3d3a77f4d48b390c4d",
    "destination": "/archivos/5391ced626338e3d3a77f4d48b390c4d.jpg"
   },
@@ -10,8 +42,24 @@
    "destination": "/archivos/6127dd1c38629db85484be7f2e25e70b.jpg"
   },
   {
+   "source": "/_blob/709ba5f6baba53a52d553167d0ade2d5",
+   "destination": "/archivos/709ba5f6baba53a52d553167d0ade2d5.jpg"
+  },
+  {
    "source": "/_blob/09e47d973013f632cffd624397cca4a9",
    "destination": "/archivos/09e47d973013f632cffd624397cca4a9.jpg"
+  },
+  {
+   "source": "/_blob/0da7c84c5086ea7076c8280dd96f2f32",
+   "destination": "/archivos/0da7c84c5086ea7076c8280dd96f2f32.png"
+  },
+  {
+   "source": "/_blob/ca83061630c36b961710199efcd2eddb",
+   "destination": "/archivos/ca83061630c36b961710199efcd2eddb.png"
+  },
+  {
+   "source": "/_blob/8b97e141ca7c7b8ce3162337a3f6b235",
+   "destination": "/archivos/8b97e141ca7c7b8ce3162337a3f6b235.png"
   },
   {
    "source": "/_blob/369a53f1988a14a052d0643a5e3d1331",
