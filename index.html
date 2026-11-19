@@ -603,6 +603,47 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
 @keyframes flota{0%,100%{transform:translateY(-50%) rotate(0)}50%{transform:translateY(-54%) rotate(-4deg)}}
 @media (prefers-reduced-motion:reduce){.nw,.slide.sph svg.sbig{animation:none}.nw{transition:none}}
 
+/* tablón de anuncios con más vida */
+.anc{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px 18px;align-items:start;padding:18px 20px 18px 18px;margin-bottom:14px;border-radius:16px;overflow:hidden;color:var(--ink);
+ background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--a2) 22%,transparent),transparent 45%),linear-gradient(100deg,color-mix(in srgb,var(--a1) 12%,var(--surface)),var(--surface) 55%);
+ border:1px solid color-mix(in srgb,var(--a1) 30%,var(--line));box-shadow:0 8px 24px rgba(20,30,45,.10);animation:ancin .55s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s,box-shadow .2s}
+.anc:nth-child(2){animation-delay:.08s}.anc:nth-child(3){animation-delay:.16s}
+.anc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--a2),var(--a1))}
+.anc:hover{transform:translateY(-3px);box-shadow:0 16px 34px color-mix(in srgb,var(--a1) 22%,rgba(20,30,45,.12))}
+.anc-ic{position:relative;width:52px;height:52px;margin-left:4px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--a1) 45%,transparent)}
+.anc-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;position:relative}
+.anc-pulse{position:absolute;inset:0;border-radius:50%;border:2px solid var(--a2);animation:ancp 2.4s ease-out infinite}
+.anc-main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.anc-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.anc-niv{font:800 .72rem var(--body);letter-spacing:.09em;text-transform:uppercase;color:#fff;background:var(--a1);padding:4px 10px;border-radius:99px}
+.anc-fte{display:inline-flex;align-items:center;gap:5px;font:600 .78rem var(--body);color:var(--ink);background:color-mix(in srgb,var(--a1) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--a1) 35%,var(--line));padding:3px 10px;border-radius:99px}
+.anc-fte svg{width:14px;height:14px;fill:none;stroke:var(--a1);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.anc-when{font-size:.78rem;color:var(--muted);font-weight:600}
+.anc-t{font:700 1.3rem/1.2 var(--display);text-wrap:balance}
+.anc-t a{color:inherit;text-decoration:none;background:linear-gradient(var(--a1),var(--a1)) 0 100%/0 2px no-repeat;transition:background-size .3s}
+.anc-t a:hover{background-size:100% 2px}
+.anc-x{color:var(--muted);white-space:pre-line;max-width:80ch}
+.anc-go{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:8px 14px;border-radius:var(--btn-r,99px);background:var(--a1);color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;box-shadow:0 4px 12px color-mix(in srgb,var(--a1) 35%,transparent);transition:gap .2s,filter .2s}
+.anc-go svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.anc-go:hover{gap:12px;filter:brightness(1.08)}
+.anc-ph{width:150px;align-self:stretch;min-height:110px;border-radius:12px;background:center/cover var(--soft);box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.anc-tools{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.anc-urg{animation:ancin .55s cubic-bezier(.2,.8,.2,1) both,ancglow 1.8s ease-in-out infinite}
+@keyframes ancin{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes ancp{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+@keyframes ancglow{0%,100%{box-shadow:0 8px 24px rgba(210,20,28,.18)}50%{box-shadow:0 8px 30px rgba(210,20,28,.45),0 0 0 3px rgba(210,20,28,.25)}}
+@media (max-width:640px){.anc{grid-template-columns:auto minmax(0,1fr);padding:14px 14px 14px 16px}.anc-ph{grid-column:1/-1;order:-1;width:auto;min-height:150px}.anc-ic{width:42px;height:42px}.anc-t{font-size:1.12rem}}
+@media (prefers-reduced-motion:reduce){.anc,.anc-urg,.anc-pulse{animation:none}.anc{transition:none}}
+
+/* barra lateral: resaltado al pasar */
+.sa a,.sidebar a.ext{position:relative;transition:background .18s,color .18s,transform .18s,box-shadow .18s}
+.sa a::before,.sidebar a.ext::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:4px;border-radius:4px;background:var(--accent);transform:scaleY(0);transition:transform .2s}
+.sa a:not(.on):hover,.sidebar a.ext:hover,.sa a:not(.on):focus-visible{background:color-mix(in srgb,var(--accent) 12%,var(--surface));color:var(--accent);font-weight:600;transform:translateX(5px);box-shadow:0 3px 10px color-mix(in srgb,var(--accent) 15%,transparent)}
+.sa a:not(.on):hover::before,.sidebar a.ext:hover::before{transform:scaleY(1)}
+.sa a:hover svg.ic,.sidebar a.ext:hover svg.ic{transform:scale(1.18)}
+.sidebar svg.ic{transition:transform .2s}
+@media (prefers-reduced-motion:reduce){.sa a,.sidebar a.ext,.sidebar svg.ic{transition:none}.sa a:hover{transform:none}}
+
 /* barra de alerta activa: destello en el color de la alerta */
 .bar112.activa{animation:destello 1.2s ease-in-out infinite;font-weight:800}
 .bar112.n1.activa{--dc:245,196,0} .bar112.n2.activa{--dc:228,108,0} .bar112.n3.activa{--dc:210,20,28}
@@ -703,7 +744,6 @@ a.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
     </svg>
     <div class="mapnote mpanel" id="mapnote">Plano esquemático, no a escala.</div>
     </header>
-  <div class="wrap"><div id="cifras"></div></div>
 </div>
 
 <div class="wrap shell" id="shell" hidden><aside id="side1" class="sidebar" aria-label="Accesos"></aside><main>
@@ -892,7 +932,7 @@ const SEC_COL={avisos:['avisosweb'],ciudadania:['ciudadania'],mapas:['mapasweb']
 const DOCS='application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp,.csv,.txt', IMGS='image/png,image/jpeg,image/webp';
 const COLS={
  noticias:{uno:'noticia',acc:IMGS,img:1,f:[['titulo','Titular'],['medio','Medio (Diario de Ferrol, Ferrol 360...)'],['fecha','Fecha','date'],['url','Enlace a la noticia (https://...)'],['resumen','Resumen','area']]},
- avisosweb:{uno:'anuncio',acc:DOCS,f:[['titulo','Título'],['texto','Texto','area'],['nivel','Nivel','sel',['Informativo','Importante','Urgente']],['url','Enlace: #seccion o https://... (opcional)'],['fuente','Fuente (opcional: si lo dejas vacío se pone la web del enlace)']]},
+ avisosweb:{uno:'anuncio',acc:DOCS,both:1,f:[['titulo','Título'],['texto','Texto','area'],['nivel','Nivel','sel',['Informativo','Importante','Urgente']],['fecha','Fecha (opcional)','date'],['url','Enlace: #seccion o https://... (opcional)'],['fuente','Fuente (opcional: si lo dejas vacío se pone la web del enlace)']]},
  mapasweb:{uno:'mapa',acc:IMGS,img:1,f:[['titulo','Título'],['url','Página del mapa (https://...)'],['detalle','Descripción (opcional)','area']]},
  personal:{uno:'módulo',acc:IMGS,img:1,f:[['nombre','Nombre'],['detalle','Descripción'],['url','Enlace (https://...)']]},
  ciudadania:{uno:'ficha para la ciudadanía',acc:DOCS,f:[['apartado','Apartado','sel',['Quemas','Avispa velutina','Ordenanzas y tasas','Otros']],['titulo','Título'],['texto','Texto','area'],['url','Enlace (https://..., opcional)']]},
@@ -994,7 +1034,17 @@ async function cargaNoticias(){try{const r=await fetch('/api/noticias',{cache:'n
 const bloques=col=>l=>l.length?l.map(d=>`<div class="card"><h3>${esc(d.titulo)}</h3><p style="margin-top:8px;white-space:pre-line">${esc(d.texto)}</p>${picList(col,d)}${itemTools(col,d)}</div>`).join(''):vacio(col,'Aún no hay contenido.');
 const links=col=>l=>l.length?l.map(d=>{const u=href(d.url);return `<div class="lk"><${u?`a href="${esc(u)}" target="_blank" rel="noopener"`:'div'} class="mapa"><b>${esc(d.nombre)}</b><span>${esc(d.detalle)}</span></${u?'a':'div'}>${itemTools(col,d)}</div>`}).join(''):vacio(col,'Aún no hay enlaces.');
 const NV={Informativo:'info',Importante:'imp',Urgente:'urg'};
-const avisoHtml=(a,tools)=>{const u=dest(a.url);return `<div class="avw ${NV[a.nivel]||'info'}"><svg class="ic"><use href="#i-avisos"/></svg><div class="main"><span class="label">${esc(a.nivel||'Aviso')}${(()=>{const f=a.fuente||(u&&u[0]!=='#'?fuente({url:u}):'');return f?` <span class="afte">Fuente: ${esc(f)}</span>`:''})()}</span><b>${esc(a.titulo)}</b><p>${esc(a.texto)}</p>${fileList('avisosweb',a)}</div>${u?`<a class="btn" href="${esc(u)}"${u[0]==='#'?'':' target="_blank" rel="noopener"'}>Más información</a>`:''}${tools?itemTools('avisosweb',a):''}</div>`};
+const ANC={info:['Informativo','#1f6feb','#5aa9ff','<path d="M12 8v.5M12 11v6"/><circle cx="12" cy="12" r="9"/>'],imp:['Importante','#c77700','#ffc23d','<path d="M12 3 2 20h20zM12 10v4M12 17v.5"/>'],urg:['Urgente','#d2141c','#ff6a5c','<path d="M12 2v3M4.9 4.9l2.1 2.1M2 12h3M19 12h3M17 7l2.1-2.1"/><path d="M7 18v-5a5 5 0 0 1 10 0v5M5 18h14v3H5z"/>']};
+const hace=f=>{if(!/^\d{4}-\d{2}-\d{2}/.test(f||''))return '';const d=Math.round((new Date(hoyISO()+'T12:00')-new Date(f.slice(0,10)+'T12:00'))/864e5);const gl=LANG==='gl';return d<=0?(gl?'Hoxe':'Hoy'):d===1?(gl?'Onte':'Ayer'):d<7?(gl?'Hai ':'Hace ')+d+(gl?' días':' días'):fecha(f)};
+const avisoHtml=(a,tools)=>{const u=dest(a.url),k=NV[a.nivel]||'info',A=ANC[k],ph=imgs(a)[0],docs={...a,files:(a.files||[]).filter(f=>!/^image/.test(f.type||''))};
+  const f=a.fuente||(u&&u[0]!=='#'?fuente({url:u}):''),ext=u&&u[0]!=='#',at=u?` href="${esc(u)}"${ext?' target="_blank" rel="noopener"':''}`:'';
+  return `<article class="anc anc-${k}" style="--a1:${A[1]};--a2:${A[2]}">
+  <div class="anc-ic"><span class="anc-pulse"></span><svg viewBox="0 0 24 24" aria-hidden="true">${A[3]}</svg></div>
+  <div class="anc-main"><div class="anc-top"><span class="anc-niv">${esc(a.nivel||A[0])}</span>${f?`<span class="anc-fte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 13h7"/></svg>${esc(f)}</span>`:''}${a.fecha?`<span class="anc-when">${esc(hace(a.fecha))}</span>`:''}</div>
+   <h3 class="anc-t">${u?`<a${at}>${esc(a.titulo)}</a>`:esc(a.titulo)}</h3>${a.texto?`<p class="anc-x">${esc(a.texto)}</p>`:''}${docs.files.length?fileList('avisosweb',docs):''}
+   ${u?`<a class="anc-go"${at}>${ext?'Leer en '+esc(f||'la fuente'):'Ver más'}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>`:''}</div>
+  ${ph?`<div class="anc-ph" style="background-image:url(/_blob/${esc(ph.id)});background-position:${pp(ph)}"></div>`:''}
+  ${tools?`<div class="anc-tools">${S.edit?picList('avisosweb',a):''}${encBtn('avisosweb',a)}${itemTools('avisosweb',a)}</div>`:''}</article>`};
 const hm=s=>{const m=/(\d{4})-?(\d{2})-?(\d{2})T(\d{2}):(\d{2})/.exec(s||'');if(!m)return '';const mes=(LANG==='gl'?['xan','feb','mar','abr','maio','xuño','xul','ago','set','out','nov','dec']:['ene','feb','mar','abr','may','jun','jul','ago','sept','oct','nov','dic'])[+m[2]-1];return `${+m[3]} ${mes}, ${m[4]}:${m[5]}`};
 const al112Html=()=>S.al112.map(a=>{const n=NIV[a.nivel]||NIV[1],gl=LANG==='gl',tipo=(gl?a.tipo_gl:a.tipo_es)||a.tipo_es||'';
   return `<a class="al112 n${a.nivel}" href="https://www.axega112.gal/gl" target="_blank" rel="noopener"><svg class="ic"><use href="#i-alertas"/></svg><span class="main"><span class="label">${gl?'Alerta meteorolóxica activa':'Alerta meteorológica activa'} · 112 Galicia</span><b>${gl?'Alerta '+n[2]:'Alerta '+n[1]}${tipo?' por '+esc(tipo.toLowerCase()):''}</b><span>${a.ini?(gl?'Desde o ':'Desde el ')+hm(a.ini):''}${a.fin?(gl?' ata o ':' hasta el ')+hm(a.fin):''} · ${esc(a.zona||'Narón')}</span></span><span class="go">${gl?'Ver no 112 ↗':'Ver en el 112 ↗'}</span></a>`}).join('');
@@ -1103,7 +1153,7 @@ function render(){
   const av=S.data.avisos,ord={rojo:3,naranja:2,amarillo:1},top=[...av].sort((a,b)=>(ord[b.nivel]||0)-(ord[a.nivel]||0))[0];
   $('banner').innerHTML=top?`<a class="banner ${esc(top.nivel)}" href="#alertas"><span>Aviso ${esc(top.nivel)} por ${esc(top.fenomeno)}</span><span class="small">${esc(top.vigencia)}</span><span style="margin-left:auto">Ver alertas →</span></a>`:'';
   const c=S.cifras; const med=S.data.vehiculos.length, per=S.data.plantilla.reduce((x,p)=>x+(parseInt(p.numero)||0),0);
-  $('cifras').innerHTML=c?`<div class="cifras">${[[nf(c.total),'intervenciones en '+c.anio],[per||'–','personas en plantilla'],[med||'–','vehículos y medios'],[nf(c.hidrantes),'hidrantes revisados'],[c.km2+' km²','de término municipal']].map(x=>`<div class="cifra"><b class="num">${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`:'';
+  if($('cifras'))$('cifras').innerHTML=c?`<div class="cifras">${[[nf(c.total),'intervenciones en '+c.anio],[per||'–','personas en plantilla'],[med||'–','vehículos y medios'],[nf(c.hidrantes),'hidrantes revisados'],[c.km2+' km²','de término municipal']].map(x=>`<div class="cifra"><b class="num">${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`:'';
   $('tablaCifras').innerHTML=c&&c.tipos?`<div class="card tablewrap" style="margin-top:14px"><h3>Intervenciones por tipo</h3><table style="margin-top:8px"><thead><tr><th>Tipo</th><th class="r">${c.anio}</th><th class="r">${c.anio-1}</th></tr></thead><tbody>${c.tipos.map(t=>`<tr><td>${esc(t.n)}</td><td class="r num"><b>${nf(t.a)}</b></td><td class="r num muted">${t.b==null?'–':nf(t.b)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td class="r num"><b>${nf(c.total)}</b></td><td class="r num muted">${nf(c.anterior)}</td></tr></tbody></table></div>`:'';
   mapaTipo();
   const ab=S.data.convocatorias.filter(x=>x.estado==='Abierta').length,um=S.data.memorias.map(m=>m.anio).sort().pop();
@@ -1167,8 +1217,7 @@ $('frm').addEventListener('submit',async e=>{e.preventDefault();if(guardando)ret
   try{ if(!S.db) throw {code:'sin_conexion'};
     if(id) await ref(col,id).update(d);
     else{ const files=[],fi=$('f-__files');let mal=0;
-      if(fi&&fi.files.length){toast('Subiendo fotos...');for(const f of fi.files){const type=tipoDe(f);if(!type||(COLS[col].img&&!/^image/.test(type))){mal++;continue}
-        try{const r=await S.assets.upload(f,{type});files.push({id:r.id,name:f.name,type:r.contentType,size:r.sizeBytes})}catch(err){mal++;if(err&&err.code==='too_large')toast('«'+f.name+'» supera los 20 MB.')}}}
+      if(fi&&fi.files.length){toast('Subiendo fotos...');for(const f of fi.files){try{files.push(await subeArchivo(f,!!COLS[col].img))}catch(err){mal++;toast(err.message||'No se pudo subir una foto.')}}}
       const nid=col.slice(0,3)+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
       await S.db.doc(col+'/'+nid).set({...d,files,orden:Date.now()});
       if(mal)setTimeout(()=>toast(mal+' archivo(s) no se pudieron subir (tipo no admitido o muy grande).'),1800);
@@ -1176,13 +1225,28 @@ $('frm').addEventListener('submit',async e=>{e.preventDefault();if(guardando)ret
     $('dlg').close();toast('Guardado')}
   catch(err){console.error(err);toast('No se pudo guardar'+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')+'. Inténtalo de nuevo.')}
   finally{guardando=false;if(sb)sb.disabled=false}});
+/* prepara una foto para subirla: convierte formatos raros (HEIC, AVIF, BMP...) y reduce las muy grandes a JPG */
+const IMG_OK=['image/jpeg','image/png','image/webp','image/gif'];
+async function prepFoto(f){const ext=(f.name.split('.').pop()||'').toLowerCase();
+  const esImg=/^image\//.test(f.type)||['heic','heif','avif','bmp','tif','tiff','jfif','jpg','jpeg','png','webp','gif'].includes(ext);if(!esImg)return f;
+  const tipo=IMG_OK.includes(f.type)?f.type:({jpg:'image/jpeg',jpeg:'image/jpeg',jfif:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif'}[ext]||'');
+  if(tipo&&f.size<=6e6)return new File([f],f.name,{type:tipo});
+  let bmp;try{bmp=await createImageBitmap(f)}catch(e){if(tipo&&f.size<=2e7)return new File([f],f.name,{type:tipo});throw {code:'formato',message:'No se puede leer la foto «'+f.name+'». Si es del iPhone (HEIC), guárdala como JPG o activa en la cámara «Más compatible».'}}
+  const m=2400,k=Math.min(1,m/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.86));if(!b)throw {code:'formato',message:'No se pudo preparar la foto «'+f.name+'».'};
+  return new File([b],f.name.replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'})}
+/* sube un archivo y devuelve su ficha {id,name,type,size}; lanza un error con mensaje claro */
+async function subeArchivo(f,soloImg){const g=await prepFoto(f),type=/^image\//.test(g.type)?g.type:tipoDe(g);
+  if(!type)throw {code:'tipo',message:'«'+f.name+'»: tipo de archivo no admitido.'};if(soloImg&&!/^image/.test(type))throw {code:'tipo',message:'«'+f.name+'» no es una foto.'};
+  if(!S.assets)throw {code:'sin_permiso',message:'No tienes permiso para subir archivos en este visor.'};
+  try{const r=await S.assets.upload(g,{type});return {id:r.id,name:g.name,type:r.contentType||type,size:r.sizeBytes}}
+  catch(err){throw {code:err&&err.code,message:'«'+f.name+'»: '+(err&&err.code==='too_large'?'supera los 20 MB.':'no se pudo subir'+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')+'.')}}}
 function tipoDe(f){const x=f.name.split('.').pop().toLowerCase();return {pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',csv:'text/csv',txt:'text/plain'}[x]}
-$('fileinp').addEventListener('change',async e=>{const fs=[...e.target.files];e.target.value='';if(!target||!fs.length)return;if(target.sec){const sec=target.sec,f=fs[0],type=tipoDe(f);if(!type||!/^image/.test(type)){toast('Sube una imagen JPG, PNG o WEBP.');return}toast('Subiendo...');try{const old=S.fotos[sec];const r=await S.assets.upload(f,{type});await S.db.doc('secciones/'+sec).set({files:[{id:r.id,name:f.name,type:r.contentType}]});if(old)S.assets.delete(old).catch(()=>{});toast('Foto cambiada')}catch(err){toast('No se pudo subir la foto.')}return}const {col,id}=target,it=item(col,id);if(!it)return;
-  const files=[...(it.files||[])];let mal=0;toast('Subiendo...');
-  for(const f of fs){const type=tipoDe(f);if(!type||(COLS[col].img&&!/^image/.test(type))){mal++;continue}
-    try{const r=await S.assets.upload(f,{type});files.push({id:r.id,name:f.name,type:r.contentType,size:r.sizeBytes})}
-    catch(err){mal++;if(err&&err.code==='too_large')toast('«'+f.name+'» supera los 20 MB.')}}
-  try{await ref(col,id).update({files});toast(mal?`Subido, salvo ${mal} archivo(s) de un tipo no admitido o con error.`:'Archivo subido')}catch(err){toast('No se pudo guardar el archivo.')}});
+$('fileinp').addEventListener('change',async e=>{const fs=[...e.target.files];e.target.value='';if(!target||!fs.length)return;if(target.sec){const sec=target.sec,f=fs[0];toast('Subiendo...');try{const old=S.fotos[sec];const r=await subeArchivo(f,true);await S.db.doc('secciones/'+sec).set({files:[{id:r.id,name:r.name,type:r.type}]});if(old)S.assets.delete(old).catch(()=>{});toast('Foto cambiada')}catch(err){console.error(err);toast(err.message||'No se pudo subir la foto.')}return}const {col,id}=target,it=item(col,id);if(!it)return;
+  const files=[...(it.files||[])],errs=[];let ok=0;toast('Subiendo...');
+  for(const f of fs){try{files.push(await subeArchivo(f,!!COLS[col].img));ok++}catch(err){console.error(err);errs.push(err.message||'error')}}
+  if(!ok){toast(errs[0]||'No se pudo subir.');return}
+  try{await ref(col,id).update({files});toast(errs.length?`Subido ${ok}. ${errs[0]}`:(ok>1?ok+' archivos subidos':'Foto guardada'))}catch(err){console.error(err);toast('No se pudo guardar'+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')+'.')}});
 
 /* encuadre de fotos */
 let ENC=null;
